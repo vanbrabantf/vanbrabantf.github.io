@@ -1,0 +1,96 @@
+@charset 'UTF-8';
+@import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900,300italic");
+@import "bootstrap";
+
+/*********************************************************************************/
+/* Basic                                                                         */
+/*********************************************************************************/
+
+    .no-padding {
+    padding-left: 0;
+    padding-right: 0;
+    }
+
+	body,input,textarea,select
+	{
+		font-family: 'Source Sans Pro';
+		color: #5d5d5d;
+	}
+
+	strong, b
+	{
+		color: #252122;
+		font-weight: bold;
+	}
+
+	i, em
+	{
+		font-style: italic;
+	}
+
+	sub
+	{
+		position: relative;
+		top: 0.5em;
+		font-size: 0.8em;
+	}
+
+	sup
+	{
+		position: relative;
+		top: -0.5em;
+		font-size: 0.8em;
+	}
+
+	blockquote
+	{
+		border-left: solid 0.75em #dddddd;
+		padding: 1em 0 1em 1.5em;
+		font-style: italic;
+	}
+
+	h1, h2, h3, h4, h5, h6
+	{
+		color: #252122;
+		font-weight: 700;
+	}
+
+		h1 a, h2 a, h3 a, h4 a, h5 a, h6 a
+		{
+			color: inherit;
+			text-decoration: none;
+		}
+
+	a
+	{
+		color: #d52349;
+		text-decoration: underline;
+	}
+
+		a:hover
+		{
+            color: #d52349;
+			text-decoration: none;
+		}
+
+	br.clear
+	{
+		clear: both;
+	}
+
+	hr
+	{
+		border: 0;
+		border-top: solid 1px #dddddd;
+		height: 1px;
+		margin: 2em 0 2em 0;
+	}
+
+	p, ul, ol, dl, table
+	{
+		margin-bottom: 2em;
+	}
+	
+	table {
+		@extend .table;
+	}

@@ -1,0 +1,33 @@
+		<!-- Footer -->
+		<div class="footer">
+			<div class="container">
+				<div class="row">
+					<div class='col-sm-8 col-12'>
+						<section class='footer-items'>
+							<header>
+								<h2>Latest posts</h2>
+							</header>
+							<ul>
+							{% for post in site.posts offset: 0 limit: 5 %}
+								<li>
+									<h3><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h3>
+								</li>
+							{% endfor %}
+							</ul>
+						</section>
+					</div>
+					<div class='col-sm-4 col-12'>
+						<section class='footer-items'>
+							<header>
+								<h2>Who now?</h2>
+							</header>
+							<p>Frederick is a less then 30 year old developer from Antwerp with a passion for API's and everything that surrounds them. 
+								He works as a Software Engineer at <a href="http://www.madewithlove.be">madewithlove</a>
+								and is co-organiser of <a href="http://www.meetup.com/phpantwerp">PHPAntwerp</a>.</p>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
