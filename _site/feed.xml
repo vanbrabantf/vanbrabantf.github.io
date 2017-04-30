@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-04-30T20:43:43+02:00</updated><id>http://localhost:4000/</id><title type="html">Frederick Vanbrabant delirious rantings</title><subtitle>A less then 30 year old developer from Antwerp with a passion for API's and everything that surrounds them. Works as a Software Engineer at madewithlove and is co-organiser of PHPAntwerp
+</subtitle><author><name>Frederick Vanbrabant</name></author><entry><title type="html">How we improved our PWA score by 53 points in 4 hours</title><link href="http://localhost:4000/2017/03/13/improved_pwa_score.html" rel="alternate" type="text/html" title="How we improved our PWA score by 53 points in 4 hours" /><published>2017-03-13T00:00:00+01:00</published><updated>2017-03-13T00:00:00+01:00</updated><id>http://localhost:4000/2017/03/13/improved_pwa_score</id><content type="html" xml:base="http://localhost:4000/2017/03/13/improved_pwa_score.html">&lt;p&gt;&lt;strong&gt;This post wast orignially posted on the &lt;a href=&quot;https://blog.madewithlove.be/&quot;&gt;madewithlove&lt;/a&gt; site&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;A week ago &lt;a href=&quot;https://twitter.com/hannesvdvreken&quot;&gt;Hannes&lt;/a&gt; and I attended &lt;a href=&quot;http://phpconference.co.uk/&quot;&gt;PHPUK&lt;/a&gt; in London (&lt;a href=&quot;https://blog.madewithlove.be/post/php-uk-conference/&quot;&gt;You can read all about it here&lt;/a&gt;). We saw a lot of great talks and met numerous very smart people. Among these was &lt;a href=&quot;https://twitter.com/rowan_m&quot;&gt;Rowan Merewood&lt;/a&gt;, who gave a talk called “Progressive Web Apps in the wild”. He convinced me to try and add some PWA’ness to one of our applications, just to try it out.&lt;/p&gt;
+
+&lt;h3 id=&quot;hold-up-what-is-pwa&quot;&gt;Hold up, what is PWA?&lt;/h3&gt;
+&lt;p&gt;So the first thing you should know about PWA (or progressive web apps) is that it’s an adaptation of your current site or web app. This means that if you want to have all the features of a progressive web app, you are going to need to change your current site/application. The good news here is that they are all changes you would want to have anyway.&lt;/p&gt;
+
+&lt;p&gt;PWA turns your site/application into something that feels like a native application on supported mobile browsers (this is mostly Chrome on Android at the time of writing). Making your application feel more native includes offline access, an app icon on the homescreen, an app like interface (you can choose to hide the navigation bar) and a lot more.&lt;/p&gt;
+
+&lt;h3 id=&quot;what-is-needed-to-make-this-happen&quot;&gt;What is needed to make this happen?&lt;/h3&gt;
+&lt;p&gt;For this I’m going to steal some information from the &lt;a href=&quot;https://developers.google.com/web/fundamentals/getting-started/codelabs/your-first-pwapp/&quot;&gt;developers.google&lt;/a&gt; pages:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Progressive - Works for every user, regardless of browser choice because it’s built with progressive enhancement as a core tenet.&lt;/li&gt;
+  &lt;li&gt;Responsive - Fits any form factor: desktop, mobile, tablet, or whatever is next.&lt;/li&gt;
+  &lt;li&gt;Connectivity independent - Enhanced with service workers to work offline or on low-quality networks.&lt;/li&gt;
+  &lt;li&gt;App-like - Feels like an app to the user with app-style interactions and navigation because it’s built on the app shell model.&lt;/li&gt;
+  &lt;li&gt;Fresh - Always up-to-date thanks to the service worker update process.&lt;/li&gt;
+  &lt;li&gt;Safe - Served via HTTPS to prevent snooping and to ensure content hasn’t been tampered with.&lt;/li&gt;
+  &lt;li&gt;Discoverable - Is identifiable as an “application” thanks to W3C manifest and service worker registration scope, allowing search engines to find it.&lt;/li&gt;
+  &lt;li&gt;Re-engageable - Makes re-engagement easy through features like push notifications.&lt;/li&gt;
+  &lt;li&gt;Installable - Allows users to “keep” apps they find most useful on their home screen without the hassle of an app store.&lt;/li&gt;
+  &lt;li&gt;Linkable - Easily share via URL, does not require complex installation.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;That looks like a lot of work right?&lt;/p&gt;
+
+&lt;p&gt;In reality most of this is not really new. Your site should already be responsive, be served over https, linkable etc.
+The others things are easily added.&lt;/p&gt;
+
+&lt;h3 id=&quot;ok-lets-do-this-how-do-we-start&quot;&gt;Ok, let’s do this. How do we start?&lt;/h3&gt;
+&lt;p&gt;Well I had the same question… Most of those things above are front-end things, and front-end was a name I haven’t heard in a long long time. So I called in our resident front-end guru &lt;a href=&quot;https://twitter.com/sambego&quot;&gt;Sam&lt;/a&gt; who helped me through it.&lt;/p&gt;
+
+&lt;p&gt;So first up is installing &lt;a href=&quot;https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk?hl=en&quot;&gt;Lighthouse&lt;/a&gt;, this is a chrome plugin, created by the friendly people at Google that checks the site you are currently visiting for compliance with the list above and returns not only a score but also some pointers on what to improve.&lt;/p&gt;
+
+&lt;p&gt;We’ve decided to run it against &lt;a href=&quot;https://madewithlove.be/&quot;&gt;our own site &lt;/a&gt; (note: you’re currently reading our blog which is decoupled from our company site) and &lt;a href=&quot;/assets/posts/2017-03-03-improved_pwa_score/pwa1.pdf&quot;&gt;this is what we got&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So if you don’t want to check out the entire report, let’s go over some highlights first. First of all is the score.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/2017-03-03-improved_pwa_score/1.png&quot; alt=&quot;First score&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;46/100 is not really great, but at least we already covered some stuff.&lt;/p&gt;
+
+&lt;p&gt;Ok, so what are the major areas for improvement here?&lt;/p&gt;
+
+&lt;p&gt;We seem to miss these things related to a manifest, a “Service Worker” and some misc server/css stuff.&lt;/p&gt;
+
+&lt;h3 id=&quot;what-is-a-manifest&quot;&gt;What is a manifest?&lt;/h3&gt;
+
+&lt;p&gt;A manifest is some meta data about your website. One of the cool things this allows you to do is make it possible for Android phones (and maybe in the future other OS’s) to add a shortcut to the home screen that makes the app feel like a native app.&lt;/p&gt;
+
+&lt;p&gt;Time to make a manifest! &lt;a href=&quot;https://gist.github.com/vanbrabantf/b9df089f5aeeaae944752d2b12079e81&quot;&gt;This is what we ended up with&lt;/a&gt;. (don’t forget to link it in your HTML)&lt;/p&gt;
+
+&lt;p&gt;As you can see, this is not really complicated. Let’s take a quick look at the fields:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;short_name&lt;/code&gt; is the name that will appear under the icon on the homescreen.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt; is the longer name that will be used in communication screens.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;icons&lt;/code&gt; is a collection of homescreen icons in different sizes.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;start_url&lt;/code&gt; is the relative url the app should open on launch.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;display&lt;/code&gt; is the feeling the app should have, we set it to &lt;code class=&quot;highlighter-rouge&quot;&gt;standalone&lt;/code&gt; so the app has a native feeling.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;background_color&lt;/code&gt; this is the background colour of the splash screen.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;theme_color&lt;/code&gt; is the colour of the application and top bar of the browser.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So that’s all there is to it, let’s run Lighthouse again and see how we did: &lt;a href=&quot;/assets/posts/2017-03-03-improved_pwa_score/pwa3.pdf&quot;&gt;report&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/2017-03-03-improved_pwa_score/2.png&quot; alt=&quot;Second score&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That was a huge bump for such a small job! We could stop here, but in for a penny in for a pound. What else can we tackle?&lt;/p&gt;
+
+&lt;h3 id=&quot;service-workers-how-hard-can-it-be&quot;&gt;Service Workers, how hard can it be?&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Service workers essentially act as proxy servers that sit between web applications, and the browser and network (when available). They are intended to (amongst other things) enable the creation of effective offline experiences, intercepting network requests and taking appropriate action based on whether the network is available and updated assets reside on the server. They will also allow access to push notifications and background sync APIs. - &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API&quot;&gt;MDN&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This is probably a bit more complicated than a json file … Sam (mainly) and I tinkered some time with this but in the end we decided on using a premade Service Worker from &lt;a href=&quot;https://twitter.com/chriscoyier?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor&quot;&gt;Chris Coyier&lt;/a&gt;.Our version can be found &lt;a href=&quot;https://gist.github.com/vanbrabantf/76586a7d069d0e42922123c4046c1286&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This Service worker has a nifty caching implementation(for mobile and desktop) that supports offline browsing on you mobile device.&lt;/p&gt;
+
+&lt;p&gt;Report time! &lt;a href=&quot;/assets/posts/2017-03-03-improved_pwa_score/pwa4.pdf&quot;&gt;report&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/2017-03-03-improved_pwa_score/3.png&quot; alt=&quot;Final score&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;can-we-push-it-to-100&quot;&gt;Can we push it to 100?&lt;/h3&gt;
+
+&lt;p&gt;In our case … sadly no.&lt;/p&gt;
+
+&lt;p&gt;Our biggest problem here is that big map at the top of our site. It’s not really open to modifications. We could rewrite it ourselves, but that would bring us too far into this 4 hour experiment.&lt;/p&gt;
+
+&lt;p&gt;We have also decided to rework our homepage, when we do this we’ll probably keep a keen eye on our PWA score so we can finally grab that 100%!&lt;/p&gt;
+
+&lt;h3 id=&quot;what-else-did-we-get-out-of-this&quot;&gt;What else did we get out of this?&lt;/h3&gt;
+
+&lt;p&gt;Something we didn’t really anticipate was the nice speed increase we got. This is of course due to the Service worker and its caching methods.&lt;/p&gt;
+
+&lt;p&gt;Checkout these before and after images:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/2017-03-03-improved_pwa_score/before.png&quot; alt=&quot;Before timeline&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/2017-03-03-improved_pwa_score/after.png&quot; alt=&quot;After timeline&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;I was actually really surprised how easy this was. We got an &lt;strong&gt;almost&lt;/strong&gt; perfect score in a short time experimenting with that spec. The results are also pretty amazing, we now have something that feels like a native app, a nice bump in page speed and some extra SEO points, just by adding 2 files.&lt;/p&gt;
+
+&lt;p&gt;I totally advise you give this a shot, maybe you can even push it to 100%!&lt;/p&gt;</content><author><name>frederick</name></author><summary type="html">After a recent burst of inspiration at PHPUK Sam and I ran an experiment to see how much we could improve our company site in just 4 hours. Turns out it was far easier than we expected</summary></entry><entry><title type="html">On how to implement a code of conduct</title><link href="http://localhost:4000/2016/01/29/on-how-to-implement-a-code-of-conduct.html" rel="alternate" type="text/html" title="On how to implement a code of conduct" /><published>2016-01-29T00:00:00+01:00</published><updated>2016-01-29T00:00:00+01:00</updated><id>http://localhost:4000/2016/01/29/on-how-to-implement-a-code-of-conduct</id><content type="html" xml:base="http://localhost:4000/2016/01/29/on-how-to-implement-a-code-of-conduct.html">&lt;p&gt;&lt;strong&gt;This post wast orignially posted on the &lt;a href=&quot;https://blog.madewithlove.be/&quot;&gt;madewithlove&lt;/a&gt; site&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;preface&quot;&gt;Preface&lt;/h2&gt;
+
+&lt;p&gt;Recently there has been a lot of commotion around code of conducts and if a user group/open-source project should implement them or not. This is not a post about that, we shall not be discussing the ethics or possible political impact this brings with it. We will however propose a starting point on &lt;strong&gt;how&lt;/strong&gt; to implement them.&lt;/p&gt;
+
+&lt;p&gt;Please note that I am in no way an expert in this field, this blogpost is the result of endless talks with colleagues / friends and people I bugged on Slack (extra thanks to &lt;a href=&quot;https://twitter.com/phalt_&quot;&gt;Paul Hallett&lt;/a&gt; and &lt;a href=&quot;https://twitter.com/developerjack&quot;&gt;Jack Skinner&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;So without further ado, I’ve made an easy 7 step program to follow along (this is the perfect time to fetch coffee or tea):&lt;/p&gt;
+
+&lt;h2 id=&quot;steps&quot;&gt;Steps&lt;/h2&gt;
+
+&lt;h3 id=&quot;1-what-is-a-coc&quot;&gt;1. What is a CoC?&lt;/h3&gt;
+
+&lt;p&gt;This is where the bulk of the drama comes from; most people are not really informed about what a Code of Conduct really is or start to overthink the concept. In essence it’s actually really simple:&lt;/p&gt;
+
+&lt;p&gt;A CoC or a code of conduct boils down to a list of rules. These rules can be as verbose or short as you like, as strict or as loose as you like. It’s just an outline of how people should behave when they attend your conference or contribute to your open-source project.&lt;/p&gt;
+
+&lt;p&gt;Lots of places have a code of conduct, like for example a bar, think “we don’t serve people without shoes”.&lt;/p&gt;
+
+&lt;h3 id=&quot;2-do-i-need-a-coc&quot;&gt;2. Do I need a CoC?&lt;/h3&gt;
+
+&lt;p&gt;You might react with: “Well we’ve never had any problems before and I don’t see the point in having one”. Sure, don’t adopt one. The world isn’t going to end if you don’t adopt one.&lt;/p&gt;
+
+&lt;p&gt;On the other hand a CoC can have the advantage that everyone clearly knows what’s up. So if you turn into problems later down the line, you can easily refer to the rules.&lt;/p&gt;
+
+&lt;p&gt;Just make up your mind. As stated before, this post is not about whether or not you should implement one.&lt;/p&gt;
+
+&lt;p&gt;If you don’t want to implement one, you can skip to step 7.&lt;/p&gt;
+
+&lt;h3 id=&quot;3-should-i-write-one-myself&quot;&gt;3. Should I write one myself?&lt;/h3&gt;
+
+&lt;p&gt;As always there is a lot of debate around this. You could if you want, but the general opinion is the same as on encryption, “Don’t invent your own”. Writing your own is pretty catchy (believe me, I’ve tried). There are lots of things to think about and frankly you probably want a CoC that’s clear about its contents.&lt;/p&gt;
+
+&lt;p&gt;If you want to write a CoC that states:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Be: awesome.&lt;/li&gt;
+  &lt;li&gt;Don’t be: not awesome.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;That’s all good, but know that you’ll be spending more of your time arguing about what passes as “Being awesome” then doing the thing you want to do. Holding conferences or writing code.&lt;/p&gt;
+
+&lt;p&gt;So if you want to save yourself some trouble and or time down the line, a good idea is to implement something that’s already thought out and proven to work.&lt;/p&gt;
+
+&lt;h3 id=&quot;4-whats-out-there&quot;&gt;4. What’s out there?&lt;/h3&gt;
+
+&lt;p&gt;Luckily there are some easy ways to adopt CoCs out there, for example &lt;a href=&quot;http://geekfeminism.wikia.com/&quot;&gt;geekfeminism&lt;/a&gt; has a conference blueprint that can be used to roll your own: &lt;a href=&quot;http://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy&quot;&gt;conferences CoC&lt;/a&gt;, if that one doesn’t fit your bill there are others out there, for example: &lt;a href=&quot;http://confcodeofconduct.com/&quot;&gt;Conference Code of Conduct&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you rather check out the codes of conduct of famous open-source projects/conferences and fit them to your needs, here are a few:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.djangoproject.com/conduct/&quot;&gt;Django Code of Conduct&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://wiki.python.org/moin/DiversityInPython&quot;&gt;Diversity In Python&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://events.linuxfoundation.org/code-of-conduct&quot;&gt;Linux Code of Conduct&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.drupal.org/dcoc&quot;&gt;Drupal Code of Conduct&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://support.google.com/developergroups/answer/3340512?hl=en&quot;&gt;Google’s Anti-Harassment Policy (template)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And there are a lot more out there. (If I forgot a major one, please contact me, or leave a comment).&lt;/p&gt;
+
+&lt;h3 id=&quot;5-pick-one&quot;&gt;5. Pick one&lt;/h3&gt;
+
+&lt;p&gt;So now comes the difficult part, choose one. This means:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Read them.&lt;/li&gt;
+  &lt;li&gt;Take one that you think fits your project/conference best.&lt;/li&gt;
+  &lt;li&gt;Possibly adapt it to your needs. (if you adapt it, make it clear you’ve done so)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Please note that I don’t want to favor one over the other, this is your choice here.&lt;/p&gt;
+
+&lt;h3 id=&quot;6-implement-it&quot;&gt;6. Implement it&lt;/h3&gt;
+
+&lt;p&gt;Ok, you’ve chosen your CoC. Now is the moment you want to share it with the world. Make sure you clearly show that you have a CoC and that you expect people to follow it. People can’t follow a CoC if they don’t know it exists.&lt;/p&gt;
+
+&lt;h3 id=&quot;7-communicate&quot;&gt;7. Communicate&lt;/h3&gt;
+
+&lt;p&gt;You’ve chosen a CoC, or not, you’ve put it out there, we are done right?&lt;/p&gt;
+
+&lt;p&gt;Well no. Open-source is all about community. A project is never an island. There will be reactions on your decisions (if there aren’t you should ask for them), now it’s the time to discuss it with the community. Again, how you handle them is up to you, but it could be wise to be open to them (if you think they’re good) and be willing to adjust some parts.&lt;/p&gt;
+
+&lt;p&gt;These things are like code, they can always be improved upon.&lt;/p&gt;</content><author><name>frederick</name></author><summary type="html">We shall not be discussing the ethics or possible political impact this brings with it. We will however propose a starting point on **how** to implement them.</summary></entry><entry><title type="html">A bird’s eye view on API development</title><link href="http://localhost:4000/2015/11/16/birdseye-view-on-api.html" rel="alternate" type="text/html" title="A bird's eye view on API development" /><published>2015-11-16T00:00:00+01:00</published><updated>2015-11-16T00:00:00+01:00</updated><id>http://localhost:4000/2015/11/16/birdseye-view-on-api</id><content type="html" xml:base="http://localhost:4000/2015/11/16/birdseye-view-on-api.html">&lt;p&gt;&lt;strong&gt;This post wast orignially posted on the &lt;a href=&quot;https://blog.madewithlove.be/&quot;&gt;madewithlove&lt;/a&gt; site&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;So an API, that’s just output of some JSON code right? No problem, my framework does that automatically.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Or if you just want an overview on some best practices, conventions and nifty ways people have done stuff before, this post has you covered.&lt;/p&gt;
+
+&lt;p&gt;We won’t go in much detail about source code here. This article is language agnostic, whether you use PHP, Ruby, Velato or some obscure Javascript framework you can happily follow along. Please note that not everything here is law, some parts (maybe everything) are open for discussion. Lastly: some of this may be pretty obvious, you are probably right. But I rather cover all the bases.&lt;/p&gt;
+
+&lt;h2 id=&quot;so-what-are-web-apis-all-about&quot;&gt;So what are web APIs all about&lt;/h2&gt;
+
+&lt;p&gt;Application Programming Interface, or as the cool kids call it: API, is a collection of endpoints to interact with an application. You have internal and external APIs. This post is all about external APIs (more specific, external web APIs). Some people like to think about APIs as a wrapper around a database, this is however mostly not the case. But they tend to serve (mostly) the same purpose: interacting with data.&lt;/p&gt;
+
+&lt;p&gt;APIs can be widely different in architecture (XML-RPC, REST, SOAP, …) and data structure (XML, JSON), but it’s very important that they stay as consistent as possible. Today we’re gonna focus on REST.&lt;/p&gt;
+
+&lt;h2 id=&quot;rest&quot;&gt;REST&lt;/h2&gt;
+
+&lt;p&gt;Stands for  Representational State Transfer (don’t worry, there won’t be a quiz) and is the most commonly used (and modern) architecture for handling APIs. REST doesn’t rely on coupling to the rest of the application like protocols as SOAP tend to do (do note that REST is not a protocol) making it fast and easy to implement.&lt;/p&gt;
+
+&lt;p&gt;The basics of REST aren’t that hard to grasp, although there is a lot of misunderstanding on the internet about it.
+Rest is a resource based architecture that is stateless. This means that a REST resource (the data) can’t have sessions nor cookies. The data itself is represented in media types like XML and JSON. It’s a common pitfall to think that RESTful APIs are &lt;a href=&quot;https://twitter.com/PHP_CEO/status/435105782829305857&quot;&gt;JSON&lt;/a&gt; only.&lt;/p&gt;
+
+&lt;p&gt;REST commits to a uniform interface. In most cases this is HTTP as they fit nicely together. However be careful, another common pitfall is to think that HTTP and REST are interwoven. REST isn’t necessarily connected to HTTP even though in practise it usually is.&lt;/p&gt;
+
+&lt;p&gt;So what does that exactly mean, committing to a uniform interface? This is easily explained with the HTTP protocol:&lt;/p&gt;
+
+&lt;h2 id=&quot;http-and-rest&quot;&gt;HTTP and REST&lt;/h2&gt;
+
+&lt;p&gt;Hypertext Transfer Protocol (another acronym, this post would be a great drinking game) is something you probably already know. You are using it right now, as you are using it in your browser to surf the Internet (a relative new hype).&lt;/p&gt;
+
+&lt;p&gt;HTTP is request/response driven, this means that a response only is given as a request is made. There is no constant stream of data (sockets).&lt;/p&gt;
+
+&lt;p&gt;In the case of REST we are mainly interested in its interface. In HTTP the client sends verbs in the header of request, the server responses with HTTP codes in its response header. Now this is one of the hard parts about building an API, what verb fits with what action and/or what response code should be send. As far as the verbs go, only the edge cases are difficult, the response codes on the other hand are often open for discussion. So let’s have a quick look at some commonly used ones shall we (please note that these are the most used ones, there are more):&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Verb&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Return HTTP Code&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;Example of url&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;GET&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;200&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;/wombats&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;GET&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;200&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;/wombats/1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;POST&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;201&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;/wombats&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;PUT&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;200&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;/wombats/1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;DELETE&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;200&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;/wombats/1&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;the-get-verb&quot;&gt;The GET verb&lt;/h3&gt;
+
+&lt;p&gt;It kinda does what it says on the tin. It GETs a resource. It can fetch individual resources or a collection (We’ll take a closer look on how this is displayed later in the post). On success this endpoint returns a 200 (see http codes) with the resource (or collection of resources) in its body.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-post-verb&quot;&gt;The POST verb&lt;/h3&gt;
+
+&lt;p&gt;This verb asks the server to accept the resource included in the post. You mainly know this outside of APIs as forms. It’s commonly used to add new resources to a collection. For example If you were to post to &lt;code class=&quot;highlighter-rouge&quot;&gt;animals/wombats&lt;/code&gt; you would create a new wombat not a new animal. If the endpoint creates a resource that isn’t covered in the API (not everything needs an endpoint) it should return a 204 No ContentHTTP status code (success, empty response), or a 201 Createdresponse which should contain the created resource and optionally a location header where the new resource can be found.&lt;/p&gt;
+
+&lt;p&gt;Now what do I mean with a “creating a resource on an  endpoint that isn’t covered in the API” ?
+This would be an endpoint that has no reference GET endpoint. Simply put, something you only want to send to the server but never return to the client.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-put-verb&quot;&gt;The PUT verb&lt;/h3&gt;
+
+&lt;p&gt;The PUT verb is like the POST verb used to send data. The main difference here is that POST creation is done on the collection, PUT creation is done on a resource URI (POST: &lt;code class=&quot;highlighter-rouge&quot;&gt;animals/dogs&lt;/code&gt; PUT &lt;code class=&quot;highlighter-rouge&quot;&gt;animal/dogs/1&lt;/code&gt;). PUT can also be used to alter a resource. Executing the same PUT request multiple times should only create or alter the resource once: its action should be &lt;a href=&quot;https://www.youtube.com/watch?v=6dVNdFwqeKs&quot;&gt;idempotent&lt;/a&gt;. If you do this than please be sure to inform the client of what happened, nothing is worse then getting non-sensical HTTP codes (except the new Star-Trek movies). So if you just update the resource, you should return a 200 or 204 HTTP code and an empty body. If you end up creating a new resource, you just follow the POST flow.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-patch-verb&quot;&gt;The PATCH verb&lt;/h4&gt;
+
+&lt;p&gt;This one is a bit special, It’s often confused with the PUT verb as it (mostly) performs the same function: updating resources. So why have two verbs that do the same thing? The answer is, they don’t and you shouldn’t probabily use this verb (unless you really know what you’re doing). According to the &lt;a href=&quot;https://tools.ietf.org/html/rfc5789&quot;&gt;RFC&lt;/a&gt; a PATCH request should contain instructions on how to partially update a resource.&lt;/p&gt;
+
+&lt;p&gt;You can find more info (and examples on how a PATCH request looks) here: &lt;a href=&quot;http://stackoverflow.com/questions/28459418/rest-api-put-vs-patch-with-real-life-examples&quot;&gt;REST API - PUT vs PATCH with real life examples&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Update: &lt;a href=&quot;https://twitter.com/couac&quot;&gt;William Durand&lt;/a&gt; &lt;a href=&quot;https://twitter.com/couac/status/667409903884046336&quot;&gt;informed me&lt;/a&gt; that you should always add the header &lt;code class=&quot;highlighter-rouge&quot;&gt;Content-Type: application/partial-update-json&lt;/code&gt; when you do a partial update through PATCH.
+More info can be found here: &lt;a href=&quot;http://www.ietf.org/mail-archive/web/apps-discuss/current/msg03991.html&quot;&gt;media type for partial JSON updates?&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;the-delete-verb&quot;&gt;The DELETE verb&lt;/h3&gt;
+
+&lt;p&gt;Another simple one, it deletes stuff. This needs to point at a specific endpoint (like a PUT) and returns a 200 HTTP code.&lt;/p&gt;
+
+&lt;h3 id=&quot;how-to-build-your-urls&quot;&gt;How to build your urls&lt;/h3&gt;
+
+&lt;p&gt;It’s very important to have a consistent API, a huge part of this is the consistency of your urls. Don’t worry, if you just follow a few simple guidelines you’ll be allright.&lt;/p&gt;
+
+&lt;p&gt;First of all, it’s best to use &lt;a href=&quot;http://apigee.com/about/blog/technology/restful-api-design-nouns-are-good-verbs-are-bad&quot;&gt;nouns instead of verbs&lt;/a&gt;. This is a simple way to enforce consistancy in your naming scheme.
+Secondly you should always use the plural form. so use &lt;code class=&quot;highlighter-rouge&quot;&gt;animals/dogs&lt;/code&gt; instead of &lt;code class=&quot;highlighter-rouge&quot;&gt;animal/dog&lt;/code&gt;.
+Thirdly you should think in terms of your API, not in terms of your database. Your client doens’t need to know about the structure of your data model.&lt;/p&gt;
+
+&lt;h3 id=&quot;http-codes&quot;&gt;HTTP CODES&lt;/h3&gt;
+
+&lt;p&gt;A very important part of an API is informing clients about what just happened. In HTTP this is solved with HTTP codes returned in the header of the response. We have seen a couple of them appear above, so what are they? Well they are indexes to a list of commonly used responses a server (or &lt;a href=&quot;https://sitesdoneright.com/blog/2013/03/what-is-418-im-a-teapot-status-code-error&quot;&gt;teapot&lt;/a&gt;) could give.&lt;/p&gt;
+
+&lt;p&gt;They can be found here: &lt;a href=&quot;https://en.wikipedia.org/wiki/List_of_HTTP_status_codes&quot;&gt;List of HTTP status codes&lt;/a&gt; or &lt;a href=&quot;https://http.cat/&quot;&gt;here in a more academic way&lt;/a&gt;.
+As stated before, sometimes it’s hard to see what code fits what use case. These are often fun points of discussion while stargazing on a first date.&lt;/p&gt;
+
+&lt;h3 id=&quot;hateoas&quot;&gt;HATEOAS&lt;/h3&gt;
+
+&lt;p&gt;Hypertext As The Engine Of Application State (acronym, drink) is a big part of REST. Its purpose is to add discoverability to your API. You can compare this to hyperlinks on regular websites. For example: imagine a Twitter feed, it consist of a long list of tweets sent by users. if you click on a tweet you get a detailed view of the tweet with all its responses. This is comparable with the HATEOAS structure. You attach a link to each entity in a collection, this link points to the endpoint of the specific resource.&lt;/p&gt;
+
+&lt;p&gt;Why is this handy? In theory this allows dropping separate documentation. You don’t have to document all your endpoints, the endpoints provide them themselves. In practice I would advise to always provide separate documentation. A great workflow here is &lt;a href=&quot;https://apiblueprint.org/&quot;&gt;Api Blueprint&lt;/a&gt; documentation with automated &lt;a href=&quot;https://dredd.readthedocs.org/en/latest/&quot;&gt;Dredd&lt;/a&gt; testing on top of it to make sure your documentation is never out of date.&lt;/p&gt;
+
+&lt;h2 id=&quot;data-structure&quot;&gt;Data structure&lt;/h2&gt;
+
+&lt;p&gt;This is the part things get a little fuzzier. Not only are there different content types out there (XML, JSON), even those tend to have different structure standards. This part of the article is more about what’s out there, instead of what you should use. The most important thing you should remember is the scope of your application. Even though it’s good practice to return both in XML and JSON (through the Accept header), it can prove to be beyond the scope of your API to do so.&lt;/p&gt;
+
+&lt;p&gt;As most people prefer the JSON format (as do I), we shall take a look at the different structure standards (loose term). People tend to get pretty defensive on what standard they pick, this happens because when you pick one, you’re stuck with it. You can’t just decide to adopt a new structure, even in a new API version, I would not advise it.&lt;/p&gt;
+
+&lt;h3 id=&quot;json-api&quot;&gt;JSON API&lt;/h3&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;self&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.com/articles&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;next&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.com/articles?page[offset]=2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;last&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.com/articles?page[offset]=10&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;data&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;articles&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;attributes&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;JSON API paints my bikeshed!&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;relationships&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;author&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;self&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.com/articles/1/relationships/author&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;related&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.com/articles/1/author&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;data&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;people&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;9&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;comments&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;self&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.com/articles/1/relationships/comments&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;related&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.com/articles/1/comments&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;data&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;comments&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;5&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;comments&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;12&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;self&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.com/articles/1&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This is my favourite, so it’s first. I’ve taken the liberty of trimming the example found on the site (&lt;a href=&quot;http://jsonapi.org/&quot;&gt;http://jsonapi.org/&lt;/a&gt;). As you can plainly see, this includes lots of data. On closer inspection you might notice that the “real” data is kind of small compared to the entire response (this is a very verbose example). This is due to a very heavy usage of HATEOAS.&lt;/p&gt;
+
+&lt;p&gt;The response starts with a &lt;code class=&quot;highlighter-rouge&quot;&gt;links&lt;/code&gt; object, this is a nice way to implement pagination. It’s pretty easy to write a recursive function to consume this endpoint (and you can reuse it for all endpoints).&lt;/p&gt;
+
+&lt;p&gt;Then follows the data object, which contains an array (if this were an endpoint to a specific entity, it would not use an array) to display the different articles (in this case only one).&lt;/p&gt;
+
+&lt;p&gt;The relationships are pretty self explanatory. these are HATEOAS links to related endpoints.&lt;/p&gt;
+
+&lt;h3 id=&quot;jsend&quot;&gt;JSend&lt;/h3&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;status&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;success&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;data&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;post&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;A blog post&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;body&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Some useful content&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Simple and to the point, what’s not to like? Well there is no HATEOAS, that’s kind of a bummer. Still, if you are making a small application (or maybe some AJAX calls), that would not be the disastrous. As stated before, it all depends on the scope of your application.&lt;/p&gt;
+
+&lt;h3 id=&quot;odata-json-protocol&quot;&gt;OData JSON Protocol&lt;/h3&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;@odata.context&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;serviceRoot/$metadata#People&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;@odata.nextLink&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;serviceRoot/People?%24skiptoken=8&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;@odata.id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;serviceRoot/People('russellwhyte')&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;@odata.etag&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;W08D1694BD49A0F11&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;@odata.editLink&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;serviceRoot/People('russellwhyte')&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;UserName&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;russellwhyte&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;FirstName&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Russell&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;LastName&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Whyte&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;Emails&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Russell@example.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Russell@contoso.com&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;AddressInfo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;Address&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;187 Suffolk Ln.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;City&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;CountryRegion&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;United States&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;Name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Boise&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;Region&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ID&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;Gender&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Male&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;Concurrency&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;635404796846280400&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;@odata.id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;serviceRoot/People('keithpinckney')&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;@odata.etag&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;W08D1694BD49A0F11&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;@odata.editLink&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;serviceRoot/People('keithpinckney')&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;UserName&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;keithpinckney&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;FirstName&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Keith&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;LastName&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Pinckney&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;Emails&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Keith@example.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Keith@contoso.com&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;AddressInfo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;Gender&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Male&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;Concurrency&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;635404796846280400&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now you might look at this and think: Wtf…
+And you would be right. This is a difficult to understand standard and is probably not something you wanna use as it’s not really compatible with REST. OData requires endpoints that get created dynamically (called out-of-band information). it also demands that you create an endpoint named &lt;code class=&quot;highlighter-rouge&quot;&gt;/$metadata&lt;/code&gt; to decipher the metadata in the response.&lt;/p&gt;
+
+&lt;p&gt;This Structure seems a bit out there and requires not only some extra work to implement, it also requires some really great documentation.&lt;/p&gt;
+
+&lt;p&gt;I would only recommend it if you really need it, and know what you are doing. (Even then HAL would still be a better option)&lt;/p&gt;
+
+&lt;h3 id=&quot;hal&quot;&gt;HAL&lt;/h3&gt;
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;_links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;self&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/orders&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;curies&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ea&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://example.com/docs/rels/{rel}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;templated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;next&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/orders?page=2&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;ea:find&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/orders{?id}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;templated&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;ea:admin&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/admins/2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Fred&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/admins/5&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Kate&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;currentlyProcessing&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;14&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;shippedToday&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;_embedded&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;ea:order&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;_links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;self&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/orders/123&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;ea:basket&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/baskets/98712&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;ea:customer&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/customers/7809&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;total&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;30.00&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;currency&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;USD&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;status&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;shipped&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;_links&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;self&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/orders/124&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;ea:basket&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/baskets/97213&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;ea:customer&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;href&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/customers/12369&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;total&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;20.00&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;currency&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;USD&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;status&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;processing&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Looks familiar? It’s basically OData with HATEOAS support. I would choose this over OData (and not only because &lt;a href=&quot;http://www.imdb.com/title/tt0062622/&quot;&gt;2001: A Space Odyssey&lt;/a&gt; is one of my favourite movies).&lt;/p&gt;
+
+&lt;h3 id=&quot;other-options&quot;&gt;Other options&lt;/h3&gt;
+
+&lt;p&gt;As stated before, These are just a few options. It’s not a crime to adapt these to your business cases or create a &lt;a href=&quot;http://xkcd.com/927/&quot;&gt;brand new standard&lt;/a&gt;. Maybe combine JSend with HATEOAS ?&lt;/p&gt;
+
+&lt;h2 id=&quot;authentication&quot;&gt;Authentication&lt;/h2&gt;
+
+&lt;p&gt;As you guys know REST is stateless (no sessions or cookies for you). So how can we limit users so they only can access the content they are allowed to access? No worries, smart people have already found some smart solutions to this problem. Again which one to choose is up to you and your application (even though OAuth2.0 is currently preferred)&lt;/p&gt;
+
+&lt;h3 id=&quot;http-basic&quot;&gt;HTTP Basic&lt;/h3&gt;
+
+&lt;p&gt;This one is the easiest one to implement. It’s the standard HTTP way of authentication. That said, it’s also the least secure option out there (never use this over non SSL/HTTPS connections!).&lt;/p&gt;
+
+&lt;p&gt;To log a user in, the client just needs to send a Basic header with a base64 encoding of username:password.&lt;/p&gt;
+
+&lt;p&gt;That’s it. Now every sequential call you do, you just have to send that data with it.&lt;/p&gt;
+
+&lt;h3 id=&quot;json-web-tokens&quot;&gt;JSON Web Tokens&lt;/h3&gt;
+
+&lt;p&gt;A JWT looks like this: aaa.bbb.ccc. It’s just a long string divided in 3 sections, separated with a dot (.). The first section is a header, second one is the payload and the last one is the signature. For more information about how to build token I recommend reading &lt;a href=&quot;https://scotch.io/tutorials/the-anatomy-of-a-json-web-token#what-does-a-jwt-look-like?&quot;&gt;this guide&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The basic JWT flow goes like this: You send your credentials to a login endpoint. The endpoint returns a JWT token with your data in it. Now you just have to send that token with every request like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Authorization: Bearer PlaceTokenHere
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Most JWT’s have expiry dates, This kind of authentication method has no refresh system. When it expires you just have to request a new one.&lt;/p&gt;
+
+&lt;h3 id=&quot;oauth2&quot;&gt;OAuth2&lt;/h3&gt;
+
+&lt;p&gt;This is the most popular Authentication method. This is mainly due to it’s security and flexibility. That said, it can be a little bit of PITA  to set it up.
+Covering the entire OAuth spectrum would take us too far I’m afraid. I’ll just cover a very simplistic practical flow.&lt;/p&gt;
+
+&lt;p&gt;In it’s most simplistic form there are some similarities between JWT and OAuth. They both request a token in the same way and they both get a token returned (In this case obviously an OAuth token and not a JWT).&lt;/p&gt;
+
+&lt;p&gt;OAuth requires that you send the token with it on each request as well:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Authorization: Bearer PlaceTokenHere
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;OAuth tokens always have an expiry date, when this happens you have to use the refresh token (it’s part of the response you get when receiving your OAuth token) on the refresh endpoint to get a new OAuth token.&lt;/p&gt;
+
+&lt;p&gt;This is a very simplistic representation of retrieving an OAuth token, I’m affraid the differences between OAuth and JWT would take us too far. I encourage you to read more about it here: &lt;a href=&quot;http://oauthbible.com/&quot;&gt;http://oauthbible.com/&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;versioning&quot;&gt;Versioning&lt;/h2&gt;
+
+&lt;p&gt;The older your API gets, the more prone your API is to change. How we deal with this change can be tricky for end users. You can’t just remove or change endpoints, there are probably some people that rely on the old structure of your API. You don’t need to support older versions of your API indefinitely, but it would be common decency to give people time to migrate to the new structure.&lt;/p&gt;
+
+&lt;p&gt;As you can imagine, everyone has an opinion on how versioning should be done. Let’s look at a few common ones.&lt;/p&gt;
+
+&lt;h3 id=&quot;url-based-versioning&quot;&gt;Url based versioning&lt;/h3&gt;
+
+&lt;p&gt;This looks like the most obvious solution, but it’s not necessarily the best one. This way of versioning requires some foreknowledge and planning. You have to design your first version of the API with the possibility in mind that future versions of the API are coming. This sounds obvious, but API versioning is commonly an afterthought.&lt;/p&gt;
+
+&lt;p&gt;A url based versioning url might look like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/api/v3/headis/players
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;header-based-versioning&quot;&gt;Header based versioning&lt;/h3&gt;
+
+&lt;p&gt;This way is commonly described as the “best” way. Of course the reality is that there is no best way. And it all depends on your use case (can’t stress that enough).&lt;/p&gt;
+
+&lt;p&gt;Header based versioning is done trough, well you guessed it, a header. More specifically, the Accept header.
+Looks like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Accept: application/vnd.github.v3+json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;If no version header is given, you simply return your latest version.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;This is of course the tip of the iceberg. We just had a bird’s eye view over API development. The key thing to remember here is that almost every problem with APIs has occurred to someone before and it’s important to be aware of what the possible directions are with every crossroad you encounter. Just don’t forget that there is no such thing as “the one true way”.&lt;/p&gt;
+
+&lt;h3 id=&quot;further-reading&quot;&gt;Further reading&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://apisyouwonthate.com/&quot;&gt;Phil Sturgeon’s great Build APIs you won’t hate&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://apigee.com/about/resources/ebooks/web-api-design&quot;&gt;Apigee’s Crafting Interfaces that Developers Love (Free)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://shop.oreilly.com/product/0636920028468.do&quot;&gt;The O’reilly book (By Leonard Richardson, Mike Amundsen, Sam Ruby)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://imgs.xkcd.com/comics/api.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Image by Randall Munroe from his &lt;a href=&quot;http://xkcd.com/&quot;&gt;great web comic site&lt;/a&gt;&lt;/p&gt;</content><author><name>Frederick Vanbrabant</name></author><summary type="html">So you want to build a web API. You have to start somewhere, why not here</summary></entry></feed>
