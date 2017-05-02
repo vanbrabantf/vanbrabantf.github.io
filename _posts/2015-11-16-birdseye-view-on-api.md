@@ -41,6 +41,7 @@ HTTP is request/response driven, this means that a response only is given as a r
 
 In the case of REST we are mainly interested in its interface. In HTTP the client sends verbs in the header of request, the server responses with HTTP codes in its response header. Now this is one of the hard parts about building an API, what verb fits with what action and/or what response code should be send. As far as the verbs go, only the edge cases are difficult, the response codes on the other hand are often open for discussion. So let's have a quick look at some commonly used ones shall we (please note that these are the most used ones, there are more):
 
+{:.table}
 | Verb   | Return HTTP Code| Example of url  |
 | -------|:---------------:| ---------------:|
 | GET    | 200             | /wombats        |
