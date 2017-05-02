@@ -1,95 +1,4 @@
 @charset "UTF-8";
-.blog-title {
-  padding-top: 3em;
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 2px;
-  text-transform: uppercase; }
-
-blockquote {
-  background: #302a2c;
-  color: white;
-  width: 100%;
-  border: none;
-  padding: 0.5em 10px;
-  quotes: "“" "”" "‘" "’"; }
-
-blockquote:before,
-blockquote:after {
-  color: #ccc;
-  font-size: 4em;
-  line-height: 0.1em;
-  margin-right: 0.25em; }
-
-blockquote:before {
-  content: open-quote;
-  vertical-align: -0.4em; }
-
-blockquote:after {
-  content: close-quote;
-  vertical-align: -0.6em; }
-
-blockquote p {
-  display: inline; }
-
-.blog-body {
-  color: black;
-  font-size: 19px;
-  font-style: normal;
-  letter-spacing: -0.063px;
-  line-height: 33.18px; }
-
-.blog-body p {
-  font-weight: normal; }
-
-.blog-body img {
-  max-width: 100%; }
-
-.blog-body .highlight {
-  font-weight: normal;
-  font-size: 19px;
-  border-radius: inherit; }
-
-.bio-card {
-  background: #eeeeee;
-  border: 1px solid #e1e1e1;
-  width: 100%;
-  display: table;
-  padding: 20px 40px;
-  text-decoration: none;
-  margin-bottom: 3em; }
-
-.bio-card-txt {
-  color: black;
-  font-size: 19px;
-  font-style: normal;
-  letter-spacing: -0.063px; }
-
-.footer {
-  background: #302a2c;
-  border: 1px solid #302a2c;
-  width: 100%;
-  display: table;
-  padding: 20px 40px;
-  text-decoration: none; }
-
-.footer h2 {
-  color: white;
-  text-transform: uppercase; }
-
-.footer h3 {
-  color: white;
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 2px;
-  text-transform: uppercase; }
-
-.footer p {
-  color: white;
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 2px; }
-
 @import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900,300italic");
 /*********************************************************************************/
 /* Basic                                                                         */
@@ -152,6 +61,98 @@ hr {
 p, ul, ol, dl, table {
   margin-bottom: 2em; }
 
+.blog-title {
+  padding-top: 3em;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase; }
+
+blockquote {
+  background: #302a2c;
+  color: white;
+  width: 100%;
+  border: none;
+  padding: 0.5em 10px;
+  quotes: "“" "”" "‘" "’"; }
+
+blockquote:before,
+blockquote:after {
+  color: #ccc;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em; }
+
+blockquote:before {
+  content: open-quote;
+  vertical-align: -0.4em; }
+
+blockquote:after {
+  content: close-quote;
+  vertical-align: -0.6em; }
+
+blockquote p {
+  display: inline; }
+
+.blog-body {
+  color: black;
+  font-size: 19px;
+  font-style: normal;
+  letter-spacing: -0.063px;
+  line-height: 33.18px; }
+
+.blog-body p {
+  font-weight: normal; }
+
+.blog-body img {
+  max-width: 100%; }
+
+.blog-body .highlight {
+  font-weight: normal;
+  font-size: 19px;
+  border-radius: inherit;
+  padding: 1em; }
+
+.bio-card {
+  background: #eeeeee;
+  border: 1px solid #e1e1e1;
+  width: 100%;
+  display: table;
+  padding: 20px 40px;
+  text-decoration: none;
+  margin-bottom: 3em; }
+
+.bio-card-txt {
+  color: black;
+  font-size: 19px;
+  font-style: normal;
+  letter-spacing: -0.063px; }
+
+.footer {
+  background: #302a2c;
+  border: 1px solid #302a2c;
+  width: 100%;
+  display: table;
+  padding: 20px 40px;
+  text-decoration: none; }
+
+.footer h2 {
+  color: white;
+  text-transform: uppercase; }
+
+.footer h3 {
+  color: white;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase; }
+
+.footer p {
+  color: white;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 2px; }
+
 /*********************************************************************************/
 /* Header                                                                        */
 /*********************************************************************************/
@@ -162,8 +163,11 @@ p, ul, ol, dl, table {
 .header a {
   color: #252122;
   font-weight: 700;
-  font-size: 2em;
-  letter-spacing: -0.035em; }
+  letter-spacing: -0.035em;
+  font-size: 5.9vw; }
+
+.header h2 {
+  font-size: 3.0vh; }
 
 .header a:hover {
   color: #d52349; }
@@ -495,7 +499,6 @@ p, ul, ol, dl, table {
   color: #cd00cd; }
 
 /* Literal.Number.Integer.Long */
-
 /*********************************************************************************/
 /* Blog overview                                                                 */
 /*********************************************************************************/
