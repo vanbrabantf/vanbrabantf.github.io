@@ -1,5 +1,181 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-05-02T22:29:45+02:00</updated><id>http://localhost:4000/</id><title type="html">Frederick Vanbrabant delirious rantings</title><subtitle>A less then 30 year old developer from Antwerp with a passion for API's and everything that surrounds them. Works as a Software Engineer at madewithlove and is co-organiser of PHPAntwerp
-</subtitle><author><name>Frederick Vanbrabant</name></author><entry><title type="html">How we improved our PWA score by 53 points in 4 hours</title><link href="http://localhost:4000/2017/03/13/improved_pwa_score.html" rel="alternate" type="text/html" title="How we improved our PWA score by 53 points in 4 hours" /><published>2017-03-13T00:00:00+01:00</published><updated>2017-03-13T00:00:00+01:00</updated><id>http://localhost:4000/2017/03/13/improved_pwa_score</id><content type="html" xml:base="http://localhost:4000/2017/03/13/improved_pwa_score.html">&lt;p&gt;&lt;strong&gt;This post wast orignially posted on the &lt;a href=&quot;https://blog.madewithlove.be/&quot;&gt;madewithlove&lt;/a&gt; site&lt;/strong&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://frederickvanbrabant.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://frederickvanbrabant.com/" rel="alternate" type="text/html" /><updated>2017-05-31T12:11:36+02:00</updated><id>http://frederickvanbrabant.com/</id><title type="html">Frederick Vanbrabant delirious rantings</title><subtitle>A less then 30 year old developer from Antwerp with a passion for API's and everything that surrounds them. Works as a Software Engineer at madewithlove and is co-organiser of PHPAntwerp
+</subtitle><author><name>Frederick Vanbrabant</name></author><entry><title type="html">What the hell are Generics and would I want them in PHP?</title><link href="http://frederickvanbrabant.com/2017/05/31/generics-in-php.html" rel="alternate" type="text/html" title="What the hell are Generics and would I want them in PHP?" /><published>2017-05-31T00:00:00+02:00</published><updated>2017-05-31T00:00:00+02:00</updated><id>http://frederickvanbrabant.com/2017/05/31/generics-in-php</id><content type="html" xml:base="http://frederickvanbrabant.com/2017/05/31/generics-in-php.html">&lt;p&gt;So everyone is talking about this hip “new” kid on the block for PHP: Generics. The rfc is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!&lt;/p&gt;
+
+&lt;h2 id=&quot;what-is-the-use-case-of-a-generic&quot;&gt;What is the use case of a Generic?&lt;/h2&gt;
+
+&lt;p&gt;Generics is not something new. Statically typed languages like &lt;a href=&quot;https://docs.oracle.com/javase/tutorial/java/generics/types.html&quot;&gt;Java&lt;/a&gt; and &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/&quot;&gt;C#&lt;/a&gt; have had them for ages. There are even some dynamically typed languages like &lt;a href=&quot;http://news.dartlang.org/2016/12/dart-121-generic-method-syntax.html&quot;&gt;Dart&lt;/a&gt; that implement them in their core. And even languages that don’t support Generics like for example Javascript can still support them with a 3rth party implementation, in the case of Javascript this would be &lt;a href=&quot;https://www.typescriptlang.org/docs/handbook/generics.html&quot;&gt;Typescript&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The basic idea is that you can reuse a class that is statically typed with different typed parameters. Ok, I understand that this might sound very confusing. So let’s check out an example:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+ 
+&lt;span class=&quot;nv&quot;&gt;$car&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Car&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Honda'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+ 
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Car&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+ 
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__construct&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$wheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;wheels&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;engine&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getWheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;wheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getEngine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+ 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Yes I know, I’m explaining OO stuff with a car class. I know it’s super cliche, and I’m normally not a fan of getters, but just roll with it.&lt;/p&gt;
+
+&lt;p&gt;As you can see, we are creating a &lt;code class=&quot;highlighter-rouge&quot;&gt;Car&lt;/code&gt; object with 2 parameters. The wheels and the engine.
+Now this is all fine and dandy, but what do &lt;code class=&quot;highlighter-rouge&quot;&gt;$wheels&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;$engine&lt;/code&gt; parameters represent? In this case it’s the amount of wheels and what engine it sports one would assume, as we send an integer and a string along.&lt;/p&gt;
+
+&lt;p&gt;But &lt;code class=&quot;highlighter-rouge&quot;&gt;$car = new Car(‘pirelli’, true);&lt;/code&gt; would be just as valid.&lt;/p&gt;
+
+&lt;p&gt;This is of course one of the typical things of a dynamically typed language. But if we want to add some more uniformity in our class we could, thanks to PHP 7 and types:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+ 
+&lt;span class=&quot;nv&quot;&gt;$car&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Car&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Honda'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+ 
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Car&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+ 
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__construct&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;wheels&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;engine&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+ 
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getWheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;wheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+ 
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getEngine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now it’s impossible to create an invalid object thanks to the strict types. Ok cool, let’s make everything strictly typed then!&lt;/p&gt;
+
+&lt;p&gt;But what if we want to create an object that’s both statically and dynamically typed? This sounds absurd but let me give you a use case. You want an object that accepts a parameter on creation but it needs to always return that same type of parameter on its return.&lt;/p&gt;
+
+&lt;p&gt;So for example when I do &lt;code class=&quot;highlighter-rouge&quot;&gt;$myCar = new Car('honda');&lt;/code&gt; and later &lt;code class=&quot;highlighter-rouge&quot;&gt;$myCar-&amp;gt;getEngine();&lt;/code&gt; I want to be sure that what I get back from &lt;code class=&quot;highlighter-rouge&quot;&gt;getEngine&lt;/code&gt; is the same type as what I’ve put into the constructor (in this case a string).&lt;/p&gt;
+
+&lt;h2 id=&quot;ok-show-me-this-generic-magic-then&quot;&gt;Ok show me this generic magic then!&lt;/h2&gt;
+&lt;p&gt;Well … the thing is… at the time of writing, generics don’t yet exist in PHP yet. I know … what a tease. But luckily for us there is a &lt;a href=&quot;https://wiki.php.net/rfc/generics&quot;&gt;RFC&lt;/a&gt;! So people are still loudly arguing whether or not they want to include generics into PHP and how it should look. But let us take a look at what the current proposed way of doing it is.&lt;/p&gt;
+
+&lt;p&gt;The use case described above could look like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+ 
+&lt;span class=&quot;nv&quot;&gt;$car&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Car&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Honda'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+ 
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Car&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;WheelType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EngineType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+ 
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__construct&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;WheelType&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EngineType&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;wheels&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;engine&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+ 
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getWheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;WheelType&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;wheels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+ 
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getEngineType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EngineType&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;As you can see, we now have brackets! So first up is this:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$car = new Car&amp;lt;int,string&amp;gt;(4, 'Honda');&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Here we say, we are going to create a new Car, with 2 parameters; an integer and a string. You could according to the currently proposed RCF just send:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$car = new Car(4, 'Honda');&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;but I like the implicit version better for explanation sake. Next up is:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;class Car&amp;lt;WheelType, EngineType&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This tells the class about what variable types it supports.
+And then we can use these virtual types just like normal types in the class.
+ So in this case the &lt;code class=&quot;highlighter-rouge&quot;&gt;WheelType&lt;/code&gt; will be an integer and the &lt;code class=&quot;highlighter-rouge&quot;&gt;EngineType&lt;/code&gt; a string.&lt;/p&gt;
+
+&lt;p&gt;It’s as easy as that.&lt;/p&gt;
+
+&lt;p&gt;##That’s a use case that will never happen!
+It is indeed a niche use case, but as PHP grows towards a hybrid of a dynamically typed and strictly typed language it does make sense to include some more features of strictly typed languages. While true, you will not use this everyday, there is no harm in having it in the language. It would however be handy for people that write logging or collection packages. Take this piece of code for example:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+ 
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;EntryType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$collection&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+ 
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;EntryType&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;collection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+ 
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getValues&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;collection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+ 
+&lt;span class=&quot;nv&quot;&gt;$collection&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Collection&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'this is a string'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+ 
+&lt;span class=&quot;nv&quot;&gt;$stringArray&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getValues&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+ 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You can now reuse this collection for whatever you want, but you will always be sure &lt;code class=&quot;highlighter-rouge&quot;&gt;getValues()&lt;/code&gt; will return a collection of items that have the same type.&lt;/p&gt;
+
+&lt;p&gt;Even more fun is that you can instantiate a Collection like this: &lt;code class=&quot;highlighter-rouge&quot;&gt;$collection = new Collection &amp;lt;Runnable &amp;gt;();&lt;/code&gt; where &lt;code class=&quot;highlighter-rouge&quot;&gt;Runnable&lt;/code&gt; is an interface. This way you could have, for example, a collection that you are sure of only has items with values objects in them that conform to the interface. For example:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;runBatch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$batch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+     &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$batch&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$entry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+           &lt;span class=&quot;nv&quot;&gt;$entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Runnable
+&lt;/span&gt;     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;T is Runnable&amp;gt;&lt;/code&gt; in this context would stand for: “you can enter whatever type you want here, but it has to adhere to the &lt;code class=&quot;highlighter-rouge&quot;&gt;Runnable&lt;/code&gt; interface.”&lt;/p&gt;
+
+&lt;p&gt;So what’s next?
+As I said before, the proposal is currently in draft. Once the proposal is finished it will go into a voting round and if there is a consensus about implementing it, it will be added, otherwise it’s back to the drawing board for Generics in PHP.&lt;/p&gt;
+
+&lt;p&gt;Ps: you can follow along how the rfc is going &lt;a href=&quot;https://why-cant-we-have-nice-things.mwl.be/requests/introduce-generics-into-php&quot;&gt;here&lt;/a&gt;&lt;/p&gt;</content><author><name>Frederick Vanbrabant</name></author><summary type="html">So everyone is talking about this hip “new” kid on the block for PHP: Generics. The rfc is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!</summary></entry><entry><title type="html">How we improved our PWA score by 53 points in 4 hours</title><link href="http://frederickvanbrabant.com/2017/03/13/improved_pwa_score.html" rel="alternate" type="text/html" title="How we improved our PWA score by 53 points in 4 hours" /><published>2017-03-13T00:00:00+01:00</published><updated>2017-03-13T00:00:00+01:00</updated><id>http://frederickvanbrabant.com/2017/03/13/improved_pwa_score</id><content type="html" xml:base="http://frederickvanbrabant.com/2017/03/13/improved_pwa_score.html">&lt;p&gt;&lt;strong&gt;This post wast orignially posted on the &lt;a href=&quot;https://blog.madewithlove.be/&quot;&gt;madewithlove&lt;/a&gt; site&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;A week ago &lt;a href=&quot;https://twitter.com/hannesvdvreken&quot;&gt;Hannes&lt;/a&gt; and I attended &lt;a href=&quot;http://phpconference.co.uk/&quot;&gt;PHPUK&lt;/a&gt; in London (&lt;a href=&quot;https://blog.madewithlove.be/post/php-uk-conference/&quot;&gt;You can read all about it here&lt;/a&gt;). We saw a lot of great talks and met numerous very smart people. Among these was &lt;a href=&quot;https://twitter.com/rowan_m&quot;&gt;Rowan Merewood&lt;/a&gt;, who gave a talk called “Progressive Web Apps in the wild”. He convinced me to try and add some PWA’ness to one of our applications, just to try it out.&lt;/p&gt;
 
@@ -106,7 +282,7 @@ The others things are easily added.&lt;/p&gt;
 
 &lt;p&gt;I was actually really surprised how easy this was. We got an &lt;strong&gt;almost&lt;/strong&gt; perfect score in a short time experimenting with that spec. The results are also pretty amazing, we now have something that feels like a native app, a nice bump in page speed and some extra SEO points, just by adding 2 files.&lt;/p&gt;
 
-&lt;p&gt;I totally advise you give this a shot, maybe you can even push it to 100%!&lt;/p&gt;</content><author><name>frederick</name></author><summary type="html">After a recent burst of inspiration at PHPUK Sam and I ran an experiment to see how much we could improve our company site in just 4 hours. Turns out it was far easier than we expected</summary></entry><entry><title type="html">On how to implement a code of conduct</title><link href="http://localhost:4000/2016/01/29/on-how-to-implement-a-code-of-conduct.html" rel="alternate" type="text/html" title="On how to implement a code of conduct" /><published>2016-01-29T00:00:00+01:00</published><updated>2016-01-29T00:00:00+01:00</updated><id>http://localhost:4000/2016/01/29/on-how-to-implement-a-code-of-conduct</id><content type="html" xml:base="http://localhost:4000/2016/01/29/on-how-to-implement-a-code-of-conduct.html">&lt;p&gt;&lt;strong&gt;This post wast orignially posted on the &lt;a href=&quot;https://blog.madewithlove.be/&quot;&gt;madewithlove&lt;/a&gt; site&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;I totally advise you give this a shot, maybe you can even push it to 100%!&lt;/p&gt;</content><author><name>frederick</name></author><summary type="html">After a recent burst of inspiration at PHPUK Sam and I ran an experiment to see how much we could improve our company site in just 4 hours. Turns out it was far easier than we expected</summary></entry><entry><title type="html">On how to implement a code of conduct</title><link href="http://frederickvanbrabant.com/2016/01/29/on-how-to-implement-a-code-of-conduct.html" rel="alternate" type="text/html" title="On how to implement a code of conduct" /><published>2016-01-29T00:00:00+01:00</published><updated>2016-01-29T00:00:00+01:00</updated><id>http://frederickvanbrabant.com/2016/01/29/on-how-to-implement-a-code-of-conduct</id><content type="html" xml:base="http://frederickvanbrabant.com/2016/01/29/on-how-to-implement-a-code-of-conduct.html">&lt;p&gt;&lt;strong&gt;This post wast orignially posted on the &lt;a href=&quot;https://blog.madewithlove.be/&quot;&gt;madewithlove&lt;/a&gt; site&lt;/strong&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;preface&quot;&gt;Preface&lt;/h2&gt;
 
@@ -189,7 +365,7 @@ The others things are easily added.&lt;/p&gt;
 
 &lt;p&gt;Well no. Open-source is all about community. A project is never an island. There will be reactions on your decisions (if there aren’t you should ask for them), now it’s the time to discuss it with the community. Again, how you handle them is up to you, but it could be wise to be open to them (if you think they’re good) and be willing to adjust some parts.&lt;/p&gt;
 
-&lt;p&gt;These things are like code, they can always be improved upon.&lt;/p&gt;</content><author><name>frederick</name></author><summary type="html">We shall not be discussing the ethics or possible political impact this brings with it. We will however propose a starting point on **how** to implement them.</summary></entry><entry><title type="html">A bird’s eye view on API development</title><link href="http://localhost:4000/2015/11/16/birdseye-view-on-api.html" rel="alternate" type="text/html" title="A bird's eye view on API development" /><published>2015-11-16T00:00:00+01:00</published><updated>2015-11-16T00:00:00+01:00</updated><id>http://localhost:4000/2015/11/16/birdseye-view-on-api</id><content type="html" xml:base="http://localhost:4000/2015/11/16/birdseye-view-on-api.html">&lt;p&gt;&lt;strong&gt;This post wast orignially posted on the &lt;a href=&quot;https://blog.madewithlove.be/&quot;&gt;madewithlove&lt;/a&gt; site&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;These things are like code, they can always be improved upon.&lt;/p&gt;</content><author><name>frederick</name></author><summary type="html">We shall not be discussing the ethics or possible political impact this brings with it. We will however propose a starting point on **how** to implement them.</summary></entry><entry><title type="html">A bird’s eye view on API development</title><link href="http://frederickvanbrabant.com/2015/11/16/birdseye-view-on-api.html" rel="alternate" type="text/html" title="A bird's eye view on API development" /><published>2015-11-16T00:00:00+01:00</published><updated>2015-11-16T00:00:00+01:00</updated><id>http://frederickvanbrabant.com/2015/11/16/birdseye-view-on-api</id><content type="html" xml:base="http://frederickvanbrabant.com/2015/11/16/birdseye-view-on-api.html">&lt;p&gt;&lt;strong&gt;This post wast orignially posted on the &lt;a href=&quot;https://blog.madewithlove.be/&quot;&gt;madewithlove&lt;/a&gt; site&lt;/strong&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;So an API, that’s just output of some JSON code right? No problem, my framework does that automatically.&lt;/p&gt;
