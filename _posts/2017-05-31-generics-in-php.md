@@ -127,7 +127,7 @@ Here we say, we are going to create a new Car, with 2 parameters; an integer and
  
 ```$car = new Car(4, 'Honda');``` 
  
-but I like the implicit version better for explanation sake. Next up is:
+but I like the explicit version better for explanation sake. Next up is:
  
 ```class Car<WheelType, EngineType>```
  
@@ -137,7 +137,7 @@ And then we can use these virtual types just like normal types in the class.
  
 It’s as easy as that.
  
-##That’s a use case that will never happen!
+## That’s a use case that will never happen!
 It is indeed a niche use case, but as PHP grows towards a hybrid of a dynamically typed and strictly typed language it does make sense to include some more features of strictly typed languages. While true, you will not use this everyday, there is no harm in having it in the language. It would however be handy for people that write logging or collection packages. Take this piece of code for example:
  
 ```php
