@@ -12,7 +12,7 @@ So everyone is talking about this hip “new” kid on the block for PHP: Generi
 
 ## What is the use case of a Generic?
 
-Generics is not something new. Statically typed languages like [Java](https://docs.oracle.com/javase/tutorial/java/generics/types.html) and [C#](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/) have had them for ages. There are even some dynamically typed languages like [Dart](http://news.dartlang.org/2016/12/dart-121-generic-method-syntax.html) that implement them in their core. And even languages that don’t support Generics like for example Javascript can still support them with a 3rth party implementation, in the case of Javascript this would be [Typescript](https://www.typescriptlang.org/docs/handbook/generics.html).
+Generics is not something new. Statically typed languages like [Java](https://docs.oracle.com/javase/tutorial/java/generics/types.html) and [C#](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/) have had them for ages. There are even some dynamically typed languages like [Dart](http://news.dartlang.org/2016/12/dart-121-generic-method-syntax.html) that implement them in their core. And even languages that don’t support Generics like for example Javascript can still support them with a 3rd party implementation, in the case of Javascript this would be [Typescript](https://www.typescriptlang.org/docs/handbook/generics.html).
  
 The basic idea is that you can reuse a class that is statically typed with different typed parameters. Ok, I understand that this might sound very confusing. So let's check out an example:
  
