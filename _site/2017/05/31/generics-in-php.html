@@ -55,8 +55,8 @@
 <meta property="og:title" content="What the hell are Generics and would I want them in PHP?" />
 <meta name="author" content="Frederick Vanbrabant" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="So everyone is talking about this hip “new” kid on the block for PHP: Generics. The rfc is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!" />
-<meta property="og:description" content="So everyone is talking about this hip “new” kid on the block for PHP: Generics. The rfc is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!" />
+<meta name="description" content="So everyone is talking about this hip “new” kid on the block for PHP: Generics. The RFC is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!" />
+<meta property="og:description" content="So everyone is talking about this hip “new” kid on the block for PHP: Generics. The RFC is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!" />
 <link rel="canonical" href="http://frederickvanbrabant.com/2017/05/31/generics-in-php.html" />
 <meta property="og:url" content="http://frederickvanbrabant.com/2017/05/31/generics-in-php.html" />
 <meta property="og:site_name" content="Frederick Vanbrabant delirious rantings" />
@@ -66,7 +66,7 @@
 <meta name="twitter:site" content="@TheEdonian" />
 <meta name="twitter:creator" content="@Frederick Vanbrabant" />
 <script type="application/ld+json">
-{"@context":"http://schema.org","@type":"BlogPosting","headline":"What the hell are Generics and would I want them in PHP?","author":{"@type":"Person","name":"Frederick Vanbrabant"},"datePublished":"2017-05-31T00:00:00+02:00","dateModified":"2017-05-31T00:00:00+02:00","description":"So everyone is talking about this hip “new” kid on the block for PHP: Generics. The rfc is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!","mainEntityOfPage":{"@type":"WebPage","@id":"http://frederickvanbrabant.com/2017/05/31/generics-in-php.html"},"url":"http://frederickvanbrabant.com/2017/05/31/generics-in-php.html"}</script>
+{"@context":"http://schema.org","@type":"BlogPosting","headline":"What the hell are Generics and would I want them in PHP?","author":{"@type":"Person","name":"Frederick Vanbrabant"},"datePublished":"2017-05-31T00:00:00+02:00","dateModified":"2017-05-31T00:00:00+02:00","description":"So everyone is talking about this hip “new” kid on the block for PHP: Generics. The RFC is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!","mainEntityOfPage":{"@type":"WebPage","@id":"http://frederickvanbrabant.com/2017/05/31/generics-in-php.html"},"url":"http://frederickvanbrabant.com/2017/05/31/generics-in-php.html"}</script>
 <!-- End Jekyll SEO tag -->
 
 	</head>
@@ -104,13 +104,13 @@
 					<div class="row blog-body">
 						<div class="col">
 							<section>
-								<p>So everyone is talking about this hip “new” kid on the block for PHP: Generics. The rfc is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!</p>
+								<p>So everyone is talking about this hip “new” kid on the block for PHP: Generics. The RFC is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!</p>
 
 <h2 id="what-is-the-use-case-of-a-generic">What is the use case of a Generic?</h2>
 
 <p>Generics is not something new. Statically typed languages like <a href="https://docs.oracle.com/javase/tutorial/java/generics/types.html">Java</a> and <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/">C#</a> have had them for ages. There are even some dynamically typed languages like <a href="http://news.dartlang.org/2016/12/dart-121-generic-method-syntax.html">Dart</a> that implement them in their core. And even languages that don’t support Generics like for example Javascript can still support them with a 3rd party implementation, in the case of Javascript this would be <a href="https://www.typescriptlang.org/docs/handbook/generics.html">Typescript</a>.</p>
 
-<p>The basic idea is that you can reuse a class that is statically typed with different typed parameters. Ok, I understand that this might sound very confusing. So let’s check out an example:</p>
+<p>The basic idea is that you can reuse a class that is statically typed with different typed parameters. OK, I understand that this might sound very confusing. So let’s check out an example:</p>
 
 <div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
  
@@ -177,14 +177,14 @@ Now this is all fine and dandy, but what do <code class="highlighter-rouge">$whe
 </code></pre>
 </div>
 
-<p>Now it’s impossible to create an invalid object thanks to the strict types. Ok cool, let’s make everything strictly typed then!</p>
+<p>Now it’s impossible to create an invalid object thanks to the strict types. OK cool, let’s make everything strictly typed then!</p>
 
 <p>But what if we want to create an object that’s both statically and dynamically typed? This sounds absurd but let me give you a use case. You want an object that accepts a parameter on creation but it needs to always return that same type of parameter on its return.</p>
 
 <p>So for example when I do <code class="highlighter-rouge">$myCar = new Car('honda');</code> and later <code class="highlighter-rouge">$myCar-&gt;getEngine();</code> I want to be sure that what I get back from <code class="highlighter-rouge">getEngine</code> is the same type as what I’ve put into the constructor (in this case a string).</p>
 
-<h2 id="ok-show-me-this-generic-magic-then">Ok show me this generic magic then!</h2>
-<p>Well … the thing is… at the time of writing, generics don’t yet exist in PHP yet. I know … what a tease. But luckily for us there is a <a href="https://wiki.php.net/rfc/generics">RFC</a>! So people are still loudly arguing whether or not they want to include generics into PHP and how it should look. But let us take a look at what the current proposed way of doing it is.</p>
+<h2 id="ok-show-me-this-generic-magic-then">OK show me this generic magic then!</h2>
+<p>Well… the thing is… at the time of writing, generics don’t yet exist in PHP yet. I know… what a tease. But luckily for us there is an <a href="https://wiki.php.net/rfc/generics">RFC</a>! So people are still loudly arguing whether or not they want to include generics into PHP and how it should look. But let us take a look at what the current proposed way of doing it is.</p>
 
 <p>The use case described above could look like this:</p>
 
@@ -223,7 +223,7 @@ Now this is all fine and dandy, but what do <code class="highlighter-rouge">$whe
 
 <p><code class="highlighter-rouge">$car = new Car(4, 'Honda');</code></p>
 
-<p>but I like the implicit version better for explanation sake. Next up is:</p>
+<p>but I like the explicit version better for explanation sake. Next up is:</p>
 
 <p><code class="highlighter-rouge">class Car&lt;WheelType, EngineType&gt;</code></p>
 
@@ -253,7 +253,7 @@ And then we can use these virtual types just like normal types in the class.
     <span class="p">}</span>
 <span class="p">}</span>
  
-<span class="nv">$collection</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Collection</span> <span class="o">&lt;</span><span class="nx">string</span> <span class="o">&gt;</span><span class="p">();</span>
+<span class="nv">$collection</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Collection</span><span class="o">&lt;</span><span class="nx">string</span> <span class="o">&gt;</span><span class="p">();</span>
 <span class="nv">$collection</span><span class="o">-&gt;</span><span class="na">addValue</span><span class="p">(</span><span class="s1">'this is a string'</span><span class="p">);</span>
  
 <span class="nv">$stringArray</span> <span class="o">=</span> <span class="nv">$collection</span><span class="o">-&gt;</span><span class="na">getValues</span><span class="p">();</span>
@@ -263,11 +263,11 @@ And then we can use these virtual types just like normal types in the class.
 
 <p>You can now reuse this collection for whatever you want, but you will always be sure <code class="highlighter-rouge">getValues()</code> will return a collection of items that have the same type.</p>
 
-<p>Even more fun is that you can instantiate a Collection like this: <code class="highlighter-rouge">$collection = new Collection &lt;Runnable &gt;();</code> where <code class="highlighter-rouge">Runnable</code> is an interface. This way you could have, for example, a collection that you are sure of only has items with values objects in them that conform to the interface. For example:</p>
+<p>Even more fun is that you can instantiate a Collection like this: <code class="highlighter-rouge">$collection = new Collection&lt;Runnable &gt;();</code> where <code class="highlighter-rouge">Runnable</code> is an interface. This way you could have, for example, a collection that you are sure of only has items with values objects in them that conform to the interface. For example:</p>
 
 <div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 
-<span class="k">public</span> <span class="k">function</span> <span class="nf">runBatch</span><span class="o">&lt;</span><span class="nx">T</span> <span class="nx">is</span> <span class="nx">Runnable</span><span class="o">&gt;</span> <span class="p">(</span><span class="nx">T</span> <span class="nv">$batch</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">runBatch</span><span class="o">&lt;</span><span class="nx">T</span> <span class="nx">is</span> <span class="nx">Runnable</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">T</span> <span class="nv">$batch</span><span class="p">)</span> <span class="p">{</span>
      <span class="k">foreach</span> <span class="p">(</span><span class="nv">$batch</span> <span class="k">as</span> <span class="nv">$entry</span><span class="p">)</span> <span class="p">{</span>
            <span class="nv">$entry</span><span class="o">-&gt;</span><span class="na">run</span><span class="p">();</span> <span class="c1">// Runnable
 </span>     <span class="p">}</span>
@@ -280,7 +280,7 @@ And then we can use these virtual types just like normal types in the class.
 <p>So what’s next?
 As I said before, the proposal is currently in draft. Once the proposal is finished it will go into a voting round and if there is a consensus about implementing it, it will be added, otherwise it’s back to the drawing board for Generics in PHP.</p>
 
-<p>Ps: you can follow along how the rfc is going <a href="https://why-cant-we-have-nice-things.mwl.be/requests/introduce-generics-into-php">here</a></p>
+<p>p.s. you can follow along how the RFC is going <a href="https://why-cant-we-have-nice-things.mwl.be/requests/introduce-generics-into-php">here</a></p>
 
 							</section>
 						</div>
@@ -301,7 +301,7 @@ As I said before, the proposal is currently in draft. Once the proposal is finis
                     <div class="col-xs-12 col-md-7 bio-card-txt">
                         <h2>Hey thanks for reading!</h2>
                         <p>Hope you enjoyed this post.
-                            There is no comments section here, if you've ever seen the Youtube comments section you'll probably understand why. 
+                            There is no comments section here, if you've ever seen the YouTube comments section you'll probably understand why. 
                             If you have any remarks or comments on this topic, please dont hesitate
                             to reach out on <a href="https://twitter.com/theedonian">Twitter</a> or send me a <a href="mailto:frederick.vanbrabant+blog@gmail.com" target="_top">mail.</a></p>
                     </div>

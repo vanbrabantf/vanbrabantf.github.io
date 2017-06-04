@@ -2,19 +2,19 @@
 layout: post
 title:  "What the hell are Generics and would I want them in PHP?"
 date: 2017-05-31
-excerpt: "So everyone is talking about this hip “new” kid on the block for PHP: Generics. The rfc is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!"
+excerpt: "So everyone is talking about this hip “new” kid on the block for PHP: Generics. The RFC is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!"
 featured: "/assets/posts/2017-05-31-generics-in-php/header.png"
 tump: "/assets/posts/2017-05-31-generics-in-php/tump.png"
 ---
 
  
-So everyone is talking about this hip “new” kid on the block for PHP: Generics. The rfc is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!
+So everyone is talking about this hip “new” kid on the block for PHP: Generics. The RFC is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!
 
 ## What is the use case of a Generic?
 
 Generics is not something new. Statically typed languages like [Java](https://docs.oracle.com/javase/tutorial/java/generics/types.html) and [C#](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/) have had them for ages. There are even some dynamically typed languages like [Dart](http://news.dartlang.org/2016/12/dart-121-generic-method-syntax.html) that implement them in their core. And even languages that don’t support Generics like for example Javascript can still support them with a 3rd party implementation, in the case of Javascript this would be [Typescript](https://www.typescriptlang.org/docs/handbook/generics.html).
  
-The basic idea is that you can reuse a class that is statically typed with different typed parameters. Ok, I understand that this might sound very confusing. So let's check out an example:
+The basic idea is that you can reuse a class that is statically typed with different typed parameters. OK, I understand that this might sound very confusing. So let's check out an example:
  
 ```php
 <?php
@@ -81,14 +81,14 @@ class Car
 }
 ```
  
-Now it’s impossible to create an invalid object thanks to the strict types. Ok cool, let’s make everything strictly typed then!
+Now it’s impossible to create an invalid object thanks to the strict types. OK cool, let’s make everything strictly typed then!
  
 But what if we want to create an object that’s both statically and dynamically typed? This sounds absurd but let me give you a use case. You want an object that accepts a parameter on creation but it needs to always return that same type of parameter on its return.
  
 So for example when I do `$myCar = new Car('honda');` and later `$myCar->getEngine();` I want to be sure that what I get back from `getEngine` is the same type as what I’ve put into the constructor (in this case a string).
  
-## Ok show me this generic magic then!
-Well … the thing is… at the time of writing, generics don’t yet exist in PHP yet. I know ... what a tease. But luckily for us there is a [RFC](https://wiki.php.net/rfc/generics)! So people are still loudly arguing whether or not they want to include generics into PHP and how it should look. But let us take a look at what the current proposed way of doing it is.
+## OK show me this generic magic then!
+Well… the thing is… at the time of writing, generics don’t yet exist in PHP yet. I know... what a tease. But luckily for us there is an [RFC](https://wiki.php.net/rfc/generics)! So people are still loudly arguing whether or not they want to include generics into PHP and how it should look. But let us take a look at what the current proposed way of doing it is.
  
 The use case described above could look like this:
  
@@ -127,7 +127,7 @@ Here we say, we are going to create a new Car, with 2 parameters; an integer and
  
 ```$car = new Car(4, 'Honda');``` 
  
-but I like the implicit version better for explanation sake. Next up is:
+but I like the explicit version better for explanation sake. Next up is:
  
 ```class Car<WheelType, EngineType>```
  
@@ -158,7 +158,7 @@ class Collection<EntryType>
     }
 }
  
-$collection = new Collection <string >();
+$collection = new Collection<string >();
 $collection->addValue('this is a string');
  
 $stringArray = $collection->getValues();
@@ -167,12 +167,12 @@ $stringArray = $collection->getValues();
  
 You can now reuse this collection for whatever you want, but you will always be sure `getValues()` will return a collection of items that have the same type.
  
-Even more fun is that you can instantiate a Collection like this: `$collection = new Collection <Runnable >();` where `Runnable` is an interface. This way you could have, for example, a collection that you are sure of only has items with values objects in them that conform to the interface. For example:
+Even more fun is that you can instantiate a Collection like this: `$collection = new Collection<Runnable >();` where `Runnable` is an interface. This way you could have, for example, a collection that you are sure of only has items with values objects in them that conform to the interface. For example:
  
 ```php
 <?php
 
-public function runBatch<T is Runnable> (T $batch) {
+public function runBatch<T is Runnable>(T $batch) {
      foreach ($batch as $entry) {
            $entry->run(); // Runnable
      }
@@ -184,4 +184,4 @@ The `<T is Runnable>` in this context would stand for: "you can enter whatever t
 So what’s next?
 As I said before, the proposal is currently in draft. Once the proposal is finished it will go into a voting round and if there is a consensus about implementing it, it will be added, otherwise it’s back to the drawing board for Generics in PHP.
  
-Ps: you can follow along how the rfc is going [here](https://why-cant-we-have-nice-things.mwl.be/requests/introduce-generics-into-php)
+p.s. you can follow along how the RFC is going [here](https://why-cant-we-have-nice-things.mwl.be/requests/introduce-generics-into-php)
