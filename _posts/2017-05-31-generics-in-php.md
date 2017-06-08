@@ -88,7 +88,7 @@ But what if we want to create an object that’s both statically and dynamically
 So for example when I do `$myCar = new Car('honda');` and later `$myCar->getEngine();` I want to be sure that what I get back from `getEngine` is the same type as what I’ve put into the constructor (in this case a string).
  
 ## OK show me this generic magic then!
-Well… the thing is… at the time of writing, generics don’t yet exist in PHP yet. I know... what a tease. But luckily for us there is an [RFC](https://wiki.php.net/rfc/generics)! So people are still loudly arguing whether or not they want to include generics into PHP and how it should look. But let us take a look at what the current proposed way of doing it is.
+Well… the thing is… at the time of writing, generics don’t yet exist in PHP yet. I know… what a tease. But luckily for us there is an [RFC](https://wiki.php.net/rfc/generics)! So people are still loudly arguing whether or not they want to include generics into PHP and how it should look. But let us take a look at what the current proposed way of doing it is.
  
 The use case described above could look like this:
  
@@ -123,7 +123,7 @@ As you can see, we now have brackets! So first up is this:
  
 ```$car = new Car<int,string>(4, 'Honda');```
  
-Here we say, we are going to create a new Car, with 2 parameters; an integer and a string. You could according to the currently proposed RCF just send:
+Here we say, we are going to create a new Car, with 2 parameters; an integer and a string. You could according to the currently proposed RFC just send:
  
 ```$car = new Car(4, 'Honda');``` 
  
