@@ -88,7 +88,7 @@ This is functionally the same method, so it does the same thing. I’ve just rem
  
 I know most people don’t write code like that, and this is probably a bit over dramatised. You would not want the developer that wrote code like that in your team. But still, I would bet you have seen code like this before. Maybe even in a codebase you work in.
  
-If we apply the broken window theory upon this code, we could argue that it all started with a small bit of neglect. Maybe it was friday afternoon, we’ve send the original code in and a colleague commented that it misses a small use case. So we’ve quickly added it in, but forgot a bit of formatting. “Whatever, It’s friday and I have a paper airplane folding competition to attend! I’ll do it next week.”
+If we apply the broken window theory upon this code, we could argue that it all started with a small bit of neglect. Maybe it was friday afternoon, we’ve sent the original code in and a colleague commented that it misses a small use case. So we’ve quickly added it in, but forgot a bit of formatting. “Whatever, It’s friday and I have a paper airplane folding competition to attend! I’ll do it next week.”
  
 You might think you or a colleague of yours will probably see this and fix it monday morning. But let’s be real here. That part of code will not only not get fixed, it will probably get worst.
 
