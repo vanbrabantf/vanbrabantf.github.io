@@ -113,6 +113,9 @@ blockquote p {
   border-radius: inherit;
   padding: 1em; }
 
+p code {
+  white-space: nowrap; }
+
 .bio-card {
   background: #eeeeee;
   border: 1px solid #e1e1e1;

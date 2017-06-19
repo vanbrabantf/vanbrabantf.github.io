@@ -1,5 +1,138 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://frederickvanbrabant.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://frederickvanbrabant.com/" rel="alternate" type="text/html" /><updated>2017-06-08T22:14:28+02:00</updated><id>http://frederickvanbrabant.com/</id><title type="html">Frederick Vanbrabant delirious rantings</title><subtitle>A less then 30 year old developer from Antwerp with a passion for API's and everything that surrounds them. Works as a Software Engineer at madewithlove and is co-organiser of PHPAntwerp
-</subtitle><author><name>Frederick Vanbrabant</name></author><entry><title type="html">What the hell are Generics and would I want them in PHP?</title><link href="http://frederickvanbrabant.com/2017/05/31/generics-in-php.html" rel="alternate" type="text/html" title="What the hell are Generics and would I want them in PHP?" /><published>2017-05-31T00:00:00+02:00</published><updated>2017-05-31T00:00:00+02:00</updated><id>http://frederickvanbrabant.com/2017/05/31/generics-in-php</id><content type="html" xml:base="http://frederickvanbrabant.com/2017/05/31/generics-in-php.html">&lt;p&gt;So everyone is talking about this hip “new” kid on the block for PHP: Generics. The RFC is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://frederickvanbrabant.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://frederickvanbrabant.com/" rel="alternate" type="text/html" /><updated>2017-06-19T08:27:37+02:00</updated><id>http://frederickvanbrabant.com/</id><title type="html">Frederick Vanbrabant delirious rantings</title><subtitle>A less then 30 year old developer from Antwerp with a passion for API's and everything that surrounds them. Works as a Software Engineer at madewithlove and is co-organiser of PHPAntwerp
+</subtitle><author><name>Frederick Vanbrabant</name></author><entry><title type="html">The broken windows theory or “Why some projects are just destined to suck”</title><link href="http://frederickvanbrabant.com/2017/06/12/broken-windows-theory.html" rel="alternate" type="text/html" title="The broken windows theory or “Why some projects are just destined to suck”" /><published>2017-06-12T00:00:00+02:00</published><updated>2017-06-12T00:00:00+02:00</updated><id>http://frederickvanbrabant.com/2017/06/12/broken-windows-theory</id><content type="html" xml:base="http://frederickvanbrabant.com/2017/06/12/broken-windows-theory.html">&lt;p&gt;Why is it that most legacy software projects are not really fun to work on? How can we stop that greenfield project to turn into one of those dull big projects? I would argue that it’s all in the foundation.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-broken-windows-theory&quot;&gt;The broken windows theory&lt;/h2&gt;
+
+&lt;p&gt;In 1982 James Q. Wilson and George L. Kelling wrote an article on a theory they had. 
+It stated that once there is a building in a neighborhood that shows small signs of neglect (a mailbox that’s overflowing with a few days worth of mail, trash on the street, a broken window that stays broken, …) the entire neighborhood devalues and opens itself up for more neglect.&lt;/p&gt;
+
+&lt;p&gt;The main idea here is twofold:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;People tend to care less about something that has a lower perceived value.&lt;/li&gt;
+  &lt;li&gt;Small neglects can quickly damage the perceived value of the bigger system they are part of.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now please note, this is as the name suggests, just a theory. And a highly criticized one at that! The theory is often criticized for promoting stigmatisation and “zero tolerance” attitudes.&lt;/p&gt;
+
+&lt;p&gt;Now I’m not really big on sociology, so I’m not going to give personal insights into how the broken windows theory might work in a social or political environment. But we can try and see if we can maybe link some of it’s ideas to software projects.&lt;/p&gt;
+
+&lt;h2 id=&quot;sweat-the-small-stuff&quot;&gt;Sweat the small stuff&lt;/h2&gt;
+
+&lt;p&gt;Let’s first start with looking at a piece of code. I’m going to take a piece of code from an open source project (In this case the &lt;a href=&quot;https://www.slimframework.com/&quot;&gt;Slim framework build in PHP&lt;/a&gt; made by &lt;a href=&quot;https://twitter.com/codeguy&quot;&gt;Josh Lockhart&lt;/a&gt;)&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;resolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;is_callable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+ 
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;is_string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;assertCallable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+ 
+        &lt;span class=&quot;c1&quot;&gt;// check for slim callable as &quot;class:method&quot;
+&lt;/span&gt;        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;preg_match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;CALLABLE_PATTERN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$matches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$resolved&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;resolveCallable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$matches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$matches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;assertCallable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$resolved&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+ 
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$resolved&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+ 
+        &lt;span class=&quot;nv&quot;&gt;$resolved&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;resolveCallable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;assertCallable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$resolved&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$resolved&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;This is the resolve method from the &lt;a href=&quot;https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php&quot;&gt;CallableResolver class&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Now it doesn’t really matter what the code does, but we can roughly see what is happening here. The code might not be perfect, you might even have seen something you would do in an other way. But the ideas are quickly shown.&lt;/p&gt;
+
+&lt;p&gt;Now see what happens if we do this:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;resolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;is_callable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;is_string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;assertCallable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;preg_match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;CALLABLE_PATTERN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; 
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;resolveCallable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;assertCallable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;resolveCallable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$toResolve&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;assertCallable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+ 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This is functionally the same method, so it does the same thing. I’ve just removed a few good practices like the early return, and some PSR rules. As you can see this code is a lot harder to understand.&lt;/p&gt;
+
+&lt;p&gt;I know most people don’t write code like that, and this is probably a bit over dramatised. You would not want the developer that wrote code like in your team. But still, I would bet you have seen code like this before. Maybe even in a codebase you work in.&lt;/p&gt;
+
+&lt;p&gt;If we apply the broken window theory upon this code, we could argue that it all started with a small bit of neglect. Maybe it was friday afternoon, we’ve send the original code in and a colleague commented that it misses a small use case. So we’ve quickly added it in, but forgot a bit of formatting. “Whatever, It’s friday and I have a paper airplane folding competition to attend! I’ll do it next week.”&lt;/p&gt;
+
+&lt;p&gt;You might think you or a colleague of yours will probably see this and fix it monday morning. But let’s be real here. That part of code will not only not get fixed, it will probably get worst.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-can-we-prevent-this-happening&quot;&gt;How can we prevent this happening?&lt;/h2&gt;
+
+&lt;p&gt;The best way to keep these issues from appearing, is to never let them in the codebase in the first place. It is mostly a mentality thing.&lt;/p&gt;
+
+&lt;p&gt;Here are a few tips that might help.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-boy-scout-rule&quot;&gt;The Boy scout rule&lt;/h3&gt;
+
+&lt;p&gt;For the people who’ve never been in the “Boy Scouts of America”. Statistically, quite a lot of people. They supposedly have a rule (I didn’t actually found the rule, but that might be because I only know about boy scouts from Wes Anderson movies):&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Always leave the campground cleaner than you found it. If you find a mess on the ground, clean it up regardless of who might have made the mess.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://twitter.com/unclebobmartin&quot;&gt;Robert C. Martin&lt;/a&gt;, whom you might know better as Uncle Bob, argues in his book &lt;a href=&quot;https://www.barnesandnoble.com/w/clean-code-robert-c-martin/1101628669?ean=9780132350884&quot;&gt;Clean Code&lt;/a&gt; that we could perfectly apply this mentality to programming. So every file you open, try and leave it a bit better then you’ve found it.&lt;/p&gt;
+
+&lt;p&gt;I would however suggest you do this in a separate branch/PR. What can get a bit tedious.&lt;/p&gt;
+
+&lt;h3 id=&quot;just-automate-it&quot;&gt;Just automate it&lt;/h3&gt;
+
+&lt;p&gt;Of course you write tests (not writing tests in 2017 is like using bronzer for contouring in your make-up). So you probably already have a build server in your stack. Now luckily for us, we can automate the code style, and run “tests” against it in much the same way. With the added bonus of not having to write any kind of “style tests”.&lt;/p&gt;
+
+&lt;h3 id=&quot;so-whats-out-there&quot;&gt;So what’s out there?&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://scrutinizer-ci.com/&quot;&gt;Scrutinizer&lt;/a&gt; is a popular one. It gives the option to assign a score to both the individual files and the entire project. The score is calculated on the rules you assign for your project (it ships with a standard rule set). If your commit sinks the score, it’s time to refactor.&lt;/p&gt;
+
+&lt;p&gt;Some alternatives like &lt;a href=&quot;https://www.codacy.com/&quot;&gt;Codacy&lt;/a&gt; and &lt;a href=&quot;https://sideci.com/&quot;&gt;Sideci&lt;/a&gt; even allow for the option to automatically add comments to a pull request. So it feels like a human is giving actual code reviews. This can be very handy for one person teams. (Note however that this is nowhere as good a real review from an actual colleague, at least not for now).&lt;/p&gt;
+
+&lt;p&gt;Now if you want to go 1 step further, there is this cool tool called &lt;a href=&quot;https://github.com/phpro/grumphp&quot;&gt;Grumphp&lt;/a&gt;. Grumphp hooks into you Git commit hook and runs its test before commit. If the tests fail, you can’t commit. As a picture says more than a thousand words; check out this cool GIF I stole from their Github page:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/phpro/grumphp/wiki/images/demo.gif&quot; alt=&quot;Grump example&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;6-weeks-work-2-weeks-cleanup&quot;&gt;6 weeks work 2 weeks cleanup&lt;/h3&gt;
+&lt;p&gt;As you know, you can’t have an insightful blog post without at least one mention of &lt;a href=&quot;https://twitter.com/jasonfried&quot;&gt;Jason Fried&lt;/a&gt;. In one of his &lt;a href=&quot;https://m.signalvnoise.com/how-we-set-up-our-work-cbce3d3d9cae&quot;&gt;posts&lt;/a&gt;, Jason talks about how they work at &lt;a href=&quot;https://basecamp.com&quot;&gt;Basecamp&lt;/a&gt;. Most of the article goes beyond the scope of this post (still a great read), but what really struck out for me was this part:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Once a six week cycle is over, we take one or two weeks off of scheduled projects so everyone can roam independently, fix stuff up, pick up some pet projects we’ve wanted to do, and generally wind down prior to starting the next six week cycle. Ample time for context switching. We also use this time to firm up ideas that we’ll be tackling next cycle. More on this in a bit.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This is probably a hard sell to make to clients or your boss. But even if you could get to a “work 6 weeks on features do 2 weeks cleanup”, you could end up with a much cleaner and more workable project. Those practices allow for faster implementation of new features and most important of all: Happy developers.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;I truly believe that the broken window theory can be applied to software projects. In my personal experiences I’ve rarely seen a project start out as a total mess. If it ended up as a mess, it was gradually. I also believe that this is not necessary the fault of developers working on the project, think of it more as frogs in a pot with gradually increased temperature of water. One morning you just wake up and take a look at the project and realise that it has gotten really messy.&lt;/p&gt;
+
+&lt;p&gt;I think that the best way to counter these small neglects sneaking up in your code base is by really analyzing every pull request. Be it by manual code reviews from peers or by dedicated automated tools. In the best case both.&lt;/p&gt;
+
+&lt;p&gt;Another important thing to note is that senior developers are in no way immune to these mishaps. Skill level has in my opinion less to do with this kind of stuff. Everyone can have an off day, it just important that these off days don’t stick around in the project.&lt;/p&gt;</content><author><name>Frederick Vanbrabant</name></author><summary type="html">Why is it that most legacy software projects are not really fun to work on? How can we stop that greenfield project to turn into one of those dull big projects? I would argue that it’s all in the foundation.</summary></entry><entry><title type="html">What the hell are Generics and would I want them in PHP?</title><link href="http://frederickvanbrabant.com/2017/05/31/generics-in-php.html" rel="alternate" type="text/html" title="What the hell are Generics and would I want them in PHP?" /><published>2017-05-31T00:00:00+02:00</published><updated>2017-05-31T00:00:00+02:00</updated><id>http://frederickvanbrabant.com/2017/05/31/generics-in-php</id><content type="html" xml:base="http://frederickvanbrabant.com/2017/05/31/generics-in-php.html">&lt;p&gt;So everyone is talking about this hip “new” kid on the block for PHP: Generics. The RFC is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!&lt;/p&gt;
 
 &lt;h2 id=&quot;what-is-the-use-case-of-a-generic&quot;&gt;What is the use case of a Generic?&lt;/h2&gt;
 
