@@ -4,7 +4,12 @@
 /* Basic                                                                         */
 /*********************************************************************************/
 
-    .no-padding {
+	body {
+		border-top: 10px solid #d52349;
+	}
+
+    .no-padding 
+	{
     padding-left: 0;
     padding-right: 0;
     }
