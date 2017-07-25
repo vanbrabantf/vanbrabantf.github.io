@@ -145,7 +145,7 @@ Everything comes at a price, and GRPC is no exception. The biggest downside is o
 
 The generated code is also a bit of a double edged sword. Lots of people have had some bad experiences with generated code (for good reasons). But to be honest, I  feel that in this case it’s not that bad. The generated code are mostly value like objects that sometimes are little more than getters and setters and it does allow you to generate SDK’s in loads of different languages with a single click, so that is a decision you have to make for yourself.
 
-I also found the set up a bit hard. In the case of PHP they suggest you install using PECL and php 7 (or up) is not supported. You also need to run a Node server so that might not jive all that well with your current setup.
+I also found the set up a bit hard. In the case of PHP they suggest you install using PECL what is not really ideal (There is a composer option as wel). You also need to run a Node server so that might not jive all that well with your current setup.
 
 ## Conclusion
 
