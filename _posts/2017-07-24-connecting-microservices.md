@@ -88,7 +88,7 @@ It would be great if we could use code like this to communicate to a remote serv
 
 In that way, when you update the API of the microservice, you would not need to update the `Mailservice` code. The client would automaticlly have access to the new methods.
 
-Of Course that would take a lot of work to create. You would have to write some sort of transformer, create something that can login to the service, and eventually POST the data…
+Of course that would take a lot of work to create. You would have to write some sort of transformer, create something that can login to the service, and eventually POST the data…
 
 ## GRPC
 
