@@ -12,7 +12,7 @@ var version = 'v1::';
 var offlineFundamentals = [
   '',
   '/',
-  '/assets/css/styles.css',
+  '/assets/css/style.css',
 ];
 
 var offlinePage = '<html><head><title>Uh oh, you appear to be offline!</title><h2>Uh oh, you appear to be offline!</h2></div></section></body></html>';
