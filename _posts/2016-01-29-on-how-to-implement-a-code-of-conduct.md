@@ -4,8 +4,8 @@ title:  "On how to implement a code of conduct"
 date: 2016-01-29
 authors: ["frederick"]
 excerpt: "We shall not be discussing the ethics or possible political impact this brings with it. We will however propose a starting point on **how** to implement them."
-featured: "/assets/posts/2016-01-29-on-how-to-implement-a-code-of-conduct/header.png"
-tump: "/assets/posts/2016-01-29-on-how-to-implement-a-code-of-conduct/tump.png"
+featured: "/assets/posts/2016-01-29-on-how-to-implement-a-code-of-conduct/header.webp"
+tump: "/assets/posts/2016-01-29-on-how-to-implement-a-code-of-conduct/tump.webp"
 ---
 
 **This post wast orignially posted on the [madewithlove](https://blog.madewithlove.be/) site**

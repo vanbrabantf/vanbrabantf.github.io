@@ -3,8 +3,8 @@ layout: post
 title:  "The broken windows theory or “Why some projects are just destined to suck”"
 date: 2017-06-12
 excerpt: "Why is it that most legacy software projects are not really fun to work on? How can we stop that greenfield project to turn into one of those dull big projects? I would argue that it’s all in the foundation."
-featured: "/assets/posts/2017-06-18-broken-windows-theory/header.png"
-tump: "/assets/posts/2017-06-18-broken-windows-theory/tump.png"
+featured: "/assets/posts/2017-06-18-broken-windows-theory/header.webp"
+tump: "/assets/posts/2017-06-18-broken-windows-theory/tump.webp"
 ---
  
 Why is it that most legacy software projects are not really fun to work on? How can we stop that greenfield project to turn into one of those dull big projects? I would argue that it’s all in the foundation.

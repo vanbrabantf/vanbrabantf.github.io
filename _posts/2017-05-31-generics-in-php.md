@@ -3,8 +3,8 @@ layout: post
 title:  "What the hell are Generics and would I want them in PHP?"
 date: 2017-05-31
 excerpt: "So everyone is talking about this hip “new” kid on the block for PHP: Generics. The RFC is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!"
-featured: "/assets/posts/2017-05-31-generics-in-php/header.png"
-tump: "/assets/posts/2017-05-31-generics-in-php/tump.png"
+featured: "/assets/posts/2017-05-31-generics-in-php/header.webp"
+tump: "/assets/posts/2017-05-31-generics-in-php/tump.webp"
 ---
 
  
