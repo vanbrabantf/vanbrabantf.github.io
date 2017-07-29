@@ -13,10 +13,10 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Frederick Vanbrabant delirious rantings
+#title: Frederick Vanbrabant delirious rantings
 email: frederick.vanbrabant@gmail.com
-description: > # this means to ignore newlines until "baseurl:"
-   A less then 30 year old developer from Antwerp with a passion for API's and everything that surrounds them. Works as a Software Engineer at madewithlove and is co-organiser of PHPAntwerp
+#description: > # this means to ignore newlines until "baseurl:"
+ #  A less then 30 year old developer from Antwerp with a passion for API's and everything that surrounds them. Works as a Software Engineer at madewithlove and is co-organiser of PHPAntwerp
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://frederickvanbrabant.com" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: theEdonian
