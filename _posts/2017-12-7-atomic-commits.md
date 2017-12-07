@@ -6,7 +6,6 @@ excerpt: "These days I’m all into atomic commits and it really made my work be
 featured: "/assets/posts/2017-12-7-atomic-commits/header.webp"
 tump: "/assets/posts/2017-12-7-atomic-commits/tump.webp"
 ---
-
 I always find it amazing to see how different people create pull requests. Some people like to put every file they’ve touched into one big commit. Other people split their commits up per file. There are even people that split it up according to domains.
 
 I’ve been all these people at one point in my career, but these days I’m all into atomic commits. Never heard of that concept? No worries, let me introduce you to:
@@ -53,7 +52,7 @@ The best way to do this by making the commits along the coding of the feature. L
 
 Yes it is. I’m not going to lie to you, this is something you will have to actively do. But I assure you it will improve your workflow.
 
-Atomic commits will drive the quality of your code reviews on pull requests way up. People will also understand your thought process, helping them to review the changes you made and keeping them motivated along the way.
+Atomic commits will drive the quality of your code reviews on pull requests way up. they will also understand your thought process, helping them to review the changes you made and keeping them motivated along the way.
 
 I bet you’re not very stoked to start a review on this one:
 
@@ -73,7 +72,7 @@ This technique also has the great benefit of making cherry picking in GIT easier
 
 Atomic commits are not a new thing, they are even often described as a GIT best practice. Yet I don’t actually see them that often. People often either cite that it’s too much work (an excuse that seems to pop up on every good code practice thing), or that it will make their main branch too verbose (you can always GIT squash your commits before merging).
 
-That said, I really hope you give this a shot. It might make your life and that of your team a small bit better. If not, you just have a feature that is a bit more verbose in your GIT history.
+That said, I really hope you give this a shot. It might make your life and that of your team a little bit better. If not, you just have a feature that is a bit more verbose in your GIT history.
 
 
 <blockquote class="reddit-card" data-card-created="1512636217"><a href="https://www.reddit.com/r/programming/comments/7i5424/atomic_commits_telling_stories_with_git/?ref=share&ref_source=embed">Atomic commits: Telling stories with GIT</a> from <a href="http://www.reddit.com/r/programming">programming</a></blockquote>
