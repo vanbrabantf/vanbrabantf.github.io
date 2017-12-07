@@ -76,3 +76,5 @@ Atomic commits are not a new thing, they are even often described as a GIT best 
 That said, I really hope you give this a shot. It might make your life and that of your team a small bit better. If not, you just have a feature that is a bit more verbose in your GIT history.
 
 
+<blockquote class="reddit-card" data-card-created="1512636217"><a href="https://www.reddit.com/r/programming/comments/7i5424/atomic_commits_telling_stories_with_git/?ref=share&ref_source=embed">Atomic commits: Telling stories with GIT</a> from <a href="http://www.reddit.com/r/programming">programming</a></blockquote>
+<script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>
