@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-12-07T12:40:59+01:00</updated><id>http://localhost:4000/</id><author><name>Frederick Vanbrabant</name></author><entry><title type="html">Atomic commits: Telling stories with Git</title><link href="http://localhost:4000/2017/12/07/atomic-commits.html" rel="alternate" type="text/html" title="Atomic commits: Telling stories with Git" /><published>2017-12-07T00:00:00+01:00</published><updated>2017-12-07T00:00:00+01:00</updated><id>http://localhost:4000/2017/12/07/atomic-commits</id><content type="html" xml:base="http://localhost:4000/2017/12/07/atomic-commits.html">&lt;p&gt;I always find it amazing to see how different people create pull requests. Some people like to put every file they’ve touched into one big commit. Other people split their commits up per file. There are even people that split it up according to domains.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-12-07T12:50:16+01:00</updated><id>http://localhost:4000/</id><author><name>Frederick Vanbrabant</name></author><entry><title type="html">Atomic commits: Telling stories with Git</title><link href="http://localhost:4000/2017/12/07/atomic-commits.html" rel="alternate" type="text/html" title="Atomic commits: Telling stories with Git" /><published>2017-12-07T00:00:00+01:00</published><updated>2017-12-07T00:00:00+01:00</updated><id>http://localhost:4000/2017/12/07/atomic-commits</id><content type="html" xml:base="http://localhost:4000/2017/12/07/atomic-commits.html">&lt;p&gt;I always find it amazing to see how different people create pull requests. Some people like to put every file they’ve touched into one big commit. Other people split their commits up per file. There are even people that split it up according to domains.&lt;/p&gt;
 
 &lt;p&gt;I’ve been all these people at one point in my career, but these days I’m all into atomic commits. Never heard of that concept? No worries, let me introduce you to:&lt;/p&gt;
 
@@ -30,11 +30,11 @@ class NewsController {
 
 &lt;p&gt;Can you guess what happened to that file when you take a quick look at these commit messages:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/posts/2017-12-7-atomic-commits/atomic-commits.webp&quot; alt=&quot;Final score&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/posts/2017-12-7-atomic-commits/atomic-commits.png&quot; alt=&quot;Final score&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;That’s all pretty clear right. But you might still be wondering why we created those empty tests stubs first. This is what happens when we click those &lt;code class=&quot;highlighter-rouge&quot;&gt;...&lt;/code&gt;’s&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/posts/2017-12-7-atomic-commits/atomic-commits-expanded.webp&quot; alt=&quot;Final score&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/posts/2017-12-7-atomic-commits/atomic-commits-expanded.png&quot; alt=&quot;Final score&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This is the basic idea behind atomic commits: Small commits that tell a story.&lt;/p&gt;
 
@@ -48,7 +48,7 @@ class NewsController {
 
 &lt;p&gt;I bet you’re not very stoked to start a review on this one:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/posts/2017-12-7-atomic-commits/big-pr.webp&quot; alt=&quot;Final score&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/posts/2017-12-7-atomic-commits/big-pr.png&quot; alt=&quot;Final score&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This is not a very fun thing to do, you will also not get a lot of great insights on this. People doze off or lose track half way through the review.&lt;/p&gt;
 

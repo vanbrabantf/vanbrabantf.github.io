@@ -3,8 +3,8 @@ layout: post
 title:  "Atomic commits: Telling stories with Git"
 date: 2017-12-07
 excerpt: "These days I’m all into atomic commits and it really made my work beter. Never heard of that concept? No worries, let me introduce you to it"
-featured: "/assets/posts/2017-12-7-atomic-commits/header.webp"
-tump: "/assets/posts/2017-12-7-atomic-commits/tump.webp"
+featured: "/assets/posts/2017-12-7-atomic-commits/header.jpg"
+tump: "/assets/posts/2017-12-7-atomic-commits/tump.jpg"
 ---
 I always find it amazing to see how different people create pull requests. Some people like to put every file they’ve touched into one big commit. Other people split their commits up per file. There are even people that split it up according to domains.
 
@@ -38,11 +38,11 @@ As you can see, pretty simple stuff: we get all the news items for the database 
 
 Can you guess what happened to that file when you take a quick look at these commit messages:
 
-![Final score](/assets/posts/2017-12-7-atomic-commits/atomic-commits.webp)
+![Final score](/assets/posts/2017-12-7-atomic-commits/atomic-commits.png)
 
 That’s all pretty clear right. But you might still be wondering why we created those empty tests stubs first. This is what happens when we click those `...`’s
 
-![Final score](/assets/posts/2017-12-7-atomic-commits/atomic-commits-expanded.webp)
+![Final score](/assets/posts/2017-12-7-atomic-commits/atomic-commits-expanded.png)
 
 This is the basic idea behind atomic commits: Small commits that tell a story.
 
@@ -56,7 +56,7 @@ Atomic commits will drive the quality of your code reviews on pull requests way 
 
 I bet you’re not very stoked to start a review on this one:
 
-![Final score](/assets/posts/2017-12-7-atomic-commits/big-pr.webp)
+![Final score](/assets/posts/2017-12-7-atomic-commits/big-pr.png)
 
 This is not a very fun thing to do, you will also not get a lot of great insights on this. People doze off or lose track half way through the review.
 

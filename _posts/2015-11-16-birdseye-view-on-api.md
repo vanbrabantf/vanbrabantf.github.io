@@ -3,8 +3,8 @@ layout: post
 title:  "A bird's eye view on API development"
 date: 2015-11-16
 excerpt: "So you want to build a web API. You have to start somewhere, why not here"
-featured: "/assets/posts/2015-11-16-birdseye-view-on-api/header.webp"
-tump: "/assets/posts/2015-11-16-birdseye-view-on-api/tump.webp"
+featured: "/assets/posts/2015-11-16-birdseye-view-on-api/header.png"
+tump: "/assets/posts/2015-11-16-birdseye-view-on-api/tump.png"
 ---
 
 **This post wast orignially posted on the [madewithlove](https://blog.madewithlove.be/) site**

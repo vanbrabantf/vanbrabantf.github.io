@@ -3,8 +3,8 @@ layout: post
 title:  "Connect microservices with the help of GRPC"
 date: 2017-07-24
 excerpt: "Microservices can solve a lot of architectural problems, and sometimes create a few fun new ones. A big problem however is connecting these services to each other. Can GRPC lend a hand here?"
-featured: "/assets/posts/2017-07-24-grpc/header.webp"
-tump: "/assets/posts/2017-07-24-grpc/tump.webp"
+featured: "/assets/posts/2017-07-24-grpc/header.jpg"
+tump: "/assets/posts/2017-07-24-grpc/tump.jpg"
 ---
 
 Microservices are all the rage these days. Luckily underneath the hype there are some great use cases for them. If you’re splitting up a monolith codebase into smaller specialised chunks, extracting a long running queue to its own system, or even using particular pieces of code in a different programming language. You always have to solve one architectural problem. How do I make these things talk to each other.

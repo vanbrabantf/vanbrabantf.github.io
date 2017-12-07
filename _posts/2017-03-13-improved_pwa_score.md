@@ -4,8 +4,8 @@ title:  "How we improved our PWA score by 53 points in 4 hours"
 date: 2017-03-13
 authors: ["frederick"]
 excerpt: "After a recent burst of inspiration at PHPUK Sam and I ran an experiment to see how much we could improve our company site in just 4 hours. Turns out it was far easier than we expected"
-featured: "/assets/posts/2017-03-03-improved_pwa_score/header.webp"
-tump: "/assets/posts/2017-03-03-improved_pwa_score/tump.webp"
+featured: "/assets/posts/2017-03-03-improved_pwa_score/header.png"
+tump: "/assets/posts/2017-03-03-improved_pwa_score/tump.png"
 ---
 
 **This post wast orignially posted on the [madewithlove](https://blog.madewithlove.be/) site**
