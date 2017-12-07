@@ -1,0 +1,177 @@
+<p>So everyone is talking about this hip “new” kid on the block for PHP: Generics. The RFC is on the table and a lot of people are getting all excited about it, but you don’t fully see the excitement? Let’s explore what it’s all about!</p>
+
+<h2 id="what-is-the-use-case-of-a-generic">What is the use case of a Generic?</h2>
+
+<p>Generics is not something new. Statically typed languages like <a href="https://docs.oracle.com/javase/tutorial/java/generics/types.html">Java</a> and <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/">C#</a> have had them for ages. There are even some dynamically typed languages like <a href="http://news.dartlang.org/2016/12/dart-121-generic-method-syntax.html">Dart</a> that implement them in their core. And even languages that don’t support Generics like for example Javascript can still support them with a 3rd party implementation, in the case of Javascript this would be <a href="https://www.typescriptlang.org/docs/handbook/generics.html">Typescript</a>.</p>
+
+<p>The basic idea is that you can reuse a class that is statically typed with different typed parameters. OK, I understand that this might sound very confusing. So let’s check out an example:</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+ 
+<span class="nv">$car</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Car</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">'Honda'</span><span class="p">);</span>
+ 
+<span class="k">class</span> <span class="nc">Car</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$wheels</span><span class="p">;</span>
+    <span class="k">private</span> <span class="nv">$engine</span><span class="p">;</span>
+ 
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">(</span><span class="nv">$wheels</span><span class="p">,</span> <span class="nv">$engine</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">wheels</span> <span class="o">=</span> <span class="nv">$wheels</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">engine</span> <span class="o">=</span> <span class="nv">$engine</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getWheels</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">wheels</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getEngine</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">engine</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+ 
+</code></pre>
+</div>
+<p>Yes I know, I’m explaining OO stuff with a car class. I know it’s super cliche, and I’m normally not a fan of getters, but just roll with it.</p>
+
+<p>As you can see, we are creating a <code class="highlighter-rouge">Car</code> object with 2 parameters. The wheels and the engine.
+Now this is all fine and dandy, but what do <code class="highlighter-rouge">$wheels</code> and <code class="highlighter-rouge">$engine</code> parameters represent? In this case it’s the amount of wheels and what engine it sports one would assume, as we send an integer and a string along.</p>
+
+<p>But <code class="highlighter-rouge">$car = new Car(‘pirelli’, true);</code> would be just as valid.</p>
+
+<p>This is of course one of the typical things of a dynamically typed language. But if we want to add some more uniformity in our class we could, thanks to PHP 7 and types:</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+ 
+<span class="nv">$car</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Car</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">'Honda'</span><span class="p">);</span>
+ 
+<span class="k">class</span> <span class="nc">Car</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$wheels</span><span class="p">;</span>
+    <span class="k">private</span> <span class="nv">$engine</span><span class="p">;</span>
+ 
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$wheels</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$engine</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">wheels</span> <span class="o">=</span> <span class="nv">$wheels</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">engine</span> <span class="o">=</span> <span class="nv">$engine</span><span class="p">;</span>
+    <span class="p">}</span>
+ 
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getWheels</span><span class="p">()</span><span class="o">:</span> <span class="nx">int</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">wheels</span><span class="p">;</span>
+    <span class="p">}</span>
+ 
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getEngine</span><span class="p">()</span><span class="o">:</span> <span class="nx">string</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">engine</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Now it’s impossible to create an invalid object thanks to the strict types. OK cool, let’s make everything strictly typed then!</p>
+
+<p>But what if we want to create an object that’s both statically and dynamically typed? This sounds absurd but let me give you a use case. You want an object that accepts a parameter on creation but it needs to always return that same type of parameter on its return.</p>
+
+<p>So for example when I do <code class="highlighter-rouge">$myCar = new Car('honda');</code> and later <code class="highlighter-rouge">$myCar-&gt;getEngine();</code> I want to be sure that what I get back from <code class="highlighter-rouge">getEngine</code> is the same type as what I’ve put into the constructor (in this case a string).</p>
+
+<h2 id="ok-show-me-this-generic-magic-then">OK show me this generic magic then!</h2>
+<p>Well… the thing is… at the time of writing, generics don’t yet exist in PHP yet. I know… what a tease. But luckily for us there is an <a href="https://wiki.php.net/rfc/generics">RFC</a>! So people are still loudly arguing whether or not they want to include generics into PHP and how it should look. But let us take a look at what the current proposed way of doing it is.</p>
+
+<p>The use case described above could look like this:</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+ 
+<span class="nv">$car</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Car</span><span class="o">&lt;</span><span class="nx">int</span><span class="p">,</span> <span class="nx">string</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">'Honda'</span><span class="p">);</span>
+ 
+<span class="k">class</span> <span class="nc">Car</span><span class="o">&lt;</span><span class="nx">WheelType</span><span class="p">,</span> <span class="nx">EngineType</span><span class="o">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$wheels</span><span class="p">;</span>
+    <span class="k">private</span> <span class="nv">$engine</span><span class="p">;</span>
+ 
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">(</span><span class="nx">WheelType</span> <span class="nv">$wheels</span><span class="p">,</span> <span class="nx">EngineType</span> <span class="nv">$engine</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">wheels</span> <span class="o">=</span> <span class="nv">$wheels</span><span class="p">;</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">engine</span> <span class="o">=</span> <span class="nv">$engine</span><span class="p">;</span>
+    <span class="p">}</span>
+ 
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getWheels</span><span class="p">()</span><span class="o">:</span> <span class="nx">WheelType</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">wheels</span><span class="p">;</span>
+    <span class="p">}</span>
+ 
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getEngineType</span><span class="p">()</span><span class="o">:</span> <span class="nx">EngineType</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">engine</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>As you can see, we now have brackets! So first up is this:</p>
+
+<p><code class="highlighter-rouge">$car = new Car&lt;int,string&gt;(4, 'Honda');</code></p>
+
+<p>Here we say, we are going to create a new Car, with 2 parameters; an integer and a string. You could according to the currently proposed RFC just send:</p>
+
+<p><code class="highlighter-rouge">$car = new Car(4, 'Honda');</code></p>
+
+<p>but I like the explicit version better for explanation sake. Next up is:</p>
+
+<p><code class="highlighter-rouge">class Car&lt;WheelType, EngineType&gt;</code></p>
+
+<p>This tells the class about what variable types it supports.
+And then we can use these virtual types just like normal types in the class.
+ So in this case the <code class="highlighter-rouge">WheelType</code> will be an integer and the <code class="highlighter-rouge">EngineType</code> a string.</p>
+
+<p>It’s as easy as that.</p>
+
+<h2 id="thats-a-use-case-that-will-never-happen">That’s a use case that will never happen!</h2>
+<p>It is indeed a niche use case, but as PHP grows towards a hybrid of a dynamically typed and strictly typed language it does make sense to include some more features of strictly typed languages. While true, you will not use this everyday, there is no harm in having it in the language. It would however be handy for people that write logging or collection packages. Take this piece of code for example:</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+ 
+<span class="k">class</span> <span class="nc">Collection</span><span class="o">&lt;</span><span class="nx">EntryType</span><span class="o">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="nv">$collection</span> <span class="o">=</span> <span class="p">[];</span>
+ 
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">addValue</span><span class="p">(</span><span class="nx">EntryType</span> <span class="nv">$item</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">collection</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$item</span><span class="p">;</span>
+    <span class="p">}</span>
+ 
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getValues</span><span class="p">()</span><span class="o">:</span><span class="k">array</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">collection</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+ 
+<span class="nv">$collection</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Collection</span><span class="o">&lt;</span><span class="nx">string</span> <span class="o">&gt;</span><span class="p">();</span>
+<span class="nv">$collection</span><span class="o">-&gt;</span><span class="na">addValue</span><span class="p">(</span><span class="s1">'this is a string'</span><span class="p">);</span>
+ 
+<span class="nv">$stringArray</span> <span class="o">=</span> <span class="nv">$collection</span><span class="o">-&gt;</span><span class="na">getValues</span><span class="p">();</span>
+ 
+</code></pre>
+</div>
+
+<p>You can now reuse this collection for whatever you want, but you will always be sure <code class="highlighter-rouge">getValues()</code> will return a collection of items that have the same type.</p>
+
+<p>Even more fun is that you can instantiate a Collection like this: <code class="highlighter-rouge">$collection = new Collection&lt;Runnable &gt;();</code> where <code class="highlighter-rouge">Runnable</code> is an interface. This way you could have, for example, a collection that you are sure of only has items with values objects in them that conform to the interface. For example:</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">runBatch</span><span class="o">&lt;</span><span class="nx">T</span> <span class="nx">is</span> <span class="nx">Runnable</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">T</span> <span class="nv">$batch</span><span class="p">)</span> <span class="p">{</span>
+     <span class="k">foreach</span> <span class="p">(</span><span class="nv">$batch</span> <span class="k">as</span> <span class="nv">$entry</span><span class="p">)</span> <span class="p">{</span>
+           <span class="nv">$entry</span><span class="o">-&gt;</span><span class="na">run</span><span class="p">();</span> <span class="c1">// Runnable
+</span>     <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">&lt;T is Runnable&gt;</code> in this context would stand for: “you can enter whatever type you want here, but it has to adhere to the <code class="highlighter-rouge">Runnable</code> interface.”</p>
+
+<p>So what’s next?
+As I said before, the proposal is currently in draft. Once the proposal is finished it will go into a voting round and if there is a consensus about implementing it, it will be added, otherwise it’s back to the drawing board for Generics in PHP.</p>
+
+<p>p.s. you can follow along how the RFC is going <a href="https://why-cant-we-have-nice-things.mwl.be/requests/introduce-generics-into-php">here</a></p>
