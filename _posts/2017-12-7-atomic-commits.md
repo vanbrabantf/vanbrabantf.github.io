@@ -53,7 +53,7 @@ The best way to do this by making the commits along the coding of the feature. L
 
 Yes it is. I’m not going to lie to you, this is something you will have to actively do. But I assure you it will improve your workflow.
 
-Atomic commits will drive the quality of your code reviews on pull requests way up. People will not only see what you are doing, how you are doing it and the scope you are working in. It will also help with motivation.
+Atomic commits will drive the quality of your code reviews on pull requests way up. People will also understand your thought process, helping them to review the changes you made and keeping them motivated along the way.
 
 I bet you’re not very stoked to start a review on this one:
 
