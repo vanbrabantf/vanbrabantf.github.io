@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Atomic commits: Telling stories with Git"
-date: 2017-12-02
+date: 2017-12-07
 excerpt: "These days I’m all into atomic commits and it really made my work beter. Never heard of that concept? No worries, let me introduce you to it"
 featured: "/assets/posts/2017-12-7-atomic-commits/header.webp"
 tump: "/assets/posts/2017-12-7-atomic-commits/tump.webp"
