@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-07-24T12:29:57+02:00</updated><id>http://localhost:4000/</id><author><name>Frederick Vanbrabant</name></author><entry><title type="html">What performance tricks actually work</title><link href="http://localhost:4000/2018/07/24/php-performance.html" rel="alternate" type="text/html" title="What performance tricks actually work" /><published>2018-07-24T00:00:00+02:00</published><updated>2018-07-24T00:00:00+02:00</updated><id>http://localhost:4000/2018/07/24/php-performance</id><content type="html" xml:base="http://localhost:4000/2018/07/24/php-performance.html">&lt;p&gt;We’ve all been there before, you submit a pull request and moments later you get a comment like: “Hey you should use a native function here, they are so much faster” or “You can declare this final, that way we save some processing power”.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-07-24T13:33:45+02:00</updated><id>http://localhost:4000/</id><author><name>Frederick Vanbrabant</name></author><entry><title type="html">What performance tricks actually work</title><link href="http://localhost:4000/2018/07/24/php-performance.html" rel="alternate" type="text/html" title="What performance tricks actually work" /><published>2018-07-24T00:00:00+02:00</published><updated>2018-07-24T00:00:00+02:00</updated><id>http://localhost:4000/2018/07/24/php-performance</id><content type="html" xml:base="http://localhost:4000/2018/07/24/php-performance.html">&lt;p&gt;We’ve all been there before, you submit a pull request and moments later you get a comment like: “Hey you should use a native function here, they are so much faster” or “You can declare this final, that way we save some processing power”.&lt;/p&gt;
 
 &lt;p&gt;It’s great that we as developers keep an eye on this, but how true are these thing. And are they still a thing in newer PHP versions?&lt;/p&gt;
 
@@ -210,7 +210,7 @@
 &lt;/div&gt;
 
 &lt;p&gt;Turns out that in this test the &lt;code class=&quot;highlighter-rouge&quot;&gt;array_map&lt;/code&gt; method is slower than the &lt;code class=&quot;highlighter-rouge&quot;&gt;foreach&lt;/code&gt;.
-This probablly has something to do with the anonymous class.&lt;/p&gt;
+This probably has something to do with the anonymous class.&lt;/p&gt;
 
 &lt;h3 id=&quot;rowid-is-7-times-faster-than-rowid-&quot;&gt;$row[’id’] is 7 times faster than $row[id] ?&lt;/h3&gt;
 
