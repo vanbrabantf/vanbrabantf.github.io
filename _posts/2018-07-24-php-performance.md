@@ -65,7 +65,7 @@ And these are the results:
 
 Turns out that indeed double quotes are about 5% slower in this test.
 
-### is Json is faster than XML?
+### is Json faster than XML?
 
 Sometimes we like to use Json or XML to setup validation or config files. Most people like to use Json over XML due to readability reasons. But is it also faster?
 
