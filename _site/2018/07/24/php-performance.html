@@ -136,7 +136,7 @@
 <p>Let’s start out with a classic. As single quotes are encouraged by PSR we all might be getting some small speed bonuses without knowing it. We will test with this code:</p>
 
 <div class="language-php highlighter-rouge"><pre class="highlight"><code>    <span class="cp">&lt;?php</span>
-        <span class="k">public</span> <span class="k">function</span> <span class="nf">single</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">double</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
         <span class="p">{</span>
             <span class="nv">$words</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="s2">"Taylor Swift"</span><span class="p">,</span>
@@ -147,7 +147,7 @@
             <span class="p">];</span>
         <span class="p">}</span>
 
-        <span class="k">public</span> <span class="k">function</span> <span class="nf">double</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">single</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
         <span class="p">{</span>
             <span class="nv">$words</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="s1">'Taylor Swift'</span><span class="p">,</span>
@@ -165,13 +165,13 @@
 <div class="language-bash highlighter-rouge"><pre class="highlight"><code>    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
     | benchmark | subject     | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
     +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
-    | TestBench | benchSingle |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.217μs | 0.224μs | 0.222μs | 0.235μs | 0.006μs | 2.68%  | 1.00x |
-    | TestBench | benchDouble |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.232μs | 0.235μs | 0.233μs | 0.241μs | 0.003μs | 1.49%  | 1.05x |
+    | TestBench | benchDouble |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.217μs | 0.224μs | 0.222μs | 0.235μs | 0.006μs | 2.68%  | 1.00x |
+    | TestBench | benchSingle |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.232μs | 0.235μs | 0.233μs | 0.241μs | 0.003μs | 1.49%  | 1.05x |
     +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
 </code></pre>
 </div>
 
-<p>Turns out that indeed double quotes are about 5% slower in this test.</p>
+<p>Turns out that single quotes are about 5% slower in this test.</p>
 
 <h3 id="is-json-faster-than-xml">is Json faster than XML?</h3>
 

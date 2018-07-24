@@ -29,7 +29,7 @@ Let's start out with a classic. As single quotes are encouraged by PSR we all mi
 
 ```php
     <?php
-        public function single(): void
+        public function double(): void
         {
             $words = [
                 "Taylor Swift",
@@ -40,7 +40,7 @@ Let's start out with a classic. As single quotes are encouraged by PSR we all mi
             ];
         }
 
-        public function double(): void
+        public function single(): void
         {
             $words = [
                 'Taylor Swift',
@@ -58,12 +58,12 @@ And these are the results:
     +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
     | benchmark | subject     | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
     +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
-    | TestBench | benchSingle |        | []     | 1000 | 5   | 890,368b | 0.217μs | 0.224μs | 0.222μs | 0.235μs | 0.006μs | 2.68%  | 1.00x |
-    | TestBench | benchDouble |        | []     | 1000 | 5   | 890,368b | 0.232μs | 0.235μs | 0.233μs | 0.241μs | 0.003μs | 1.49%  | 1.05x |
+    | TestBench | benchDouble |        | []     | 1000 | 5   | 890,368b | 0.217μs | 0.224μs | 0.222μs | 0.235μs | 0.006μs | 2.68%  | 1.00x |
+    | TestBench | benchSingle |        | []     | 1000 | 5   | 890,368b | 0.232μs | 0.235μs | 0.233μs | 0.241μs | 0.003μs | 1.49%  | 1.05x |
     +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
 ```
 
-Turns out that indeed double quotes are about 5% slower in this test.
+Turns out that single quotes are about 5% slower in this test.
 
 ### is Json faster than XML?
 
