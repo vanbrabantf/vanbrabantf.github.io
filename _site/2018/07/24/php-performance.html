@@ -1,0 +1,734 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<html>
+	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="description" content="Less then 30 year old developer from Antwerp with a passion for API's and everything that surrounds them. Works as a Software Engineer at madewithlove and is co-organiser of PHPAntwerp">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Frederick Vanbrabant" />
+    	<title>Frederick Vanbrabant delirious rantings</title>
+
+		<!-- Twitter gob -->
+		<meta name="twitter:site" content="@maybefrederick" />
+		<meta name="twitter:description" content="We've all been there before, you submit a pull request and moments later you get a comment like: 'Hey you should use a native function here, they are so much..." />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:creator" content="@maybefrederick" />
+		<meta name="twitter:title" content="What performance tricks actually work" />
+
+		
+			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2018-07-24-php-performance/tump.jpg" />
+			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2018-07-24-php-performance/tump.jpg" />
+		
+
+
+    	<!-- Disable tap highlight on IE -->
+    	<meta name="msapplication-tap-highlight" content="no">
+
+    	<!-- Web Application Manifest -->
+    	<link rel="manifest" href="/assets/manifest.json">
+
+    	 <!-- Add to homescreen for Chrome on Android -->
+	    <meta name="mobile-web-app-capable" content="yes">
+	    <meta name="application-name" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="icon" sizes="192x192" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    <!-- Add to homescreen for Safari on iOS -->
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta name="apple-mobile-web-app-title" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="apple-touch-icon" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    <!-- Tile icon for Win8 (144x144 + tile color) -->
+	    <meta name="msapplication-TileImage" content="/assets/images/touch/chrome-touch-icon-144x144.png">
+	    <meta name="msapplication-TileColor" content="#d52349">
+
+	    <!-- Color the status bar on mobile devices -->
+    	<meta name="theme-color" content="#d52349">
+
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('/assets/js/serviceworker.js').then(function(registration) {
+						// Registration was successful
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}).catch(function(err) {
+						// registration failed :(
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+		</script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/style.css" />
+		<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>What performance tricks actually work</title>
+<meta name="generator" content="Jekyll v3.4.3" />
+<meta property="og:title" content="What performance tricks actually work" />
+<meta name="author" content="Frederick Vanbrabant" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="We’ve all been there before, you submit a pull request and moments later you get a comment like: ‘Hey you should use a native function here, they are so much faster’ or ‘You can declare this final, that way we save some processing power’" />
+<meta property="og:description" content="We’ve all been there before, you submit a pull request and moments later you get a comment like: ‘Hey you should use a native function here, they are so much faster’ or ‘You can declare this final, that way we save some processing power’" />
+<link rel="canonical" href="http://localhost:4000/2018/07/24/php-performance.html" />
+<meta property="og:url" content="http://localhost:4000/2018/07/24/php-performance.html" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-07-24T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@maybeFrederick" />
+<meta name="twitter:creator" content="@Frederick Vanbrabant" />
+<script type="application/ld+json">
+{"description":"We’ve all been there before, you submit a pull request and moments later you get a comment like: ‘Hey you should use a native function here, they are so much faster’ or ‘You can declare this final, that way we save some processing power’","author":{"@type":"Person","name":"Frederick Vanbrabant"},"@type":"BlogPosting","url":"http://localhost:4000/2018/07/24/php-performance.html","headline":"What performance tricks actually work","dateModified":"2018-07-24T00:00:00+02:00","datePublished":"2018-07-24T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2018/07/24/php-performance.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+	</head>
+
+
+<body>
+<!-- Header -->
+<div class="container">
+	<div class="row header">
+		<div class="col padding-0">
+			<h1><a href="/index.html">Frederick Vanbrabant's</a></h1>
+			<h2>delirious rantings</h2>
+		</div>
+	</div>
+</div>
+<div class="jumbotron cover-image"  style="background-image: url('/assets/posts/2018-07-24-php-performance/header.jpg');" >
+</div>
+	
+
+<div id="main-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			<!-- Blog -->
+				<section>
+					<header class="blog-title">
+						<h1>What performance tricks actually work</h1>
+						<p>Posted 24 Jul 2018 - <span class="reading-time" title="Estimated read time">
+  
+  
+    about 18 mins to read
+  
+</span></p>
+					</header>
+					<div class="row blog-body">
+						<div class="col">
+							<section>
+								<p>We’ve all been there before, you submit a pull request and moments later you get a comment like: “Hey you should use a native function here, they are so much faster” or “You can declare this final, that way we save some processing power”.</p>
+
+<p>It’s great that we as developers keep an eye on this, but how true are these thing. And are they still a thing in newer PHP versions?</p>
+
+<h2 id="to-the-laboratory">To the laboratory</h2>
+
+<p>Time to put some of these “good practices” to the test. I’ve selected 10 speed tricks that I’ve picked up over the years and we’re going to check how relevant they still are in PHP7.2.</p>
+
+<p>So how are we going to test this? I’ve set up a small project that we are going to be running natively (no Docker, no vagrant) in MacOs (version: 10.13.5). The PHP version is the latest version currently on brew (PHP 7.2.8).</p>
+
+<p>The benchmark itself uses <a href="https://github.com/phpbench/phpbench">PHPBench</a> and we are going to compare each “trick” to its standard alternative. They are separate methods that each will be ran 1000 times over 5 iterations. So that means we will run each test 5000 times grouped over 5 results. That way we can minimise deviations and extract mean results.</p>
+
+<p>Sounds like fun? Let’s bust some myths.</p>
+
+<p>But before we begin, please a word of warning. We are going to zoom in on these claims. Some of these results might seem pretty high but that is only because we only run very small pieces of code. The results might not be that extreme in your day to day code.</p>
+
+<h3 id="single-quotes-are-faster-than-double-quotes">Single quotes are faster than double quotes</h3>
+
+<p>Let’s start out with a classic. As single quotes are encouraged by PSR we all might be getting some small speed bonuses without knowing it. We will test with this code:</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code>    <span class="cp">&lt;?php</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">single</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$words</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">"Taylor Swift"</span><span class="p">,</span>
+                <span class="s2">"her"</span><span class="p">,</span>
+                <span class="s2">"zodiac"</span><span class="p">,</span>
+                <span class="s2">"sign is"</span><span class="p">,</span>
+                <span class="s2">"sagittarius"</span><span class="p">,</span>
+            <span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">double</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$words</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">'Taylor Swift'</span><span class="p">,</span>
+                <span class="s1">'her'</span><span class="p">,</span>
+                <span class="s1">'zodiac'</span><span class="p">,</span>
+                <span class="s1">'sign is'</span><span class="p">,</span>
+                <span class="s1">'sagittarius'</span><span class="p">,</span>
+            <span class="p">];</span>
+        <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>And these are the results:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject     | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchSingle |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.217μs | 0.224μs | 0.222μs | 0.235μs | 0.006μs | 2.68%  | 1.00x |
+    | TestBench | benchDouble |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.232μs | 0.235μs | 0.233μs | 0.241μs | 0.003μs | 1.49%  | 1.05x |
+    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+</code></pre>
+</div>
+
+<p>Turns out that indeed double quotes are about 5% slower in this test.</p>
+
+<h3 id="json-is-faster-than-xml">Json is faster than XML</h3>
+
+<p>Sometimes we like to use Json or XML to setup validation or config files. Most people like to use Json over XML due to readability reasons. But is it also faster?</p>
+
+<p>A quick word of warning here, we will be using the native <code class="highlighter-rouge">xmlrpc_encode</code> en <code class="highlighter-rouge">xmlrpc_decode</code> functions. These are very experimental and not fully implemented. We could be using packages for this, something I would certainly advice in real projects, but that would skew the results too much (as we need to load them in etc). So here is the code:</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code>    <span class="cp">&lt;?php</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">xml</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$words</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">'Taylor Swift'</span><span class="p">,</span>
+                <span class="s1">'has 2 cats'</span><span class="p">,</span>
+                <span class="s1">'Meredith and'</span><span class="p">,</span>
+                <span class="s1">'Olivia'</span><span class="p">,</span>
+            <span class="p">];</span>
+
+            <span class="nv">$encode</span> <span class="o">=</span> <span class="nb">xmlrpc_encode</span><span class="p">(</span><span class="nv">$words</span><span class="p">);</span>
+            <span class="nv">$decode</span> <span class="o">=</span> <span class="nb">xmlrpc_decode</span><span class="p">(</span><span class="nv">$encode</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">json</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$words</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">'Taylor Swift'</span><span class="p">,</span>
+                <span class="s1">'has 2 cats'</span><span class="p">,</span>
+                <span class="s1">'Meredith and'</span><span class="p">,</span>
+                <span class="s1">'Olivia'</span><span class="p">,</span>
+            <span class="p">];</span>
+
+            <span class="nv">$encode</span> <span class="o">=</span> <span class="nb">json_encode</span><span class="p">(</span><span class="nv">$words</span><span class="p">);</span>
+            <span class="nv">$decode</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nv">$encode</span><span class="p">);</span>
+        <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>And unsurprisingly here are the results:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>    +-----------+-----------+--------+--------+------+-----+----------+----------+----------+----------+----------+---------+--------+--------+
+    | benchmark | subject   | groups | params | revs | its | mem_peak | best     | mean     | mode     | worst    | stdev   | rstdev | diff   |
+    +-----------+-----------+--------+--------+------+-----+----------+----------+----------+----------+----------+---------+--------+--------+
+    | TestBench | benchXml  |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 26.991μs | 27.577μs | 27.216μs | 28.325μs | 0.534μs | 1.94%  | 28.13x |
+    | TestBench | benchJson |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.939μs  | 0.980μs  | 0.959μs  | 1.025μs  | 0.035μs | 3.54%  | 1.00x  |
+    +-----------+-----------+--------+--------+------+-----+----------+----------+----------+----------+----------+---------+--------+--------+
+</code></pre>
+</div>
+
+<p>The native experimental functions that deal with XML are way slower in our tests.</p>
+
+<h3 id="using-loads-of-layered-objects-is-way-slower">Using loads of layered objects is way slower</h3>
+
+<p>This one will be a bit messy to display. We are going to new up some classes and send the parameters down 3 layers. There we execute the same function as we otherwise would.</p>
+
+<p>I think we all know that the new-ing up of classes will lose us some time, but let’s see how much time we lose.</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code>    <span class="cp">&lt;?php</span>
+
+    <span class="k">namespace</span> <span class="nx">App</span><span class="p">;</span>
+
+    <span class="k">class</span> <span class="nc">Tester</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">spaghetti</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">lasagne</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$layers</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">LayerOne</span><span class="p">();</span>
+            <span class="nv">$layers</span><span class="o">-&gt;</span><span class="na">down</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">LayerOne</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">down</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$layer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">LayerTwo</span><span class="p">();</span>
+            <span class="nv">$layer</span><span class="o">-&gt;</span><span class="na">down</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">LayerTwo</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">down</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$layer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">LayerThree</span><span class="p">();</span>
+            <span class="nv">$layer</span><span class="o">-&gt;</span><span class="na">doTheLoop</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">LayerThree</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">doTheLoop</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>    +-----------+----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject        | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchSpaghetti |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 1.121μs | 1.161μs | 1.155μs | 1.210μs | 0.029μs | 2.46%  | 1.00x |
+    | TestBench | benchLasagne   |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 1.418μs | 1.448μs | 1.432μs | 1.484μs | 0.026μs | 1.78%  | 1.25x |
+    +-----------+----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+</code></pre>
+</div>
+
+<p>Unsurprisingly the new-ing up of classes takes some time. In this case it comes down to about 25% slower. This obviously doesn’t mean you shouldn’t be using classes anymore. Personally I will always prefer the maintainability over the speed.</p>
+
+<h3 id="native-array-functions-are-faster-than-loops">Native array functions are faster than loops</h3>
+
+<p>This is a classic. It’s said that native array functions are faster than foreach loops because they are native C functions. This is the code we will be running:</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code>    <span class="cp">&lt;?php</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">native</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$words</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'i'</span><span class="p">,</span> <span class="s1">'am'</span><span class="p">,</span> <span class="s1">'not'</span><span class="p">,</span> <span class="s1">'shouting'</span><span class="p">];</span>
+
+            <span class="nv">$shouts</span> <span class="o">=</span> <span class="nb">array_map</span><span class="p">(</span>
+                <span class="k">function</span> <span class="p">(</span><span class="nv">$word</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nb">strtoupper</span><span class="p">(</span><span class="nv">$word</span><span class="p">);</span>
+                <span class="p">},</span> <span class="nv">$words</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">loop</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$words</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'i'</span><span class="p">,</span> <span class="s1">'am'</span><span class="p">,</span> <span class="s1">'not'</span><span class="p">,</span> <span class="s1">'shouting'</span><span class="p">];</span>
+            <span class="nv">$shouts</span> <span class="o">=</span> <span class="p">[];</span>
+
+            <span class="k">foreach</span> <span class="p">(</span><span class="nv">$words</span> <span class="k">as</span> <span class="nv">$word</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$shouts</span><span class="p">[]</span> <span class="o">=</span> <span class="nb">strtoupper</span><span class="p">(</span><span class="nv">$word</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>I’m going to be totally honest here and say that I’ve ran this test a few times now, cause I couldn’t really believe the results:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject     | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchNative |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.817μs | 0.847μs | 0.859μs | 0.876μs | 0.022μs | 2.60%  | 1.36x |
+    | TestBench | benchLoop   |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.611μs | 0.623μs | 0.616μs | 0.647μs | 0.013μs | 2.16%  | 1.00x |
+    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+</code></pre>
+</div>
+
+<p>Turns out that in this test the <code class="highlighter-rouge">array_map</code> method is slower than the <code class="highlighter-rouge">foreach</code>.
+This probablly has something to do with the anonymous class.</p>
+
+<h3 id="rowid-is-7-times-faster-than-rowid">$row[’id’] is 7 times faster than $row[id]</h3>
+
+<p>I’ve never heard of this one. Apparently it’s a thing:</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code>    <span class="cp">&lt;?php</span>
+    	<span class="k">public</span> <span class="k">function</span> <span class="nf">fetchByString</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$array</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">'Ariana Grande\'s'</span><span class="p">,</span>
+                <span class="s1">'favourite cereal'</span><span class="p">,</span>
+                <span class="s1">'is cocoa puffs'</span><span class="p">,</span>
+            <span class="p">];</span>
+
+            <span class="nv">$who</span> <span class="o">=</span> <span class="nv">$array</span><span class="p">[</span><span class="s1">'0'</span><span class="p">];</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">fetchByInteger</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$array</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">'Ariana Grande\'s'</span><span class="p">,</span>
+                <span class="s1">'favourite cereal'</span><span class="p">,</span>
+                <span class="s1">'is cocoa puffs'</span><span class="p">,</span>
+            <span class="p">];</span>
+
+            <span class="nv">$who</span> <span class="o">=</span> <span class="nv">$array</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Turns out it doesn’t really make a lot of difference, at least not in the 700% range.</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject      | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchString  |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.228μs | 0.238μs | 0.233μs | 0.248μs | 0.008μs | 3.28%  | 1.02x |
+    | TestBench | benchInteger |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.224μs | 0.232μs | 0.234μs | 0.242μs | 0.007μs | 2.98%  | 1.00x |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+</code></pre>
+</div>
+
+<p>The string fetching is even marginally slower in our test by 2%.</p>
+
+<h3 id="throws-are-super-expensive">Throws are super expensive</h3>
+
+<p>Error handling is an important part of any application, but it is said you should be a bit weary of using extensive amounts of <code class="highlighter-rouge">try catch</code> blocks. Time to put it to the test.</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code>    <span class="cp">&lt;?php</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">errorHandling</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">try</span> <span class="p">{</span>
+                <span class="k">while</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="k">throw</span> <span class="k">new</span> <span class="nx">\Exception</span><span class="p">(</span><span class="s1">'Some sweet error handling.'</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\Exception</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">noErrorHandling</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>And the results:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject      | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchError   |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 2.056μs | 2.164μs | 2.218μs | 2.226μs | 0.075μs | 3.45%  | 1.55x |
+    | TestBench | benchNoError |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 1.346μs | 1.398μs | 1.367μs | 1.455μs | 0.045μs | 3.21%  | 1.00x |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+</code></pre>
+</div>
+
+<p>Unsurprisingly we lose some time on the errorHandling. But personally I would always recommend having more error handling over having less.</p>
+
+<h3 id="what-is-the-impact-of-unused-vars">What is the impact of unused vars</h3>
+
+<p>Most static analysis tools tends to either complain about unused vars, or straight up remove them for you.</p>
+
+<p>As unused vars in your code serve no real benefit, it doesn’t really makes sense to keep them. That said, let’s take a look at the cost.</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code>    <span class="cp">&lt;?php</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">unusedvars</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$var1</span> <span class="o">=</span> <span class="s2">"Lorde"</span><span class="p">;</span>
+            <span class="nv">$var2</span> <span class="o">=</span> <span class="s2">"loves"</span><span class="p">;</span>
+            <span class="nv">$var3</span> <span class="o">=</span> <span class="s2">"peanut"</span><span class="p">;</span>
+            <span class="nv">$var4</span> <span class="o">=</span> <span class="s2">"m&amp;ms"</span><span class="p">;</span>
+
+            <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">noUnusedvars</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>and the results:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>    +-----------+-------------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject           | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+-------------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchUnusedVars   |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 1.444μs | 1.483μs | 1.492μs | 1.507μs | 0.023μs | 1.53%  | 1.07x |
+    | TestBench | benchNoUnusedVars |        | <span class="o">[]</span>     | 1000 | 5   | 890,384b | 1.317μs | 1.382μs | 1.405μs | 1.424μs | 0.040μs | 2.88%  | 1.00x |
+    +-----------+-------------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+</code></pre>
+</div>
+
+<p>So it is about 7% in our tests. But as you probably know, there is no real reason to keep those vars around.</p>
+
+<h3 id="magic-methods-are-slower-than-regular-ones">Magic methods are slower than regular ones</h3>
+
+<p>I love to use value objects. And in those objects I normally use <code class="highlighter-rouge">__toString()</code> to cast the object to a string. But I’ve had some remarks that you should just make them yourself to have a speed boost. Time to take a look at that.</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code>    <span class="cp">&lt;?php</span>
+
+    <span class="k">class</span> <span class="nc">Tester</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">magic</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$tea</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tea</span><span class="p">();</span>
+            <span class="nv">$advice</span> <span class="o">=</span> <span class="s1">'I know '</span> <span class="o">.</span> <span class="nv">$tea</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">noMagic</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$tea</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tea</span><span class="p">();</span>
+            <span class="nv">$advice</span> <span class="o">=</span> <span class="s1">'I know '</span> <span class="o">.</span> <span class="nv">$tea</span><span class="o">-&gt;</span><span class="na">toString</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">Tea</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">__toString</span><span class="p">()</span><span class="o">:</span> <span class="nx">string</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="s1">'tea water shouln\t boil'</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">toString</span><span class="p">()</span><span class="o">:</span> <span class="nx">string</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="s1">'tea water shouln\t boil'</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject      | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchMagic   |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.392μs | 0.401μs | 0.404μs | 0.409μs | 0.006μs | 1.46%  | 1.12x |
+    | TestBench | benchNoMagic |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.342μs | 0.357μs | 0.361μs | 0.370μs | 0.010μs | 2.78%  | 1.00x |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+</code></pre>
+</div>
+
+<p>Turns out magic methods are indeed a tiny bit slower, at about 12% in this test.</p>
+
+<h3 id="final-classes-are-faster-than-non-final-classes">Final classes are faster than non final classes</h3>
+
+<p>A friend of mine (the very talented <a href="https://twitter.com/WouterSioen">Wouter Sioen</a>) declares his classes <code class="highlighter-rouge">final</code> on creation and only changes it when they really need to be extended.</p>
+
+<p>I’m pretty sure he does that due to OOP reasons, but maybe it’s also a bit faster. That could make sense right?</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code>    <span class="cp">&lt;?php</span>
+
+    <span class="k">class</span> <span class="nc">Tester</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">useFinal</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$tea</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tea</span><span class="p">();</span>
+            <span class="nv">$advice</span> <span class="o">=</span> <span class="p">(</span><span class="nx">string</span><span class="p">)</span> <span class="nv">$tea</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">dontUseFinal</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$coffee</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Coffee</span><span class="p">();</span>
+            <span class="nv">$advice</span> <span class="o">=</span> <span class="p">(</span><span class="nx">string</span><span class="p">)</span> <span class="nv">$coffee</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">final</span> <span class="k">class</span> <span class="nc">Tea</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">__toString</span><span class="p">()</span><span class="o">:</span> <span class="nx">string</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="s1">'you should drink some'</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">class</span> <span class="nc">Coffee</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">__toString</span><span class="p">()</span><span class="o">:</span> <span class="nx">string</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="s1">'you should drink some'</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>Turns out it does</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject      | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchFinal   |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.363μs | 0.369μs | 0.365μs | 0.382μs | 0.007μs | 1.96%  | 1.00x |
+    | TestBench | benchNoFinal |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 0.373μs | 0.384μs | 0.386μs | 0.392μs | 0.006μs | 1.64%  | 1.04x |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+</code></pre>
+</div>
+
+<p>In our tests it is slightly faster to use <code class="highlighter-rouge">final</code></p>
+
+<p>That said, I think it a good thing to do any way.</p>
+
+<h3 id="comments-have-impact-on-your-code">Comments have impact on your code</h3>
+
+<p>Ok this is the last one. This has brought so many discussions in the past. Docblocks over return types, code should be self documenting, … You’ve seen the discussions before.</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code>    <span class="cp">&lt;?php</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">comments</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="c1">//Katy Perry is actually a stage name, her full name is Katheryn Elizabeth Hudson.
+</span>            <span class="c1">//Perry is actually her mother’s maiden name.
+</span>            <span class="c1">//She was born October 25, 1984 in Santa Barbara, California.
+</span>            <span class="c1">//She has an older sister, Angela, and younger brother, Dan.
+</span>            <span class="c1">//Both of her parents are pastors.
+</span>            <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">function</span> <span class="nf">noComments</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+        <span class="p">{</span>
+            <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>All of those Katy Perry facts result in:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>    +-----------+-----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject         | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+-----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchComments   |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 1.400μs | 1.435μs | 1.422μs | 1.470μs | 0.026μs | 1.80%  | 1.08x |
+    | TestBench | benchNoComments |        | <span class="o">[]</span>     | 1000 | 5   | 890,368b | 1.305μs | 1.326μs | 1.318μs | 1.346μs | 0.016μs | 1.19%  | 1.00x |
+    +-----------+-----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+</code></pre>
+</div>
+
+<h2 id="about-these-tests">About these tests</h2>
+
+<p>Some of these tests might surprise you, some might not. That said, please don’t stare yourself blind at the results here. Speed is just one part of software development, and I personally think marginal gains don’t out weight good developer practices.</p>
+
+<p>At least you left here with some fun facts about pop stars.</p>
+
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-9">
+            <div class="bio-card">
+                <div class="row bio-card-body">
+                    <div class="col-xs-12 col-md-5 bio-card-image">
+                        <img src="/assets/images/my-face.jpg" alt="my face" class="img-responsive"/>
+                    </div>
+                    <div class="col-xs-12 col-md-7 bio-card-txt">
+                        <h2>Hey thanks for reading!</h2>
+                        <p>Hope you enjoyed this post.
+                            There is no comments section here, if you've ever seen the YouTube comments section you'll probably understand why. 
+                            If you have any remarks or comments on this topic, please dont hesitate
+                            to reach out on <a href="https://twitter.com/maybeFrederick">Twitter</a> or send me a <a href="mailto:frederick.vanbrabant+blog@gmail.com" target="_top">mail.</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Footer -->
+<div class="footer">
+	<div class="container">
+		<div class="padder">
+			<div class="row">
+				<div class='col-sm-8 col-12'>
+					<section class='footer-items'>
+						<header>
+							<h2>Latest posts</h2>
+						</header>
+						<ul>
+							
+							<li>
+								<h3>
+									<a href="/2018/07/24/php-performance.html">What performance tricks actually work</a>
+								</h3>
+							</li>
+							
+							<li>
+								<h3>
+									<a href="/2017/12/07/atomic-commits.html">Atomic commits: Telling stories with Git</a>
+								</h3>
+							</li>
+							
+							<li>
+								<h3>
+									<a href="/2017/07/24/connecting-microservices.html">Connect microservices with the help of GRPC</a>
+								</h3>
+							</li>
+							
+							<li>
+								<h3>
+									<a href="/2017/07/04/yk38-bug.html">The Y2k38 Bug: The biggest news craze of the year 2038</a>
+								</h3>
+							</li>
+							
+							<li>
+								<h3>
+									<a href="/2017/06/12/broken-windows-theory.html">The broken windows theory or “Why some projects are just destined to suck”</a>
+								</h3>
+							</li>
+							
+						</ul>
+					</section>
+				</div>
+				<div class='col-sm-4 col-12'>
+					<section class='footer-items'>
+						<header>
+							<h2>Who now?</h2>
+						</header>
+						<p>Frederick is a less than 30 year old developer from Antwerp with a passion for API's and everything that surrounds
+							them. He works as a Software Engineer at
+							<a href="http://www.madewithlove.be">madewithlove</a>
+							and is co-organiser of
+							<a href="http://www.meetup.com/phpantwerp">PHP Antwerp</a>.</p>
+
+						If you want to stay up to date on my ramblings you can subscribe to this 90's thing called
+						<a href="https://frederickvanbrabant.com/feed.xml">Rss</a>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+ crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+ crossorigin="anonymous"></script>
+<script>
+	(function (i, s, o, g, r, a, m) {
+		i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+			(i[r].q = i[r].q || []).push(arguments)
+		}, i[r].l = 1 * new Date(); a = s.createElement(o),
+			m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+	})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+	ga('create', 'UA-98268819-1', 'auto');
+	ga('send', 'pageview');
+
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Person",
+  "name": "Frederick Vanbrabant",
+  "url": "http://www.frederickvanbrabant.com",
+  "sameAs": [
+    "https://twitter.com/maybeFrederick",
+    "https://www.linkedin.com/in/frederickvanbrabant/",
+    "https://github.com/vanbrabantf",
+    "https://symposiumapp.com/u/frederick",
+    "http://www.speakersbase.com/frederick-vanbrabant"
+  ]
+}
+</script>
+
+</html>

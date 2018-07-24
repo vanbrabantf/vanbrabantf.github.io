@@ -1,4 +1,493 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-12-07T12:52:11+01:00</updated><id>http://localhost:4000/</id><author><name>Frederick Vanbrabant</name></author><entry><title type="html">Atomic commits: Telling stories with Git</title><link href="http://localhost:4000/2017/12/07/atomic-commits.html" rel="alternate" type="text/html" title="Atomic commits: Telling stories with Git" /><published>2017-12-07T00:00:00+01:00</published><updated>2017-12-07T00:00:00+01:00</updated><id>http://localhost:4000/2017/12/07/atomic-commits</id><content type="html" xml:base="http://localhost:4000/2017/12/07/atomic-commits.html">&lt;p&gt;I always find it amazing to see how different people create pull requests. Some people like to put every file they’ve touched into one big commit. Other people split their commits up per file. There are even people that split it up according to domains.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-07-24T11:36:51+02:00</updated><id>http://localhost:4000/</id><author><name>Frederick Vanbrabant</name></author><entry><title type="html">What performance tricks actually work</title><link href="http://localhost:4000/2018/07/24/php-performance.html" rel="alternate" type="text/html" title="What performance tricks actually work" /><published>2018-07-24T00:00:00+02:00</published><updated>2018-07-24T00:00:00+02:00</updated><id>http://localhost:4000/2018/07/24/php-performance</id><content type="html" xml:base="http://localhost:4000/2018/07/24/php-performance.html">&lt;p&gt;We’ve all been there before, you submit a pull request and moments later you get a comment like: “Hey you should use a native function here, they are so much faster” or “You can declare this final, that way we save some processing power”.&lt;/p&gt;
+
+&lt;p&gt;It’s great that we as developers keep an eye on this, but how true are these thing. And are they still a thing in newer PHP versions?&lt;/p&gt;
+
+&lt;h2 id=&quot;to-the-laboratory&quot;&gt;To the laboratory&lt;/h2&gt;
+
+&lt;p&gt;Time to put some of these “good practices” to the test. I’ve selected 10 speed tricks that I’ve picked up over the years and we’re going to check how relevant they still are in PHP7.2.&lt;/p&gt;
+
+&lt;p&gt;So how are we going to test this? I’ve set up a small project that we are going to be running natively (no Docker, no vagrant) in MacOs (version: 10.13.5). The PHP version is the latest version currently on brew (PHP 7.2.8).&lt;/p&gt;
+
+&lt;p&gt;The benchmark itself uses &lt;a href=&quot;https://github.com/phpbench/phpbench&quot;&gt;PHPBench&lt;/a&gt; and we are going to compare each “trick” to its standard alternative. They are separate methods that each will be ran 1000 times over 5 iterations. So that means we will run each test 5000 times grouped over 5 results. That way we can minimise deviations and extract mean results.&lt;/p&gt;
+
+&lt;p&gt;Sounds like fun? Let’s bust some myths.&lt;/p&gt;
+
+&lt;p&gt;But before we begin, please a word of warning. We are going to zoom in on these claims. Some of these results might seem pretty high but that is only because we only run very small pieces of code. The results might not be that extreme in your day to day code.&lt;/p&gt;
+
+&lt;h3 id=&quot;single-quotes-are-faster-than-double-quotes&quot;&gt;Single quotes are faster than double quotes&lt;/h3&gt;
+
+&lt;p&gt;Let’s start out with a classic. As single quotes are encouraged by PSR we all might be getting some small speed bonuses without knowing it. We will test with this code:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;single&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;s2&quot;&gt;&quot;Taylor Swift&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s2&quot;&gt;&quot;her&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s2&quot;&gt;&quot;zodiac&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s2&quot;&gt;&quot;sign is&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s2&quot;&gt;&quot;sagittarius&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'Taylor Swift'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'her'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'zodiac'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'sign is'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'sagittarius'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And these are the results:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject     | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchSingle |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 0.217μs | 0.224μs | 0.222μs | 0.235μs | 0.006μs | 2.68%  | 1.00x |
+    | TestBench | benchDouble |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 0.232μs | 0.235μs | 0.233μs | 0.241μs | 0.003μs | 1.49%  | 1.05x |
+    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Turns out that indeed double quotes are about 5% slower in this test.&lt;/p&gt;
+
+&lt;h3 id=&quot;json-is-faster-than-xml&quot;&gt;Json is faster than XML&lt;/h3&gt;
+
+&lt;p&gt;Sometimes we like to use Json or XML to setup validation or config files. Most people like to use Json over XML due to readability reasons. But is it also faster?&lt;/p&gt;
+
+&lt;p&gt;A quick word of warning here, we will be using the native &lt;code class=&quot;highlighter-rouge&quot;&gt;xmlrpc_encode&lt;/code&gt; en &lt;code class=&quot;highlighter-rouge&quot;&gt;xmlrpc_decode&lt;/code&gt; functions. These are very experimental and not fully implemented. We could be using packages for this, something I would certainly advice in real projects, but that would skew the results too much (as we need to load them in etc). So here is the code:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'Taylor Swift'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'has 2 cats'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'Meredith and'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'Olivia'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+
+            &lt;span class=&quot;nv&quot;&gt;$encode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;xmlrpc_encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$decode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;xmlrpc_decode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'Taylor Swift'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'has 2 cats'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'Meredith and'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'Olivia'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+
+            &lt;span class=&quot;nv&quot;&gt;$encode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;json_encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$decode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;json_decode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And unsurprisingly here are the results:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    +-----------+-----------+--------+--------+------+-----+----------+----------+----------+----------+----------+---------+--------+--------+
+    | benchmark | subject   | groups | params | revs | its | mem_peak | best     | mean     | mode     | worst    | stdev   | rstdev | diff   |
+    +-----------+-----------+--------+--------+------+-----+----------+----------+----------+----------+----------+---------+--------+--------+
+    | TestBench | benchXml  |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 26.991μs | 27.577μs | 27.216μs | 28.325μs | 0.534μs | 1.94%  | 28.13x |
+    | TestBench | benchJson |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 0.939μs  | 0.980μs  | 0.959μs  | 1.025μs  | 0.035μs | 3.54%  | 1.00x  |
+    +-----------+-----------+--------+--------+------+-----+----------+----------+----------+----------+----------+---------+--------+--------+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The native experimental functions that deal with XML are way slower in our tests.&lt;/p&gt;
+
+&lt;h3 id=&quot;using-loads-of-layered-objects-is-way-slower&quot;&gt;Using loads of layered objects is way slower&lt;/h3&gt;
+
+&lt;p&gt;This one will be a bit messy to display. We are going to new up some classes and send the parameters down 3 layers. There we execute the same function as we otherwise would.&lt;/p&gt;
+
+&lt;p&gt;I think we all know that the new-ing up of classes will lose us some time, but let’s see how much time we lose.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;App&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Tester&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;spaghetti&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lasagne&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$layers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;LayerOne&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$layers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;down&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LayerOne&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;down&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$layer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;LayerTwo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$layer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;down&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LayerTwo&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;down&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$layer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;LayerThree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$layer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;doTheLoop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LayerThree&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;doTheLoop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    +-----------+----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject        | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchSpaghetti |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 1.121μs | 1.161μs | 1.155μs | 1.210μs | 0.029μs | 2.46%  | 1.00x |
+    | TestBench | benchLasagne   |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 1.418μs | 1.448μs | 1.432μs | 1.484μs | 0.026μs | 1.78%  | 1.25x |
+    +-----------+----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Unsurprisingly the new-ing up of classes takes some time. In this case it comes down to about 25% slower. This obviously doesn’t mean you shouldn’t be using classes anymore. Personally I will always prefer the maintainability over the speed.&lt;/p&gt;
+
+&lt;h3 id=&quot;native-array-functions-are-faster-than-loops&quot;&gt;Native array functions are faster than loops&lt;/h3&gt;
+
+&lt;p&gt;This is a classic. It’s said that native array functions are faster than foreach loops because they are native C functions. This is the code we will be running:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;native&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'i'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'am'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'not'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'shouting'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+
+            &lt;span class=&quot;nv&quot;&gt;$shouts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;array_map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;strtoupper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$words&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;loop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$words&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'i'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'am'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'not'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'shouting'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$shouts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+
+            &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$words&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$shouts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;strtoupper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$word&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I’m going to be totally honest here and say that I’ve ran this test a few times now, cause I couldn’t really believe the results:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject     | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchNative |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 0.817μs | 0.847μs | 0.859μs | 0.876μs | 0.022μs | 2.60%  | 1.36x |
+    | TestBench | benchLoop   |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 0.611μs | 0.623μs | 0.616μs | 0.647μs | 0.013μs | 2.16%  | 1.00x |
+    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Turns out that in this test the &lt;code class=&quot;highlighter-rouge&quot;&gt;array_map&lt;/code&gt; method is slower than the &lt;code class=&quot;highlighter-rouge&quot;&gt;foreach&lt;/code&gt;.
+This probablly has something to do with the anonymous class.&lt;/p&gt;
+
+&lt;h3 id=&quot;rowid-is-7-times-faster-than-rowid&quot;&gt;$row[’id’] is 7 times faster than $row[id]&lt;/h3&gt;
+
+&lt;p&gt;I’ve never heard of this one. Apparently it’s a thing:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+    	&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fetchByString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$array&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'Ariana Grande\'s'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'favourite cereal'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'is cocoa puffs'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+
+            &lt;span class=&quot;nv&quot;&gt;$who&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'0'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fetchByInteger&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$array&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'Ariana Grande\'s'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'favourite cereal'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s1&quot;&gt;'is cocoa puffs'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+
+            &lt;span class=&quot;nv&quot;&gt;$who&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Turns out it doesn’t really make a lot of difference, at least not in the 700% range.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject      | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchString  |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 0.228μs | 0.238μs | 0.233μs | 0.248μs | 0.008μs | 3.28%  | 1.02x |
+    | TestBench | benchInteger |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 0.224μs | 0.232μs | 0.234μs | 0.242μs | 0.007μs | 2.98%  | 1.00x |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The string fetching is even marginally slower in our test by 2%.&lt;/p&gt;
+
+&lt;h3 id=&quot;throws-are-super-expensive&quot;&gt;Throws are super expensive&lt;/h3&gt;
+
+&lt;p&gt;Error handling is an important part of any application, but it is said you should be a bit weary of using extensive amounts of &lt;code class=&quot;highlighter-rouge&quot;&gt;try catch&lt;/code&gt; blocks. Time to put it to the test.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;errorHandling&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+                &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;\Exception&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Some sweet error handling.'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;\Exception&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;noErrorHandling&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And the results:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject      | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchError   |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 2.056μs | 2.164μs | 2.218μs | 2.226μs | 0.075μs | 3.45%  | 1.55x |
+    | TestBench | benchNoError |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 1.346μs | 1.398μs | 1.367μs | 1.455μs | 0.045μs | 3.21%  | 1.00x |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Unsurprisingly we lose some time on the errorHandling. But personally I would always recommend having more error handling over having less.&lt;/p&gt;
+
+&lt;h3 id=&quot;what-is-the-impact-of-unused-vars&quot;&gt;What is the impact of unused vars&lt;/h3&gt;
+
+&lt;p&gt;Most static analysis tools tends to either complain about unused vars, or straight up remove them for you.&lt;/p&gt;
+
+&lt;p&gt;As unused vars in your code serve no real benefit, it doesn’t really makes sense to keep them. That said, let’s take a look at the cost.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;unusedvars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$var1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Lorde&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$var2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;loves&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$var3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;peanut&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$var4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;m&amp;amp;ms&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+            &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;noUnusedvars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;and the results:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    +-----------+-------------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject           | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+-------------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchUnusedVars   |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 1.444μs | 1.483μs | 1.492μs | 1.507μs | 0.023μs | 1.53%  | 1.07x |
+    | TestBench | benchNoUnusedVars |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,384b | 1.317μs | 1.382μs | 1.405μs | 1.424μs | 0.040μs | 2.88%  | 1.00x |
+    +-----------+-------------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So it is about 7% in our tests. But as you probably know, there is no real reason to keep those vars around.&lt;/p&gt;
+
+&lt;h3 id=&quot;magic-methods-are-slower-than-regular-ones&quot;&gt;Magic methods are slower than regular ones&lt;/h3&gt;
+
+&lt;p&gt;I love to use value objects. And in those objects I normally use &lt;code class=&quot;highlighter-rouge&quot;&gt;__toString()&lt;/code&gt; to cast the object to a string. But I’ve had some remarks that you should just make them yourself to have a speed boost. Time to take a look at that.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Tester&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;magic&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$tea&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Tea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$advice&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'I know '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$tea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;noMagic&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$tea&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Tea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$advice&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'I know '&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$tea&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Tea&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'tea water shouln\t boil'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'tea water shouln\t boil'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject      | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchMagic   |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 0.392μs | 0.401μs | 0.404μs | 0.409μs | 0.006μs | 1.46%  | 1.12x |
+    | TestBench | benchNoMagic |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 0.342μs | 0.357μs | 0.361μs | 0.370μs | 0.010μs | 2.78%  | 1.00x |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Turns out magic methods are indeed a tiny bit slower, at about 12% in this test.&lt;/p&gt;
+
+&lt;h3 id=&quot;final-classes-are-faster-than-non-final-classes&quot;&gt;Final classes are faster than non final classes&lt;/h3&gt;
+
+&lt;p&gt;A friend of mine (the very talented &lt;a href=&quot;https://twitter.com/WouterSioen&quot;&gt;Wouter Sioen&lt;/a&gt;) declares his classes &lt;code class=&quot;highlighter-rouge&quot;&gt;final&lt;/code&gt; on creation and only changes it when they really need to be extended.&lt;/p&gt;
+
+&lt;p&gt;I’m pretty sure he does that due to OOP reasons, but maybe it’s also a bit faster. That could make sense right?&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Tester&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;useFinal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$tea&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Tea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$advice&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$tea&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;dontUseFinal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$coffee&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Coffee&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$advice&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$coffee&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Tea&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'you should drink some'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Coffee&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'you should drink some'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Turns out it does&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject      | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchFinal   |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 0.363μs | 0.369μs | 0.365μs | 0.382μs | 0.007μs | 1.96%  | 1.00x |
+    | TestBench | benchNoFinal |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 0.373μs | 0.384μs | 0.386μs | 0.392μs | 0.006μs | 1.64%  | 1.04x |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In our tests it is slightly faster to use &lt;code class=&quot;highlighter-rouge&quot;&gt;final&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;That said, I think it a good thing to do any way.&lt;/p&gt;
+
+&lt;h3 id=&quot;comments-have-impact-on-your-code&quot;&gt;Comments have impact on your code&lt;/h3&gt;
+
+&lt;p&gt;Ok this is the last one. This has brought so many discussions in the past. Docblocks over return types, code should be self documenting, … You’ve seen the discussions before.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;//Katy Perry is actually a stage name, her full name is Katheryn Elizabeth Hudson.
+&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;//Perry is actually her mother’s maiden name.
+&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;//She was born October 25, 1984 in Santa Barbara, California.
+&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;//She has an older sister, Angela, and younger brother, Dan.
+&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;//Both of her parents are pastors.
+&lt;/span&gt;            &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;noComments&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;void&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;All of those Katy Perry facts result in:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    +-----------+-----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject         | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+-----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchComments   |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 1.400μs | 1.435μs | 1.422μs | 1.470μs | 0.026μs | 1.80%  | 1.08x |
+    | TestBench | benchNoComments |        | &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;     | 1000 | 5   | 890,368b | 1.305μs | 1.326μs | 1.318μs | 1.346μs | 0.016μs | 1.19%  | 1.00x |
+    +-----------+-----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;about-these-tests&quot;&gt;About these tests&lt;/h2&gt;
+
+&lt;p&gt;Some of these tests might surprise you, some might not. That said, please don’t stare yourself blind at the results here. Speed is just one part of software development, and I personally think marginal gains don’t out weight good developer practices.&lt;/p&gt;
+
+&lt;p&gt;At least you left here with some fun facts about pop stars.&lt;/p&gt;</content><author><name>Frederick Vanbrabant</name></author><summary type="html">We've all been there before, you submit a pull request and moments later you get a comment like: 'Hey you should use a native function here, they are so much faster' or 'You can declare this final, that way we save some processing power'</summary></entry><entry><title type="html">Atomic commits: Telling stories with Git</title><link href="http://localhost:4000/2017/12/07/atomic-commits.html" rel="alternate" type="text/html" title="Atomic commits: Telling stories with Git" /><published>2017-12-07T00:00:00+01:00</published><updated>2017-12-07T00:00:00+01:00</updated><id>http://localhost:4000/2017/12/07/atomic-commits</id><content type="html" xml:base="http://localhost:4000/2017/12/07/atomic-commits.html">&lt;p&gt;I always find it amazing to see how different people create pull requests. Some people like to put every file they’ve touched into one big commit. Other people split their commits up per file. There are even people that split it up according to domains.&lt;/p&gt;
 
 &lt;p&gt;I’ve been all these people at one point in my career, but these days I’m all into atomic commits. Never heard of that concept? No worries, let me introduce you to:&lt;/p&gt;
 

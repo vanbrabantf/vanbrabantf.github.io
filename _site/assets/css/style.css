@@ -139,8 +139,10 @@ p code {
   border: 1px solid #302a2c;
   width: 100%;
   display: table;
-  padding: 20px 40px;
   text-decoration: none; }
+
+.footer .padder {
+  padding: 20px 40px; }
 
 .footer h2 {
   color: white;
