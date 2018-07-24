@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-07-24T11:36:51+02:00</updated><id>http://localhost:4000/</id><author><name>Frederick Vanbrabant</name></author><entry><title type="html">What performance tricks actually work</title><link href="http://localhost:4000/2018/07/24/php-performance.html" rel="alternate" type="text/html" title="What performance tricks actually work" /><published>2018-07-24T00:00:00+02:00</published><updated>2018-07-24T00:00:00+02:00</updated><id>http://localhost:4000/2018/07/24/php-performance</id><content type="html" xml:base="http://localhost:4000/2018/07/24/php-performance.html">&lt;p&gt;We’ve all been there before, you submit a pull request and moments later you get a comment like: “Hey you should use a native function here, they are so much faster” or “You can declare this final, that way we save some processing power”.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-07-24T12:27:27+02:00</updated><id>http://localhost:4000/</id><author><name>Frederick Vanbrabant</name></author><entry><title type="html">What performance tricks actually work</title><link href="http://localhost:4000/2018/07/24/php-performance.html" rel="alternate" type="text/html" title="What performance tricks actually work" /><published>2018-07-24T00:00:00+02:00</published><updated>2018-07-24T00:00:00+02:00</updated><id>http://localhost:4000/2018/07/24/php-performance</id><content type="html" xml:base="http://localhost:4000/2018/07/24/php-performance.html">&lt;p&gt;We’ve all been there before, you submit a pull request and moments later you get a comment like: “Hey you should use a native function here, they are so much faster” or “You can declare this final, that way we save some processing power”.&lt;/p&gt;
 
 &lt;p&gt;It’s great that we as developers keep an eye on this, but how true are these thing. And are they still a thing in newer PHP versions?&lt;/p&gt;
 
@@ -14,7 +14,7 @@
 
 &lt;p&gt;But before we begin, please a word of warning. We are going to zoom in on these claims. Some of these results might seem pretty high but that is only because we only run very small pieces of code. The results might not be that extreme in your day to day code.&lt;/p&gt;
 
-&lt;h3 id=&quot;single-quotes-are-faster-than-double-quotes&quot;&gt;Single quotes are faster than double quotes&lt;/h3&gt;
+&lt;h3 id=&quot;are-single-quotes-are-faster-than-double-quotes&quot;&gt;Are single quotes are faster than double quotes?&lt;/h3&gt;
 
 &lt;p&gt;Let’s start out with a classic. As single quotes are encouraged by PSR we all might be getting some small speed bonuses without knowing it. We will test with this code:&lt;/p&gt;
 
@@ -56,7 +56,7 @@
 
 &lt;p&gt;Turns out that indeed double quotes are about 5% slower in this test.&lt;/p&gt;
 
-&lt;h3 id=&quot;json-is-faster-than-xml&quot;&gt;Json is faster than XML&lt;/h3&gt;
+&lt;h3 id=&quot;is-json-is-faster-than-xml&quot;&gt;is Json is faster than XML?&lt;/h3&gt;
 
 &lt;p&gt;Sometimes we like to use Json or XML to setup validation or config files. Most people like to use Json over XML due to readability reasons. But is it also faster?&lt;/p&gt;
 
@@ -104,7 +104,7 @@
 
 &lt;p&gt;The native experimental functions that deal with XML are way slower in our tests.&lt;/p&gt;
 
-&lt;h3 id=&quot;using-loads-of-layered-objects-is-way-slower&quot;&gt;Using loads of layered objects is way slower&lt;/h3&gt;
+&lt;h3 id=&quot;using-loads-of-layered-objects-is-way-slower&quot;&gt;Using loads of layered objects is way slower?&lt;/h3&gt;
 
 &lt;p&gt;This one will be a bit messy to display. We are going to new up some classes and send the parameters down 3 layers. There we execute the same function as we otherwise would.&lt;/p&gt;
 
@@ -171,7 +171,7 @@
 
 &lt;p&gt;Unsurprisingly the new-ing up of classes takes some time. In this case it comes down to about 25% slower. This obviously doesn’t mean you shouldn’t be using classes anymore. Personally I will always prefer the maintainability over the speed.&lt;/p&gt;
 
-&lt;h3 id=&quot;native-array-functions-are-faster-than-loops&quot;&gt;Native array functions are faster than loops&lt;/h3&gt;
+&lt;h3 id=&quot;native-array-functions-should-be-faster-than-loops-right&quot;&gt;Native array functions should be faster than loops right?&lt;/h3&gt;
 
 &lt;p&gt;This is a classic. It’s said that native array functions are faster than foreach loops because they are native C functions. This is the code we will be running:&lt;/p&gt;
 
@@ -212,7 +212,7 @@
 &lt;p&gt;Turns out that in this test the &lt;code class=&quot;highlighter-rouge&quot;&gt;array_map&lt;/code&gt; method is slower than the &lt;code class=&quot;highlighter-rouge&quot;&gt;foreach&lt;/code&gt;.
 This probablly has something to do with the anonymous class.&lt;/p&gt;
 
-&lt;h3 id=&quot;rowid-is-7-times-faster-than-rowid&quot;&gt;$row[’id’] is 7 times faster than $row[id]&lt;/h3&gt;
+&lt;h3 id=&quot;rowid-is-7-times-faster-than-rowid-&quot;&gt;$row[’id’] is 7 times faster than $row[id] ?&lt;/h3&gt;
 
 &lt;p&gt;I’ve never heard of this one. Apparently it’s a thing:&lt;/p&gt;
 
@@ -254,7 +254,7 @@ This probablly has something to do with the anonymous class.&lt;/p&gt;
 
 &lt;p&gt;The string fetching is even marginally slower in our test by 2%.&lt;/p&gt;
 
-&lt;h3 id=&quot;throws-are-super-expensive&quot;&gt;Throws are super expensive&lt;/h3&gt;
+&lt;h3 id=&quot;are-throws-super-expensive&quot;&gt;Are throws super expensive?&lt;/h3&gt;
 
 &lt;p&gt;Error handling is an important part of any application, but it is said you should be a bit weary of using extensive amounts of &lt;code class=&quot;highlighter-rouge&quot;&gt;try catch&lt;/code&gt; blocks. Time to put it to the test.&lt;/p&gt;
 
@@ -296,7 +296,7 @@ This probablly has something to do with the anonymous class.&lt;/p&gt;
 
 &lt;p&gt;Unsurprisingly we lose some time on the errorHandling. But personally I would always recommend having more error handling over having less.&lt;/p&gt;
 
-&lt;h3 id=&quot;what-is-the-impact-of-unused-vars&quot;&gt;What is the impact of unused vars&lt;/h3&gt;
+&lt;h3 id=&quot;what-is-the-impact-of-unused-vars&quot;&gt;What is the impact of unused vars?&lt;/h3&gt;
 
 &lt;p&gt;Most static analysis tools tends to either complain about unused vars, or straight up remove them for you.&lt;/p&gt;
 
@@ -340,7 +340,7 @@ This probablly has something to do with the anonymous class.&lt;/p&gt;
 
 &lt;p&gt;So it is about 7% in our tests. But as you probably know, there is no real reason to keep those vars around.&lt;/p&gt;
 
-&lt;h3 id=&quot;magic-methods-are-slower-than-regular-ones&quot;&gt;Magic methods are slower than regular ones&lt;/h3&gt;
+&lt;h3 id=&quot;magic-methods-are-slower-than-regular-ones&quot;&gt;Magic methods are slower than regular ones?&lt;/h3&gt;
 
 &lt;p&gt;I love to use value objects. And in those objects I normally use &lt;code class=&quot;highlighter-rouge&quot;&gt;__toString()&lt;/code&gt; to cast the object to a string. But I’ve had some remarks that you should just make them yourself to have a speed boost. Time to take a look at that.&lt;/p&gt;
 
@@ -387,7 +387,7 @@ This probablly has something to do with the anonymous class.&lt;/p&gt;
 
 &lt;p&gt;Turns out magic methods are indeed a tiny bit slower, at about 12% in this test.&lt;/p&gt;
 
-&lt;h3 id=&quot;final-classes-are-faster-than-non-final-classes&quot;&gt;Final classes are faster than non final classes&lt;/h3&gt;
+&lt;h3 id=&quot;final-classes-should-be-faster-than-non-final-classes&quot;&gt;Final classes should be faster than non final classes?&lt;/h3&gt;
 
 &lt;p&gt;A friend of mine (the very talented &lt;a href=&quot;https://twitter.com/WouterSioen&quot;&gt;Wouter Sioen&lt;/a&gt;) declares his classes &lt;code class=&quot;highlighter-rouge&quot;&gt;final&lt;/code&gt; on creation and only changes it when they really need to be extended.&lt;/p&gt;
 
@@ -443,7 +443,7 @@ This probablly has something to do with the anonymous class.&lt;/p&gt;
 
 &lt;p&gt;That said, I think it a good thing to do any way.&lt;/p&gt;
 
-&lt;h3 id=&quot;comments-have-impact-on-your-code&quot;&gt;Comments have impact on your code&lt;/h3&gt;
+&lt;h3 id=&quot;do-comments-have-impact-on-your-code&quot;&gt;Do comments have impact on your code?&lt;/h3&gt;
 
 &lt;p&gt;Ok this is the last one. This has brought so many discussions in the past. Docblocks over return types, code should be self documenting, … You’ve seen the discussions before.&lt;/p&gt;
 

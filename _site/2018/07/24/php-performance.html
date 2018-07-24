@@ -131,7 +131,7 @@
 
 <p>But before we begin, please a word of warning. We are going to zoom in on these claims. Some of these results might seem pretty high but that is only because we only run very small pieces of code. The results might not be that extreme in your day to day code.</p>
 
-<h3 id="single-quotes-are-faster-than-double-quotes">Single quotes are faster than double quotes</h3>
+<h3 id="are-single-quotes-are-faster-than-double-quotes">Are single quotes are faster than double quotes?</h3>
 
 <p>Let’s start out with a classic. As single quotes are encouraged by PSR we all might be getting some small speed bonuses without knowing it. We will test with this code:</p>
 
@@ -173,7 +173,7 @@
 
 <p>Turns out that indeed double quotes are about 5% slower in this test.</p>
 
-<h3 id="json-is-faster-than-xml">Json is faster than XML</h3>
+<h3 id="is-json-is-faster-than-xml">is Json is faster than XML?</h3>
 
 <p>Sometimes we like to use Json or XML to setup validation or config files. Most people like to use Json over XML due to readability reasons. But is it also faster?</p>
 
@@ -221,7 +221,7 @@
 
 <p>The native experimental functions that deal with XML are way slower in our tests.</p>
 
-<h3 id="using-loads-of-layered-objects-is-way-slower">Using loads of layered objects is way slower</h3>
+<h3 id="using-loads-of-layered-objects-is-way-slower">Using loads of layered objects is way slower?</h3>
 
 <p>This one will be a bit messy to display. We are going to new up some classes and send the parameters down 3 layers. There we execute the same function as we otherwise would.</p>
 
@@ -288,7 +288,7 @@
 
 <p>Unsurprisingly the new-ing up of classes takes some time. In this case it comes down to about 25% slower. This obviously doesn’t mean you shouldn’t be using classes anymore. Personally I will always prefer the maintainability over the speed.</p>
 
-<h3 id="native-array-functions-are-faster-than-loops">Native array functions are faster than loops</h3>
+<h3 id="native-array-functions-should-be-faster-than-loops-right">Native array functions should be faster than loops right?</h3>
 
 <p>This is a classic. It’s said that native array functions are faster than foreach loops because they are native C functions. This is the code we will be running:</p>
 
@@ -329,7 +329,7 @@
 <p>Turns out that in this test the <code class="highlighter-rouge">array_map</code> method is slower than the <code class="highlighter-rouge">foreach</code>.
 This probablly has something to do with the anonymous class.</p>
 
-<h3 id="rowid-is-7-times-faster-than-rowid">$row[’id’] is 7 times faster than $row[id]</h3>
+<h3 id="rowid-is-7-times-faster-than-rowid-">$row[’id’] is 7 times faster than $row[id] ?</h3>
 
 <p>I’ve never heard of this one. Apparently it’s a thing:</p>
 
@@ -371,7 +371,7 @@ This probablly has something to do with the anonymous class.</p>
 
 <p>The string fetching is even marginally slower in our test by 2%.</p>
 
-<h3 id="throws-are-super-expensive">Throws are super expensive</h3>
+<h3 id="are-throws-super-expensive">Are throws super expensive?</h3>
 
 <p>Error handling is an important part of any application, but it is said you should be a bit weary of using extensive amounts of <code class="highlighter-rouge">try catch</code> blocks. Time to put it to the test.</p>
 
@@ -413,7 +413,7 @@ This probablly has something to do with the anonymous class.</p>
 
 <p>Unsurprisingly we lose some time on the errorHandling. But personally I would always recommend having more error handling over having less.</p>
 
-<h3 id="what-is-the-impact-of-unused-vars">What is the impact of unused vars</h3>
+<h3 id="what-is-the-impact-of-unused-vars">What is the impact of unused vars?</h3>
 
 <p>Most static analysis tools tends to either complain about unused vars, or straight up remove them for you.</p>
 
@@ -457,7 +457,7 @@ This probablly has something to do with the anonymous class.</p>
 
 <p>So it is about 7% in our tests. But as you probably know, there is no real reason to keep those vars around.</p>
 
-<h3 id="magic-methods-are-slower-than-regular-ones">Magic methods are slower than regular ones</h3>
+<h3 id="magic-methods-are-slower-than-regular-ones">Magic methods are slower than regular ones?</h3>
 
 <p>I love to use value objects. And in those objects I normally use <code class="highlighter-rouge">__toString()</code> to cast the object to a string. But I’ve had some remarks that you should just make them yourself to have a speed boost. Time to take a look at that.</p>
 
@@ -504,7 +504,7 @@ This probablly has something to do with the anonymous class.</p>
 
 <p>Turns out magic methods are indeed a tiny bit slower, at about 12% in this test.</p>
 
-<h3 id="final-classes-are-faster-than-non-final-classes">Final classes are faster than non final classes</h3>
+<h3 id="final-classes-should-be-faster-than-non-final-classes">Final classes should be faster than non final classes?</h3>
 
 <p>A friend of mine (the very talented <a href="https://twitter.com/WouterSioen">Wouter Sioen</a>) declares his classes <code class="highlighter-rouge">final</code> on creation and only changes it when they really need to be extended.</p>
 
@@ -560,7 +560,7 @@ This probablly has something to do with the anonymous class.</p>
 
 <p>That said, I think it a good thing to do any way.</p>
 
-<h3 id="comments-have-impact-on-your-code">Comments have impact on your code</h3>
+<h3 id="do-comments-have-impact-on-your-code">Do comments have impact on your code?</h3>
 
 <p>Ok this is the last one. This has brought so many discussions in the past. Docblocks over return types, code should be self documenting, … You’ve seen the discussions before.</p>
 

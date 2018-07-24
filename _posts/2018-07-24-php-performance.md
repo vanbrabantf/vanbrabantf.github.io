@@ -23,7 +23,7 @@ Sounds like fun? Let's bust some myths.
 
 But before we begin, please a word of warning. We are going to zoom in on these claims. Some of these results might seem pretty high but that is only because we only run very small pieces of code. The results might not be that extreme in your day to day code.
 
-### Single quotes are faster than double quotes
+### Are single quotes are faster than double quotes?
 
 Let's start out with a classic. As single quotes are encouraged by PSR we all might be getting some small speed bonuses without knowing it. We will test with this code:
 
@@ -65,7 +65,7 @@ And these are the results:
 
 Turns out that indeed double quotes are about 5% slower in this test.
 
-### Json is faster than XML
+### is Json is faster than XML?
 
 Sometimes we like to use Json or XML to setup validation or config files. Most people like to use Json over XML due to readability reasons. But is it also faster?
 
@@ -113,7 +113,7 @@ And unsurprisingly here are the results:
 
 The native experimental functions that deal with XML are way slower in our tests.
 
-### Using loads of layered objects is way slower
+### Using loads of layered objects is way slower?
 
 This one will be a bit messy to display. We are going to new up some classes and send the parameters down 3 layers. There we execute the same function as we otherwise would.
 
@@ -180,7 +180,7 @@ I think we all know that the new-ing up of classes will lose us some time, but l
 
 Unsurprisingly the new-ing up of classes takes some time. In this case it comes down to about 25% slower. This obviously doesn't mean you shouldn't be using classes anymore. Personally I will always prefer the maintainability over the speed.
 
-### Native array functions are faster than loops
+### Native array functions should be faster than loops right?
 
 This is a classic. It's said that native array functions are faster than foreach loops because they are native C functions. This is the code we will be running:
 
@@ -221,7 +221,7 @@ I'm going to be totally honest here and say that I've ran this test a few times 
 Turns out that in this test the `array_map` method is slower than the `foreach`.
 This probablly has something to do with the anonymous class.
 
-### $row[’id’] is 7 times faster than $row[id]
+### $row[’id’] is 7 times faster than $row[id] ?
 
 I've never heard of this one. Apparently it's a thing:
 
@@ -263,7 +263,7 @@ Turns out it doesn't really make a lot of difference, at least not in the 700% r
 
 The string fetching is even marginally slower in our test by 2%.
 
-### Throws are super expensive
+### Are throws super expensive?
 
 Error handling is an important part of any application, but it is said you should be a bit weary of using extensive amounts of `try catch` blocks. Time to put it to the test.
 
@@ -305,7 +305,7 @@ And the results:
 
 Unsurprisingly we lose some time on the errorHandling. But personally I would always recommend having more error handling over having less.
 
-### What is the impact of unused vars
+### What is the impact of unused vars?
 
 Most static analysis tools tends to either complain about unused vars, or straight up remove them for you.
 
@@ -349,7 +349,7 @@ and the results:
 
 So it is about 7% in our tests. But as you probably know, there is no real reason to keep those vars around.
 
-### Magic methods are slower than regular ones
+### Magic methods are slower than regular ones?
 
 I love to use value objects. And in those objects I normally use `__toString()` to cast the object to a string. But I've had some remarks that you should just make them yourself to have a speed boost. Time to take a look at that.
 
@@ -396,7 +396,7 @@ I love to use value objects. And in those objects I normally use `__toString()` 
 
 Turns out magic methods are indeed a tiny bit slower, at about 12% in this test.
 
-### Final classes are faster than non final classes
+### Final classes should be faster than non final classes?
 
 A friend of mine (the very talented [Wouter Sioen](https://twitter.com/WouterSioen)) declares his classes `final` on creation and only changes it when they really need to be extended.
 
@@ -452,7 +452,7 @@ In our tests it is slightly faster to use `final`
 
 That said, I think it a good thing to do any way.
 
-### Comments have impact on your code
+### Do comments have impact on your code?
 
 Ok this is the last one. This has brought so many discussions in the past. Docblocks over return types, code should be self documenting, ... You've seen the discussions before.
 
