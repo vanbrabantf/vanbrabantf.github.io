@@ -219,7 +219,7 @@ I'm going to be totally honest here and say that I've ran this test a few times 
 ```
 
 Turns out that in this test the `array_map` method is slower than the `foreach`.
-This probably has something to do with the anonymous class.
+This probably has something to do with the anonymous function.
 
 ### $row[’id’] is 7 times faster than $row[id] ?
 
