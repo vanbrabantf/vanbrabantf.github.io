@@ -23,7 +23,7 @@ Sounds like fun? Let's bust some myths.
 
 But before we begin, please a word of warning. We are going to zoom in on these claims. Some of these results might seem pretty high but that is only because we only run very small pieces of code. The results might not be that extreme in your day to day code.
 
-### Are single quotes are faster than double quotes?
+### Are single quotes faster than double quotes?
 
 Let's start out with a classic. As single quotes are encouraged by PSR we all might be getting some small speed bonuses without knowing it. We will test with this code:
 
