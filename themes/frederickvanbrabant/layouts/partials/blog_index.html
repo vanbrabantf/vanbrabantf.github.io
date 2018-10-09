@@ -1,0 +1,30 @@
+<div class="blog-screen">
+        <div class="container">
+            <div class='row masonry overview'>
+                    {{ range (where .Site.Pages "Type" "post") }}
+                        {{ if .Params.excerpt }}
+                            <div class='col-xl-4 col-sm-6 col-12'>
+                                <div class="blog-overview-item item">
+                                    <a href="{{ .Permalink }}">
+                                        <img src="{{ .Params.tump }}" alt="tumpnail" />
+                                        <div class="container">
+                                            <h3>{{ .Title }}</h3>
+                                            </a>
+                                            <p>Posted {{ .Date.Format "2 January, 2006" }} <br/> About {{ .ReadingTime }} mins to read</p>
+                                            <p>{{ .Params.excerpt }}</p>
+                                        </div>
+                                    <a href="{{ .Permalink }}" class="read-more">Continue Reading</a>
+                                </div>
+                            </div>
+                        {{ end }}
+                    {{ end }}
+            </div>
+        </div>
+        <div class="container">
+            <div class='row'>
+                <div class='col-xs-offset-4 col-xs-4'>
+                    <!-- PAGINATOR-->
+                </div>
+            </div>
+        </div>
+    </div>
