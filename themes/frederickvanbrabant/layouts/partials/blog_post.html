@@ -1,0 +1,22 @@
+<div id="main-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			<!-- Blog -->
+				<section>
+					<header class="blog-title">
+						<h1>{{ .Title }}</h1>
+						<p>Posted {{ .Date.Format "2 January, 2006" }}- About {{ .ReadingTime }} mins to read</p>
+					</header>
+					<div class="row blog-body">
+						<div class="col">
+							<section>
+								{{ .Content }}
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div>

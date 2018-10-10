@@ -1,0 +1,10 @@
+baseURL: https://frederickvanbrabant.com
+disablePathToLower: true
+languageCode: en-US
+title: Frederick Vanbrabant delirious rantings
+theme: frederickvanbrabant
+author: Frederick Vanbrabant
+pygmentsCodeFences: true
+enableRobotsTXT: true
+params:
+  description: Webdeveloper from Antwerp Belgium with a love for legacy code and APIs
