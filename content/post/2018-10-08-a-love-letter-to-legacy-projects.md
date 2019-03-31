@@ -6,6 +6,8 @@ title: A love letter to legacy projects
 tump: /assets/posts/2018-12-13-love/tump.jpg
 ---
 
+**This post wast orignially posted on the [24daysindecember](https://24daysindecember.net/2018/12/13/a-love-letter-to-legacy-projects/) site**
+
 Monday morning. Your previous project just wrapped up, and they are going to assign you a brand new one. They even promised you the lead on this project. Who said Mondays couldn’t be great?
 
 A few hours later and you are staring at the most dreadful code you have ever seen — controllers of more than a thousand lines, PHP that injects jQuery in the views, raw SQL statements that could challenge a Dostoyevsky novel in size. The list goes on and on. This Monday is going to need a ton of coffee.
