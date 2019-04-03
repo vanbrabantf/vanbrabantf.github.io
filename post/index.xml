@@ -19,7 +19,7 @@
             <guid>https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/</guid>
             <description>
 
-&lt;p&gt;I work in many legacy code bases, and in fact, I&amp;rsquo;ve made it a big part of my career. I love diving into big monoliths that have grown out of proportion and tidying them up. One of the best parts of that work is rewriting a God class into a connection of small reusable classes. Let&amp;rsquo;s take a look at what makes a simple class great.&lt;/p&gt;
+&lt;p&gt;I work in many legacy code bases, and in fact, I&amp;rsquo;ve made it a big part of my career. I love diving into big monoliths that have grown out of proportion and tidying them up. One of the best parts of that work is rewriting a God class into a collection of small reusable classes. Let&amp;rsquo;s take a look at what makes a simple class great.&lt;/p&gt;
 
 &lt;p&gt;One of my favourite types of classes is a value object. For those not in the known, a value object is a small class that holds a value with a tiny bit of extra logic surrounding it. Sounds simple enough right? I think a nice way of looking at these classes is implementing them as an extension of the type system of your programming language. Let take a look at an uncomplicated example.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
