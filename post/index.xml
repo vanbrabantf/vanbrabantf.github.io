@@ -6,10 +6,167 @@
         <description>Recent content in Posts on Frederick Vanbrabant delirious rantings</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-US</language>
-        <lastBuildDate>Thu, 13 Dec 2018 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Wed, 03 Apr 2019 00:00:00 +0000</lastBuildDate>
         
         <atom:link href="https://frederickvanbrabant.com/post/index.xml" rel="self" type="application/rss+xml" />
         
+        
+        <item>
+            <title>The simpel class</title>
+            <link>https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/</link>
+            <pubDate>Wed, 03 Apr 2019 00:00:00 +0000</pubDate>
+            
+            <guid>https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/</guid>
+            <description>
+
+&lt;p&gt;I work in many legacy code bases, and in fact, I&amp;rsquo;ve made it a big part of my career. I love diving into big monoliths that have grown out of proportion and tidying them up. One of the best parts of that work is rewriting a God class into a connection of small reusable classes. Let&amp;rsquo;s take a look at what makes a simple class great.&lt;/p&gt;
+
+&lt;p&gt;One of my favourite types of classes is a value object. For those not in the known, a value object is a small class that holds a value with a tiny bit of extra logic surrounding it. Sounds simple enough right? I think a nice way of looking at these classes is implementing them as an extension of the type system of your programming language. Let take a look at an uncomplicated example.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;declare&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;strict_types&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;);
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CustomerName&lt;/span&gt;
+{
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; $firstName;
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; $lastName;
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __construct(&lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt; $firstName, &lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt; $lastName)
+    {
+        $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;firstName&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $firstName;
+        $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;lastName&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $lastName;
+    }
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;firstName&lt;/span&gt;()&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt;
+    {
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;firstName&lt;/span&gt;;
+    }
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lastName&lt;/span&gt;()&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt;
+    {
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;lastName&lt;/span&gt;;
+    }
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fullName&lt;/span&gt;()&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt;
+    {
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sprintf&lt;/span&gt;(
+            &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;%s %s&amp;#39;&lt;/span&gt;,
+            $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;firstName&lt;/span&gt;(),
+            $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;lastName&lt;/span&gt;()
+        );
+    }
+} 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This small class doesn&amp;rsquo;t do anything really, and it just holds two strings. The only tiny bit of function (on first glance) is that it concatenates the two strings. However, for the minimal amount of code in this class, it does offer a ton of value to your code base.&lt;/p&gt;
+
+&lt;h2 id=&#34;putting-an-end-to-the-class-struggle&#34;&gt;Putting an end to the class struggle&lt;/h2&gt;
+
+&lt;p&gt;Once we start replacing every occurrence of the first name and last name with this simple class, you will quickly begin to see the value. First of all, every time you come across this class in your code, you know that it has a first name and a last name in it. You also know that both of these values will be strings. And that you have an easy way to display the first name -  last name combination.&lt;/p&gt;
+
+&lt;p&gt;You can now also add this as a safety in your new classes. You could, for example, do something like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sendMail&lt;/span&gt;(
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;CustomerName&lt;/span&gt; $customerName,
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Email&lt;/span&gt; $email
+    )&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;void&lt;/span&gt;
+    {
+        $mail &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Mail&lt;/span&gt;($customerName&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;fullName&lt;/span&gt;(), $email);
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;// send mail
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Here you easily guard your method from all kinds of extra logic. You know that the variables that enter the method are of the type Email and Customer class.&lt;/p&gt;
+
+&lt;p&gt;There is however still a major issue with our values objects. We could still trick our system into accepting empty strings. Let&amp;rsquo;s take a look at how we can make these classes just a tiny bit more robust.&lt;/p&gt;
+
+&lt;h2 id=&#34;putting-a-stop-to-empty-values&#34;&gt;Putting a stop to empty values&lt;/h2&gt;
+
+&lt;p&gt;We know that our values in our object will always be of the type string, but &amp;ldquo;&amp;rdquo; is also a string. so you could do&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;new CustomerName(&amp;#39;&amp;#39;, &amp;#39;&amp;#39;);&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;or even&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;new CustomerName(&amp;#39;$&amp;#39;, &amp;#39;!&amp;#39;);&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;You could allow that last one if you are building a platform for rappers, but in most cases, you would want to guard against that.&lt;/p&gt;
+
+&lt;p&gt;If you are using PHP (like the examples are), I would suggest using a package like webmozart/assert (&lt;a href=&#34;https://github.com/webmozart/assert&#34;&gt;https://github.com/webmozart/assert&lt;/a&gt;).&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __construct(&lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt; $firstName, &lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt; $lastName)
+    {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Assert&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;stringNotEmpty&lt;/span&gt;($firstName);
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Assert&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;stringNotEmpty&lt;/span&gt;($lastName);
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Assert&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;alpha&lt;/span&gt;($firstName);
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Assert&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;alpha&lt;/span&gt;($lastName);
+
+        $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;firstName&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $firstName;
+        $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;lastName&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $lastName;
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;(you could add a private validation method to the class that is called on the first line of the constructor if there are many validation rules)&lt;/p&gt;
+
+&lt;p&gt;The class is now a lot smarter; it validates the values that come in and will throw an exception when they don&amp;rsquo;t meet the expectations of the class.&lt;/p&gt;
+
+&lt;p&gt;Now you can be sure that whenever you encounter this class, the values within will be usable.&lt;/p&gt;
+
+&lt;h2 id=&#34;adding-more-means-of-production-to-the-classes&#34;&gt;Adding more means of production to the classes&lt;/h2&gt;
+
+&lt;p&gt;It might be very tempting to start now adding more and more logic to these classes. However, I would caution restraint here.&lt;/p&gt;
+
+&lt;p&gt;A common thing you see is people adding getters and setters to these classes. You might notice we already have getters (we just not named them getters), and I would strongly recommend against adding setters.&lt;/p&gt;
+
+&lt;p&gt;If you need to update a value in the class, create a new instance of the class. Value objects are meant to be built and discarded. By creating new value objects you also make sure you pass the constructor every time, and therefore including the validation.&lt;/p&gt;
+
+&lt;p&gt;If you really feel like adding setters, make sure they create new instances themselves:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;setFirstName&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt; $firstName)&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CustomerName&lt;/span&gt;
+    {
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;self&lt;/span&gt;($firstName, $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;lastName&lt;/span&gt;());
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Another thing to touch upon is named constructors. A named constructor allows you to create the value object under different circumstances. I feel like it is easiest to explain with another example.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;declare&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;strict_types&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;);
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CustomerName&lt;/span&gt;
+{
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; $firstName;
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt; $lastName;
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __construct(&lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt; $firstName, &lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt; $lastName)
+    {
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Assert&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;stringNotEmpty&lt;/span&gt;($firstName);
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Assert&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;stringNotEmpty&lt;/span&gt;($lastName);
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Assert&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;alpha&lt;/span&gt;($firstName);
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;Assert&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;alpha&lt;/span&gt;($lastName);
+
+        $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;firstName&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $firstName;
+        $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;lastName&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $lastName;
+    }
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fromFullName&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;string&lt;/span&gt; $fullname)&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;self&lt;/span&gt;
+    {
+        $pieces &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;explode&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;, $fullname);
+        
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CustomerName&lt;/span&gt;($pieces[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;], $pieces[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;(this example is to demonstrate the function of a named constructor. This method assumes that a name is always in 2 pieces with the first name as the first piece. If you want to implement this, please add extra logic)&lt;/p&gt;
+
+&lt;p&gt;These constructors are a small convenient way to create the value object. Named constructors allow for great flexibility. However, like always, you should not take this flexibility too far.&lt;/p&gt;
+
+&lt;p&gt;You should always ask yourself, is this method solving a real problem, or am I just adding this for a one-off small convenience?&lt;/p&gt;
+
+&lt;p&gt;Named constructors are very useful in a &amp;ldquo;Time&amp;rdquo; class, where you can create the class from a string format, or from the hour, minute and second parameters as further explained &lt;a href=&#34;http://verraes.net/2014/06/named-constructors-in-php/&#34;&gt;here&lt;/a&gt; by &lt;a href=&#34;https://twitter.com/mathiasverraes&#34;&gt;Mathias Verraes&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;in-closing&#34;&gt;In closing&lt;/h2&gt;
+
+&lt;p&gt;There is still a lot to be said about value objects.  We haven&amp;rsquo;t touched upon testing, logging, naming&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;For more information about these topics, I would advise you to look into some DDD books or even better check out &lt;a href=&#34;https://twitter.com/matthiasnoback&#34;&gt;Matthias Noback&amp;rsquo;s&lt;/a&gt; book &lt;a href=&#34;https://leanpub.com/object-design&#34;&gt;&amp;ldquo;Style Guide for Object Design&amp;rdquo;&lt;/a&gt;. A book that prompted me to write this article. (I get no personal benefits for advertising this book, I just think it&amp;rsquo;s a great book)&lt;/p&gt;
+
+&lt;p&gt;If you haven&amp;rsquo;t implemented Value objects into your codebase, I would greatly advise you to give it a try. You will wonder how you ever lived without it.&lt;/p&gt;
+</description>
+        </item>
         
         <item>
             <title>A love letter to legacy projects</title>

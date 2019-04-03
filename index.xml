@@ -6,10 +6,20 @@
     <description>Recent content on Frederick Vanbrabant delirious rantings</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Thu, 13 Dec 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 03 Apr 2019 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://frederickvanbrabant.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The simpel class</title>
+      <link>https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/</link>
+      <pubDate>Wed, 03 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/</guid>
+      <description>I work in many legacy code bases, and in fact, I&amp;rsquo;ve made it a big part of my career. I love diving into big monoliths that have grown out of proportion and tidying them up. One of the best parts of that work is rewriting a God class into a connection of small reusable classes. Let&amp;rsquo;s take a look at what makes a simple class great.
+One of my favourite types of classes is a value object.</description>
+    </item>
     
     <item>
       <title>A love letter to legacy projects</title>
