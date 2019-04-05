@@ -563,3 +563,7 @@ nav {
     text-align: center;
     color: white;
     text-decoration: none; }
+
+.github-fork-ribbon {
+  position: fixed !important;
+}
