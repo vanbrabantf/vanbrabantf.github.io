@@ -1,0 +1,1038 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<html>
+	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="description" content="Webdeveloper from Antwerp Belgium with a love for legacy code and APIs">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Frederick Vanbrabant" />
+    	<title>Frederick Vanbrabant delirious rantings</title>
+
+		
+		<meta name="twitter:site" content="@maybefrederick" />
+        <meta name="twitter:description" content="" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:creator" content="@maybefrederick" />
+		<meta name="twitter:title" content="What performance tricks actually work" />
+
+		
+			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2018-07-24-php-performance/tump.jpg" />
+			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2018-07-24-php-performance/tump.jpg" />
+		
+
+
+    	
+    	<meta name="msapplication-tap-highlight" content="no">
+
+    	
+    	<link rel="manifest" href="/assets/manifest.json">
+
+    	 
+	    <meta name="mobile-web-app-capable" content="yes">
+	    <meta name="application-name" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="icon" sizes="192x192" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta name="apple-mobile-web-app-title" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="apple-touch-icon" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="msapplication-TileImage" content="/assets/images/touch/chrome-touch-icon-144x144.png">
+	    <meta name="msapplication-TileColor" content="#d52349">
+
+	    
+    	<meta name="theme-color" content="#d52349">
+
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('/assets/js/serviceworker.js').then(function(registration) {
+						
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}).catch(function(err) {
+						
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+		</script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/style.css" />
+	</head>
+
+
+<div class="container">
+        <div class="row header">
+            <div class="col padding-0">
+                <h1><a href="/index.html">Frederick Vanbrabant's</a></h1>
+                <h2>delirious rantings</h2>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron cover-image" style="background-image: url('/assets/posts/2018-07-24-php-performance/header.jpg');" >
+    </div>
+        
+    <div id="main-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			
+				<section>
+					<header class="blog-title">
+						<h1>What performance tricks actually work</h1>
+						<p>Posted 24 July, 2018- About 14 mins to read</p>
+					</header>
+					<div class="row blog-body">
+						<div class="col">
+							<section>
+								<p>We&rsquo;ve all been there before, you submit a pull request and moments later you get a comment like: &ldquo;Hey you should use a native function here, they are so much faster&rdquo; or &ldquo;You can declare this final, that way we save some processing power&rdquo;.</p>
+<p>It&rsquo;s great that we as developers keep an eye on this, but how true are these thing. And are they still a thing in newer PHP versions?</p>
+<h2 id="to-the-laboratory">To the laboratory</h2>
+<p>Time to put some of these &ldquo;good practices&rdquo; to the test. I&rsquo;ve selected 10 speed tricks that I&rsquo;ve picked up over the years and we&rsquo;re going to check how relevant they still are in PHP7.2.</p>
+<p>So how are we going to test this? I&rsquo;ve set up a small project that we are going to be running natively (no Docker, no vagrant) in MacOs (version: 10.13.5). The PHP version is the latest version currently on brew (PHP 7.2.8).</p>
+<p>The benchmark itself uses <a href="https://github.com/phpbench/phpbench">PHPBench</a> and we are going to compare each &ldquo;trick&rdquo; to its standard alternative. They are separate methods that each will be ran 1000 times over 5 iterations. So that means we will run each test 5000 times grouped over 5 results. That way we can minimise deviations and extract mean results.</p>
+<p>Sounds like fun? Let&rsquo;s bust some myths.</p>
+<p>But before we begin, please a word of warning. We are going to zoom in on these claims. Some of these results might seem pretty high but that is only because we only run very small pieces of code. The results might not be that extreme in your day to day code.</p>
+<h3 id="are-single-quotes-faster-than-double-quotes">Are single quotes faster than double quotes?</h3>
+<p>Let&rsquo;s start out with a classic. As single quotes are encouraged by PSR we all might be getting some small speed bonuses without knowing it. We will test with this code:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">double</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $words <span style="color:#f92672">=</span> [
+                <span style="color:#e6db74">&#34;Taylor Swift&#34;</span>,
+                <span style="color:#e6db74">&#34;her&#34;</span>,
+                <span style="color:#e6db74">&#34;zodiac&#34;</span>,
+                <span style="color:#e6db74">&#34;sign is&#34;</span>,
+                <span style="color:#e6db74">&#34;sagittarius&#34;</span>,
+            ];
+        }
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">single</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $words <span style="color:#f92672">=</span> [
+                <span style="color:#e6db74">&#39;Taylor Swift&#39;</span>,
+                <span style="color:#e6db74">&#39;her&#39;</span>,
+                <span style="color:#e6db74">&#39;zodiac&#39;</span>,
+                <span style="color:#e6db74">&#39;sign is&#39;</span>,
+                <span style="color:#e6db74">&#39;sagittarius&#39;</span>,
+            ];
+        }
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>And these are the results:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject     | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchDouble |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 0.217μs | 0.224μs | 0.222μs | 0.235μs | 0.006μs | 2.68%  | 1.00x |
+    | TestBench | benchSingle |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 0.232μs | 0.235μs | 0.233μs | 0.241μs | 0.003μs | 1.49%  | 1.05x |
+    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+</code></pre></td></tr></table>
+</div>
+</div>
+<p>Turns out that single quotes are about 5% slower in this test.</p>
+<h3 id="is-json-faster-than-xml">is Json faster than XML?</h3>
+<p>Sometimes we like to use Json or XML to setup validation or config files. Most people like to use Json over XML due to readability reasons. But is it also faster?</p>
+<p>A quick word of warning here, we will be using the native <code>xmlrpc_encode</code> en <code>xmlrpc_decode</code> functions. These are very experimental and not fully implemented. We could be using packages for this, something I would certainly advice in real projects, but that would skew the results too much (as we need to load them in etc). So here is the code:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">xml</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $words <span style="color:#f92672">=</span> [
+                <span style="color:#e6db74">&#39;Taylor Swift&#39;</span>,
+                <span style="color:#e6db74">&#39;has 2 cats&#39;</span>,
+                <span style="color:#e6db74">&#39;Meredith and&#39;</span>,
+                <span style="color:#e6db74">&#39;Olivia&#39;</span>,
+            ];
+
+            $encode <span style="color:#f92672">=</span> <span style="color:#a6e22e">xmlrpc_encode</span>($words);
+            $decode <span style="color:#f92672">=</span> <span style="color:#a6e22e">xmlrpc_decode</span>($encode);
+        }
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">json</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $words <span style="color:#f92672">=</span> [
+                <span style="color:#e6db74">&#39;Taylor Swift&#39;</span>,
+                <span style="color:#e6db74">&#39;has 2 cats&#39;</span>,
+                <span style="color:#e6db74">&#39;Meredith and&#39;</span>,
+                <span style="color:#e6db74">&#39;Olivia&#39;</span>,
+            ];
+
+            $encode <span style="color:#f92672">=</span> <span style="color:#a6e22e">json_encode</span>($words);
+            $decode <span style="color:#f92672">=</span> <span style="color:#a6e22e">json_decode</span>($encode);
+        }
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>And unsurprisingly here are the results:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    +-----------+-----------+--------+--------+------+-----+----------+----------+----------+----------+----------+---------+--------+--------+
+    | benchmark | subject   | groups | params | revs | its | mem_peak | best     | mean     | mode     | worst    | stdev   | rstdev | diff   |
+    +-----------+-----------+--------+--------+------+-----+----------+----------+----------+----------+----------+---------+--------+--------+
+    | TestBench | benchXml  |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 26.991μs | 27.577μs | 27.216μs | 28.325μs | 0.534μs | 1.94%  | 28.13x |
+    | TestBench | benchJson |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 0.939μs  | 0.980μs  | 0.959μs  | 1.025μs  | 0.035μs | 3.54%  | 1.00x  |
+    +-----------+-----------+--------+--------+------+-----+----------+----------+----------+----------+----------+---------+--------+--------+</code></pre></td></tr></table>
+</div>
+</div>
+<p>The native experimental functions that deal with XML are way slower in our tests.</p>
+<h3 id="using-loads-of-layered-objects-is-way-slower">Using loads of layered objects is way slower?</h3>
+<p>This one will be a bit messy to display. We are going to new up some classes and send the parameters down 3 layers. There we execute the same function as we otherwise would.</p>
+<p>I think we all know that the new-ing up of classes will lose us some time, but let&rsquo;s see how much time we lose.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+
+    <span style="color:#66d9ef">namespace</span> <span style="color:#a6e22e">App</span>;
+
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Tester</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">spaghetti</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            <span style="color:#66d9ef">for</span> ($i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; $i <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">100</span>; $i<span style="color:#f92672">++</span>) {
+                $i<span style="color:#f92672">++</span>;
+            }
+        }
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">lasagne</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $layers <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">LayerOne</span>();
+            $layers<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">down</span>();
+        }
+    }
+
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LayerOne</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">down</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $layer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">LayerTwo</span>();
+            $layer<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">down</span>();
+        }
+    }
+
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LayerTwo</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">down</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $layer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">LayerThree</span>();
+            $layer<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">doTheLoop</span>();
+        }
+    }
+
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LayerThree</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">doTheLoop</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            <span style="color:#66d9ef">for</span> ($i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; $i <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">100</span>; $i<span style="color:#f92672">++</span>) {
+                $i<span style="color:#f92672">++</span>;
+            }
+        }
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    +-----------+----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject        | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchSpaghetti |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 1.121μs | 1.161μs | 1.155μs | 1.210μs | 0.029μs | 2.46%  | 1.00x |
+    | TestBench | benchLasagne   |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 1.418μs | 1.448μs | 1.432μs | 1.484μs | 0.026μs | 1.78%  | 1.25x |
+    +-----------+----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+</code></pre></td></tr></table>
+</div>
+</div>
+<p>Unsurprisingly the new-ing up of classes takes some time. In this case it comes down to about 25% slower. This obviously doesn&rsquo;t mean you shouldn&rsquo;t be using classes anymore. Personally I will always prefer the maintainability over the speed.</p>
+<h3 id="native-array-functions-should-be-faster-than-loops-right">Native array functions should be faster than loops right?</h3>
+<p>This is a classic. It&rsquo;s said that native array functions are faster than foreach loops because they are native C functions. This is the code we will be running:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">native</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $words <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;i&#39;</span>, <span style="color:#e6db74">&#39;am&#39;</span>, <span style="color:#e6db74">&#39;not&#39;</span>, <span style="color:#e6db74">&#39;shouting&#39;</span>];
+
+            $shouts <span style="color:#f92672">=</span> <span style="color:#a6e22e">array_map</span>(
+                <span style="color:#66d9ef">function</span> ($word) {
+                    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">strtoupper</span>($word);
+                }, $words);
+        }
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">loop</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $words <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;i&#39;</span>, <span style="color:#e6db74">&#39;am&#39;</span>, <span style="color:#e6db74">&#39;not&#39;</span>, <span style="color:#e6db74">&#39;shouting&#39;</span>];
+            $shouts <span style="color:#f92672">=</span> [];
+
+            <span style="color:#66d9ef">foreach</span> ($words <span style="color:#66d9ef">as</span> $word) {
+                $shouts[] <span style="color:#f92672">=</span> <span style="color:#a6e22e">strtoupper</span>($word);
+            }
+        }
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>I&rsquo;m going to be totally honest here and say that I&rsquo;ve ran this test a few times now, cause I couldn&rsquo;t really believe the results:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject     | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchNative |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 0.817μs | 0.847μs | 0.859μs | 0.876μs | 0.022μs | 2.60%  | 1.36x |
+    | TestBench | benchLoop   |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 0.611μs | 0.623μs | 0.616μs | 0.647μs | 0.013μs | 2.16%  | 1.00x |
+    +-----------+-------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+</code></pre></td></tr></table>
+</div>
+</div>
+<p>Turns out that in this test the <code>array_map</code> method is slower than the <code>foreach</code>.
+This probably has something to do with the anonymous function.</p>
+<h3 id="rowid-is-7-times-faster-than-rowid-">$row[’id’] is 7 times faster than $row[id] ?</h3>
+<p>I&rsquo;ve never heard of this one. Apparently it&rsquo;s a thing:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+    	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">fetchByString</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $array <span style="color:#f92672">=</span> [
+                <span style="color:#e6db74">&#39;Ariana Grande\&#39;s&#39;</span>,
+                <span style="color:#e6db74">&#39;favourite cereal&#39;</span>,
+                <span style="color:#e6db74">&#39;is cocoa puffs&#39;</span>,
+            ];
+
+            $who <span style="color:#f92672">=</span> $array[<span style="color:#e6db74">&#39;0&#39;</span>];
+        }
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">fetchByInteger</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $array <span style="color:#f92672">=</span> [
+                <span style="color:#e6db74">&#39;Ariana Grande\&#39;s&#39;</span>,
+                <span style="color:#e6db74">&#39;favourite cereal&#39;</span>,
+                <span style="color:#e6db74">&#39;is cocoa puffs&#39;</span>,
+            ];
+
+            $who <span style="color:#f92672">=</span> $array[<span style="color:#ae81ff">0</span>];
+        }
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>Turns out it doesn&rsquo;t really make a lot of difference, at least not in the 700% range.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject      | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchString  |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 0.228μs | 0.238μs | 0.233μs | 0.248μs | 0.008μs | 3.28%  | 1.02x |
+    | TestBench | benchInteger |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 0.224μs | 0.232μs | 0.234μs | 0.242μs | 0.007μs | 2.98%  | 1.00x |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+</code></pre></td></tr></table>
+</div>
+</div>
+<p>The string fetching is even marginally slower in our test by 2%.</p>
+<h3 id="are-throws-super-expensive">Are throws super expensive?</h3>
+<p>Error handling is an important part of any application, but it is said you should be a bit weary of using extensive amounts of <code>try catch</code> blocks. Time to put it to the test.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">errorHandling</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+            <span style="color:#66d9ef">try</span> {
+                <span style="color:#66d9ef">while</span> ($i <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">100</span>) {
+                    $i<span style="color:#f92672">++</span>;
+                }
+
+                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">\Exception</span>(<span style="color:#e6db74">&#39;Some sweet error handling.&#39;</span>);
+            } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">\Exception</span> $e) {
+            }
+        }
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">noErrorHandling</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+            <span style="color:#66d9ef">while</span> ($i <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">100</span>) {
+                $i<span style="color:#f92672">++</span>;
+            }
+        }
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>And the results:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject      | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchError   |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 2.056μs | 2.164μs | 2.218μs | 2.226μs | 0.075μs | 3.45%  | 1.55x |
+    | TestBench | benchNoError |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 1.346μs | 1.398μs | 1.367μs | 1.455μs | 0.045μs | 3.21%  | 1.00x |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+</code></pre></td></tr></table>
+</div>
+</div>
+<p>Unsurprisingly we lose some time on the errorHandling. But personally I would always recommend having more error handling over having less.</p>
+<h3 id="what-is-the-impact-of-unused-vars">What is the impact of unused vars?</h3>
+<p>Most static analysis tools tends to either complain about unused vars, or straight up remove them for you.</p>
+<p>As unused vars in your code serve no real benefit, it doesn&rsquo;t really makes sense to keep them. That said, let&rsquo;s take a look at the cost.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">unusedvars</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $var1 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Lorde&#34;</span>;
+            $var2 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;loves&#34;</span>;
+            $var3 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;peanut&#34;</span>;
+            $var4 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;m&amp;ms&#34;</span>;
+
+            $i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+            <span style="color:#66d9ef">while</span> ($i <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">100</span>) {
+                $i<span style="color:#f92672">++</span>;
+            }
+        }
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">noUnusedvars</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+            <span style="color:#66d9ef">while</span> ($i <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">100</span>) {
+                $i<span style="color:#f92672">++</span>;
+            }
+        }
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>and the results:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    +-----------+-------------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject           | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+-------------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchUnusedVars   |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 1.444μs | 1.483μs | 1.492μs | 1.507μs | 0.023μs | 1.53%  | 1.07x |
+    | TestBench | benchNoUnusedVars |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,384b | 1.317μs | 1.382μs | 1.405μs | 1.424μs | 0.040μs | 2.88%  | 1.00x |
+    +-----------+-------------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+</code></pre></td></tr></table>
+</div>
+</div>
+<p>So it is about 7% in our tests. But as you probably know, there is no real reason to keep those vars around.</p>
+<h3 id="magic-methods-are-slower-than-regular-ones">Magic methods are slower than regular ones?</h3>
+<p>I love to use value objects. And in those objects I normally use <code>__toString()</code> to cast the object to a string. But I&rsquo;ve had some remarks that you should just make them yourself to have a speed boost. Time to take a look at that.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Tester</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">magic</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $tea <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Tea</span>();
+            $advice <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;I know &#39;</span> <span style="color:#f92672">.</span> $tea;
+        }
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">noMagic</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $tea <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Tea</span>();
+            $advice <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;I know &#39;</span> <span style="color:#f92672">.</span> $tea<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">toString</span>();
+        }
+    }
+
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Tea</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> __toString()<span style="color:#f92672">:</span> <span style="color:#a6e22e">string</span>
+        {
+            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;tea water shouln\t boil&#39;</span>;
+        }
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">toString</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">string</span>
+        {
+            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;tea water shouln\t boil&#39;</span>;
+        }
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject      | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchMagic   |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 0.392μs | 0.401μs | 0.404μs | 0.409μs | 0.006μs | 1.46%  | 1.12x |
+    | TestBench | benchNoMagic |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 0.342μs | 0.357μs | 0.361μs | 0.370μs | 0.010μs | 2.78%  | 1.00x |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+</code></pre></td></tr></table>
+</div>
+</div>
+<p>Turns out magic methods are indeed a tiny bit slower, at about 12% in this test.</p>
+<h3 id="final-classes-should-be-faster-than-non-final-classes">Final classes should be faster than non final classes?</h3>
+<p>A friend of mine (the very talented <a href="https://twitter.com/WouterSioen">Wouter Sioen</a>) declares his classes <code>final</code> on creation and only changes it when they really need to be extended.</p>
+<p>I&rsquo;m pretty sure he does that due to OOP reasons, but maybe it&rsquo;s also a bit faster. That could make sense right?</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Tester</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">useFinal</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $tea <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Tea</span>();
+            $advice <span style="color:#f92672">=</span> (<span style="color:#a6e22e">string</span>) $tea;
+        }
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">dontUseFinal</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $coffee <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Coffee</span>();
+            $advice <span style="color:#f92672">=</span> (<span style="color:#a6e22e">string</span>) $coffee;
+        }
+    }
+
+    <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Tea</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> __toString()<span style="color:#f92672">:</span> <span style="color:#a6e22e">string</span>
+        {
+            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;you should drink some&#39;</span>;
+        }
+    }
+
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Coffee</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> __toString()<span style="color:#f92672">:</span> <span style="color:#a6e22e">string</span>
+        {
+            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;you should drink some&#39;</span>;
+        }
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>Turns out it does</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject      | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchFinal   |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 0.363μs | 0.369μs | 0.365μs | 0.382μs | 0.007μs | 1.96%  | 1.00x |
+    | TestBench | benchNoFinal |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 0.373μs | 0.384μs | 0.386μs | 0.392μs | 0.006μs | 1.64%  | 1.04x |
+    +-----------+--------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+</code></pre></td></tr></table>
+</div>
+</div>
+<p>In our tests it is slightly faster to use <code>final</code></p>
+<p>That said, I think it a good thing to do any way.</p>
+<h3 id="do-comments-have-impact-on-your-code">Do comments have impact on your code?</h3>
+<p>Ok this is the last one. This has brought so many discussions in the past. Docblocks over return types, code should be self documenting, &hellip; You&rsquo;ve seen the discussions before.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">comments</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            <span style="color:#75715e">//Katy Perry is actually a stage name, her full name is Katheryn Elizabeth Hudson.
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//Perry is actually her mother’s maiden name.
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//She was born October 25, 1984 in Santa Barbara, California.
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//She has an older sister, Angela, and younger brother, Dan.
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//Both of her parents are pastors.
+</span><span style="color:#75715e"></span>            $i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+            <span style="color:#66d9ef">while</span> ($i <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">100</span>) {
+                $i<span style="color:#f92672">++</span>;
+            }
+        }
+
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">noComments</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span>
+        {
+            $i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+            <span style="color:#66d9ef">while</span> ($i <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">100</span>) {
+                $i<span style="color:#f92672">++</span>;
+            }
+        }
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>All of those Katy Perry facts result in:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    +-----------+-----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | benchmark | subject         | groups | params | revs | its | mem_peak | best    | mean    | mode    | worst   | stdev   | rstdev | diff  |
+    +-----------+-----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+
+    | TestBench | benchComments   |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 1.400μs | 1.435μs | 1.422μs | 1.470μs | 0.026μs | 1.80%  | 1.08x |
+    | TestBench | benchNoComments |        | <span style="color:#f92672">[</span><span style="color:#f92672">]</span>     | <span style="color:#ae81ff">1000</span> | <span style="color:#ae81ff">5</span>   | 890,368b | 1.305μs | 1.326μs | 1.318μs | 1.346μs | 0.016μs | 1.19%  | 1.00x |
+    +-----------+-----------------+--------+--------+------+-----+----------+---------+---------+---------+---------+---------+--------+-------+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="about-these-tests">About these tests</h2>
+<p>Some of these tests might surprise you, some might not. That said, please don&rsquo;t stare yourself blind at the results here. Speed is just one part of software development, and I personally think marginal gains don&rsquo;t out weight good developer practices.</p>
+<p>At least you left here with some fun facts about pop stars.</p>
+
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div><div class="container">
+        <div class="row justify-content-center">
+            <div class="col-9">
+                <div class="bio-card">
+                    <div class="row bio-card-body">
+                        <div class="col-xs-12 col-md-5 bio-card-image">
+                            <a href="https://twitter.com/maybeFrederick">
+                                <img src="/assets/images/my-face.jpg" alt="my face" class="img-responsive" />
+                            </a>
+                        </div>
+                        <div class="col-xs-12 col-md-7 bio-card-txt">
+                            <h2>Hey thanks for reading!</h2>
+                            <p>Hope you enjoyed this post. There is no comments section here, if you've ever seen the YouTube comments
+                                section you'll probably understand why. If you have any remarks or comments on this topic, please
+                                dont hesitate to reach out on
+                                <a href="https://twitter.com/maybeFrederick">Twitter</a> or send me a
+                                <a href="mailto:frederick@brodyandhooper.com" target="_top">mail.</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="footer">
+        <div class="container">
+            <div class="padder">
+                <div class="row">
+                    <div class='col-sm-8 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Latest posts</h2>
+                            </header>
+                            <ul>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/">Posts</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-05-09-binary-tree/">What is a binary tree and why would I ever want to reverse it</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/">The simple class</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-12-13-a-love-letter-to-legacy/">A love letter to legacy projects</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-10-08-integration-operation-segregation-principle/">The Integration Operation Segregation Principle</a></h3>
+                                </li>
+                                
+                            </ul>
+                        </section>
+                    </div>
+                    <div class='col-sm-4 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Who now?</h2>
+                            </header>
+                            <p>Frederick is a Webdeveloper from Antwerp Belgium with a love for legacy code and APIs. He is the founder of
+                                Brody & Hooper</p>
+    
+                            If you want to stay up to date on my ramblings you can subscribe to this 90's thing called
+                            <a href="https://frederickvanbrabant.comindex.xml">Rss</a>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+     crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+     crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    
+        ga('create', 'UA-98268819-1', 'auto');
+        ga('send', 'pageview');
+    
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Person",
+      "name": "Frederick Vanbrabant",
+      "url": "http://www.frederickvanbrabant.com",
+      "sameAs": [
+        "https://twitter.com/maybeFrederick",
+        "https://www.linkedin.com/in/frederickvanbrabant/",
+        "https://github.com/vanbrabantf",
+        "https://symposiumapp.com/u/frederick",
+        "http://www.speakersbase.com/frederick-vanbrabant"
+      ]
+    }
+    </script>
+    
+    </html>

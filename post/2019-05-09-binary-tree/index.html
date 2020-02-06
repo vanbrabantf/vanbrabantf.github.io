@@ -1,0 +1,318 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<html>
+	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="description" content="Webdeveloper from Antwerp Belgium with a love for legacy code and APIs">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Frederick Vanbrabant" />
+    	<title>Frederick Vanbrabant delirious rantings</title>
+
+		
+		<meta name="twitter:site" content="@maybefrederick" />
+        <meta name="twitter:description" content="" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:creator" content="@maybefrederick" />
+		<meta name="twitter:title" content="What is a binary tree and why would I ever want to reverse it" />
+
+		
+			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2019-05-09-binary-tree/tump.jpg" />
+			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2019-05-09-binary-tree/tump.jpg" />
+		
+
+
+    	
+    	<meta name="msapplication-tap-highlight" content="no">
+
+    	
+    	<link rel="manifest" href="/assets/manifest.json">
+
+    	 
+	    <meta name="mobile-web-app-capable" content="yes">
+	    <meta name="application-name" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="icon" sizes="192x192" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta name="apple-mobile-web-app-title" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="apple-touch-icon" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="msapplication-TileImage" content="/assets/images/touch/chrome-touch-icon-144x144.png">
+	    <meta name="msapplication-TileColor" content="#d52349">
+
+	    
+    	<meta name="theme-color" content="#d52349">
+
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('/assets/js/serviceworker.js').then(function(registration) {
+						
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}).catch(function(err) {
+						
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+		</script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/style.css" />
+	</head>
+
+
+<div class="container">
+        <div class="row header">
+            <div class="col padding-0">
+                <h1><a href="/index.html">Frederick Vanbrabant's</a></h1>
+                <h2>delirious rantings</h2>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron cover-image" style="background-image: url('/assets/posts/2019-05-09-binary-tree/header.jpg');" >
+    </div>
+        
+    <div id="main-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			
+				<section>
+					<header class="blog-title">
+						<h1>What is a binary tree and why would I ever want to reverse it</h1>
+						<p>Posted 9 May, 2019- About 5 mins to read</p>
+					</header>
+					<div class="row blog-body">
+						<div class="col">
+							<section>
+								<p>You have probably already heard the horror stories of code interviews where they ask you to reverse a binary tree on a whiteboard. (if not check <a href="https://thecodebarbarian.com/i-dont-want-to-hire-you-if-you-cant-reverse-a-binary-tree">this blog post</a> that I profoundly disagree with)</p>
+<p>Well, a few days ago I was in that exact situation. And I had no idea what the interviewer was talking about. So what are these binary trees and why is it so critical that you know how to inverse them? Let’s find out.</p>
+<h1 id="what-is-a-binary-tree">What is a binary tree</h1>
+<p>A binary tree is a very simple data structure that as the name suggests looks like an upside down tree.</p>
+<p><img src="/assets/posts/2019-05-09-binary-tree/1.png" alt=""></p>
+<p>This structure is mainly used for searching. For example, if we needed to find 4 in this structure quickly, we would need only to make 2 binary decisions. If we scale this up to 1000 nodes, we would only need about 10 choices. There are other options still, like self-balancing binary trees but let’s keep it simple at the moment, and just focus on balanced binary trees.</p>
+<h1 id="lets-invert-them">Let’s invert them</h1>
+<p>Ok so now that we know what it is let’s start with inverting a binary tree. What do we mean by that? It’s actually very straightforward. We turn this:</p>
+<pre><code>      4
+     /  \
+    2    7
+   / \  / \
+  1  3 6   9
+</code></pre><p>into</p>
+<pre><code>     4
+    /  \
+   7    2
+  / \  / \
+ 9  6 3   1
+</code></pre><p>We flip the entire structure horizontally. So 7 and 2 are flipped, and the 2 children are also flipped. All the way down.</p>
+<h1 id="down-to-code">Down to code</h1>
+<p>As we are good OOP developers, we are first going to start with our tree. A binary tree is nothing more than a collection of points, called nodes, with 2 children: a left and a right one. So first we are going to create a Node object.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
+{
+    <span style="color:#66d9ef">private</span> $value;
+    <span style="color:#66d9ef">private</span> $left;
+    <span style="color:#66d9ef">private</span> $right;
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> __construct(<span style="color:#a6e22e">string</span> $value, <span style="color:#f92672">?</span><span style="color:#a6e22e">Node</span> $left, <span style="color:#f92672">?</span><span style="color:#a6e22e">Node</span> $right)
+    {
+        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">left</span> <span style="color:#f92672">=</span> $left;
+        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">right</span> <span style="color:#f92672">=</span> $right;
+        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> $value;
+    }
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getValue</span>()<span style="color:#f92672">:</span> <span style="color:#a6e22e">string</span>
+    {
+        <span style="color:#66d9ef">return</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">value</span>;
+    }
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getLeft</span>()<span style="color:#f92672">:</span> <span style="color:#f92672">?</span><span style="color:#a6e22e">Node</span>
+    {
+        <span style="color:#66d9ef">return</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">left</span>;
+    }
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">getRight</span>()<span style="color:#f92672">:</span> <span style="color:#f92672">?</span><span style="color:#a6e22e">Node</span>
+    {
+        <span style="color:#66d9ef">return</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">right</span>;
+    }
+}
+</code></pre></div><p>(I’ve added value to the object as well, just to give it a practical use)</p>
+<p>Now that we have the Node object it’s time to create a tree.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+
+$level3al <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Node</span>(<span style="color:#e6db74">&#39;deepAL&#39;</span>, <span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">null</span>);
+$level3ar <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Node</span>(<span style="color:#e6db74">&#39;deepAR&#39;</span>, <span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">null</span>);
+
+$level3bl <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Node</span>(<span style="color:#e6db74">&#39;deepBL&#39;</span>, <span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">null</span>);
+$level3br <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Node</span>(<span style="color:#e6db74">&#39;deepBR&#39;</span>, <span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">null</span>);
+
+$level2a <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Node</span>(<span style="color:#e6db74">&#39;midA&#39;</span>, $level3al, $level3ar);
+$level2b <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Node</span>(<span style="color:#e6db74">&#39;midB&#39;</span>, $level3bl, $level3br);
+
+$level1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Node</span>(<span style="color:#e6db74">&#39;top&#39;</span>, $level2a, $level2b);
+</code></pre></div><p>At this point we have a data structure that looks like this:</p>
+<p><img src="/assets/posts/2019-05-09-binary-tree/2.png" alt=""></p>
+<p>This is all set up, time to move on to the swapping. If we break the problem down to its core, we just want to swap the children of a node. Like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">invert</span>(<span style="color:#a6e22e">Node</span> $tree)<span style="color:#f92672">:</span> <span style="color:#a6e22e">Node</span>
+{
+    $right <span style="color:#f92672">=</span> $tree<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getLeft</span>();
+    $left <span style="color:#f92672">=</span> $tree<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getRight</span>();
+
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Node</span>($tree<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getValue</span>(), $left, $right);
+}
+</code></pre></div><p>We take the Node and create (and return) a new Node with the children swapped. We now have:</p>
+<p><img src="/assets/posts/2019-05-09-binary-tree/3.png" alt=""></p>
+<p>At first, glance that looks like we completed the task, but if you look a tiny bit deeper, you might see that we only inverted one level. The lower levels are in the same place (but on the other side of the branch).</p>
+<p>To switch those we actually just have to repeat this process till we run out of levels. Now that sounds like a recursive function.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">invert</span>(<span style="color:#f92672">?</span><span style="color:#a6e22e">Node</span> $tree)<span style="color:#f92672">:</span> <span style="color:#f92672">?</span><span style="color:#a6e22e">Node</span>
+{
+    <span style="color:#66d9ef">if</span> ($tree <span style="color:#f92672">===</span> <span style="color:#66d9ef">null</span>) {
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+    }
+
+    $right <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">invert</span>($tree<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getLeft</span>());
+    $left <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">invert</span>($tree<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getRight</span>());
+
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Node</span>($tree<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getValue</span>(), $left, $right);
+}
+</code></pre></div><p>Let’s run through it:</p>
+<p>The first thing to note is that our function signature changed. We now also accept null values. Why? Well once we hit bottom, there aren’t any children left. <code>getRight()</code> will return null. This null will indicate that we are at the end of our loop.</p>
+<p>next up is that if check:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">        if ($tree === null) {
+            return null;
+        }
+</code></pre></div><p>This is that check for when we run into a null value as described above.</p>
+<p>Now the meat of the algorithm:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    $right = $this-&gt;invert($tree-&gt;getLeft());
+    $left = $this-&gt;invert($tree-&gt;getRight());
+
+    return new Node($tree-&gt;getValue(), $left, $right);
+</code></pre></div><p>This is the recursive method. Every time we pass this, we go one level deeper. If we hit bottom, that if will take care of it and it stops. If not, we swap the values and bubble it back up to the level above.</p>
+<p>That’s it. Inverting a binary tree is 10 lines of code. It’s actually pretty simple.</p>
+<h1 id="cool-so-when-would-i-actually-want-to-inverse-a-binary-tree">Cool, so when would I actually want to inverse a Binary tree?</h1>
+<p>I have no idea. I’m sure some brilliant people on Reddit or Twitter will have a trove of useful functionality, but I sure can’t think of one.</p>
+<p>In my opinion, this is just one of those job interview questions that solely exist so the interviewer can feel smart. You could argue that this is a simple test to see if the candidate can think recursively, but I believe that an open conversation about the interests of the candidate + maybe a small take-home test would give way more insights.</p>
+
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div><div class="container">
+        <div class="row justify-content-center">
+            <div class="col-9">
+                <div class="bio-card">
+                    <div class="row bio-card-body">
+                        <div class="col-xs-12 col-md-5 bio-card-image">
+                            <a href="https://twitter.com/maybeFrederick">
+                                <img src="/assets/images/my-face.jpg" alt="my face" class="img-responsive" />
+                            </a>
+                        </div>
+                        <div class="col-xs-12 col-md-7 bio-card-txt">
+                            <h2>Hey thanks for reading!</h2>
+                            <p>Hope you enjoyed this post. There is no comments section here, if you've ever seen the YouTube comments
+                                section you'll probably understand why. If you have any remarks or comments on this topic, please
+                                dont hesitate to reach out on
+                                <a href="https://twitter.com/maybeFrederick">Twitter</a> or send me a
+                                <a href="mailto:frederick@brodyandhooper.com" target="_top">mail.</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="footer">
+        <div class="container">
+            <div class="padder">
+                <div class="row">
+                    <div class='col-sm-8 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Latest posts</h2>
+                            </header>
+                            <ul>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/">Posts</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-05-09-binary-tree/">What is a binary tree and why would I ever want to reverse it</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/">The simple class</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-12-13-a-love-letter-to-legacy/">A love letter to legacy projects</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-10-08-integration-operation-segregation-principle/">The Integration Operation Segregation Principle</a></h3>
+                                </li>
+                                
+                            </ul>
+                        </section>
+                    </div>
+                    <div class='col-sm-4 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Who now?</h2>
+                            </header>
+                            <p>Frederick is a Webdeveloper from Antwerp Belgium with a love for legacy code and APIs. He is the founder of
+                                Brody & Hooper</p>
+    
+                            If you want to stay up to date on my ramblings you can subscribe to this 90's thing called
+                            <a href="https://frederickvanbrabant.comindex.xml">Rss</a>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+     crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+     crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    
+        ga('create', 'UA-98268819-1', 'auto');
+        ga('send', 'pageview');
+    
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Person",
+      "name": "Frederick Vanbrabant",
+      "url": "http://www.frederickvanbrabant.com",
+      "sameAs": [
+        "https://twitter.com/maybeFrederick",
+        "https://www.linkedin.com/in/frederickvanbrabant/",
+        "https://github.com/vanbrabantf",
+        "https://symposiumapp.com/u/frederick",
+        "http://www.speakersbase.com/frederick-vanbrabant"
+      ]
+    }
+    </script>
+    
+    </html>

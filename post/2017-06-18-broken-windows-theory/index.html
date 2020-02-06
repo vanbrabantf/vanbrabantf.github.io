@@ -1,0 +1,357 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<html>
+	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="description" content="Webdeveloper from Antwerp Belgium with a love for legacy code and APIs">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Frederick Vanbrabant" />
+    	<title>Frederick Vanbrabant delirious rantings</title>
+
+		
+		<meta name="twitter:site" content="@maybefrederick" />
+        <meta name="twitter:description" content="" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:creator" content="@maybefrederick" />
+		<meta name="twitter:title" content="The broken windows theory or “Why some projects are just destined to suck”" />
+
+		
+			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2017-06-18-broken-windows-theory/tump.png" />
+			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2017-06-18-broken-windows-theory/tump.png" />
+		
+
+
+    	
+    	<meta name="msapplication-tap-highlight" content="no">
+
+    	
+    	<link rel="manifest" href="/assets/manifest.json">
+
+    	 
+	    <meta name="mobile-web-app-capable" content="yes">
+	    <meta name="application-name" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="icon" sizes="192x192" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta name="apple-mobile-web-app-title" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="apple-touch-icon" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="msapplication-TileImage" content="/assets/images/touch/chrome-touch-icon-144x144.png">
+	    <meta name="msapplication-TileColor" content="#d52349">
+
+	    
+    	<meta name="theme-color" content="#d52349">
+
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('/assets/js/serviceworker.js').then(function(registration) {
+						
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}).catch(function(err) {
+						
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+		</script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/style.css" />
+	</head>
+
+
+<div class="container">
+        <div class="row header">
+            <div class="col padding-0">
+                <h1><a href="/index.html">Frederick Vanbrabant's</a></h1>
+                <h2>delirious rantings</h2>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron cover-image" style="background-image: url('/assets/posts/2017-06-18-broken-windows-theory/header.png');" >
+    </div>
+        
+    <div id="main-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			
+				<section>
+					<header class="blog-title">
+						<h1>The broken windows theory or “Why some projects are just destined to suck”</h1>
+						<p>Posted 12 June, 2017- About 7 mins to read</p>
+					</header>
+					<div class="row blog-body">
+						<div class="col">
+							<section>
+								<p>Why is it that most legacy software projects are not really fun to work on? How can we stop that greenfield project to turn into one of those dull big projects? I would argue that it’s all in the foundation.</p>
+<h2 id="the-broken-windows-theory">The broken windows theory</h2>
+<p>In 1982 James Q. Wilson and George L. Kelling wrote an article on a theory they had.
+It stated that once there is a building in a neighborhood that shows small signs of neglect (a mailbox that’s overflowing with a few days worth of mail, trash on the street, a broken window that stays broken, &hellip;) the entire neighborhood devalues and opens itself up for more neglect.</p>
+<p>The main idea here is twofold:</p>
+<ul>
+<li>People tend to care less about something that has a lower perceived value.</li>
+<li>Small neglects can quickly damage the perceived value of the bigger system they are part of.</li>
+</ul>
+<p>Now please note, this is as the name suggests, just a theory. And a highly criticized one at that! The theory is often criticized for promoting stigmatisation and “zero tolerance” attitudes.</p>
+<p>Now I’m not really big on sociology, so I’m not going to give personal insights into how the broken windows theory might work in a social or political environment. But we can try and see if we can maybe link some of it’s ideas to software projects.</p>
+<h2 id="sweat-the-small-stuff">Sweat the small stuff</h2>
+<p>Let’s first start with looking at a piece of code. I’m going to take a piece of code from an open source project (In this case the <a href="https://www.slimframework.com/">Slim framework build in PHP</a> made by <a href="https://twitter.com/codeguy">Josh Lockhart</a>)</p>
+<p><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">resolve</span>($toResolve)
+    {
+        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">is_callable</span>($toResolve)) {
+            <span style="color:#66d9ef">return</span> $toResolve;
+        }
+ 
+        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">is_string</span>($toResolve)) {
+            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">assertCallable</span>($toResolve);
+        }
+ 
+        <span style="color:#75715e">// check for slim callable as &#34;class:method&#34;
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">preg_match</span>(<span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">CALLABLE_PATTERN</span>, $toResolve, $matches)) {
+            $resolved <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">resolveCallable</span>($matches[<span style="color:#ae81ff">1</span>], $matches[<span style="color:#ae81ff">2</span>]);
+            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">assertCallable</span>($resolved);
+ 
+            <span style="color:#66d9ef">return</span> $resolved;
+        }
+ 
+        $resolved <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">resolveCallable</span>($toResolve);
+        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">assertCallable</span>($resolved);
+        
+        <span style="color:#66d9ef">return</span> $resolved;
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+This is the resolve method from the <a href="https://github.com/slimphp/Slim/blob/3.x/Slim/CallableResolver.php">CallableResolver class</a></p>
+<p>Now it doesn’t really matter what the code does, but we can roughly see what is happening here. The code might not be perfect, you might even have seen something you would do in an other way. But the ideas are quickly shown.</p>
+<p>Now see what happens if we do this:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">resolve</span>($toResolve)
+{
+    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">is_callable</span>($toResolve)) {
+        <span style="color:#66d9ef">return</span> $toResolve;
+    } <span style="color:#66d9ef">else</span> {
+        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">is_string</span>($toResolve)) {
+        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">assertCallable</span>($toResolve);
+        }
+        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">preg_match</span>(<span style="color:#a6e22e">self</span><span style="color:#f92672">::</span><span style="color:#a6e22e">CALLABLE_PATTERN</span>, $toResolve, $m)) 
+        {
+        $r <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">resolveCallable</span>($m[<span style="color:#ae81ff">1</span>], $m[<span style="color:#ae81ff">2</span>]);
+        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">assertCallable</span>($r);
+        <span style="color:#66d9ef">return</span> $r;
+        } <span style="color:#66d9ef">else</span> {
+        $r <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">resolveCallable</span>($toResolve);
+        $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">assertCallable</span>($r);
+        <span style="color:#66d9ef">return</span> $r;
+        }
+    }
+}
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>This is functionally the same method, so it does the same thing. I’ve just removed a few good practices like the early return, and some PSR rules. As you can see this code is a lot harder to understand.</p>
+<p>I know most people don’t write code like that, and this is probably a bit over dramatised. You would not want the developer that wrote code like that in your team. But still, I would bet you have seen code like this before. Maybe even in a codebase you work in.</p>
+<p>If we apply the broken window theory upon this code, we could argue that it all started with a small bit of neglect. Maybe it was friday afternoon, we’ve sent the original code in and a colleague commented that it misses a small use case. So we’ve quickly added it in, but forgot a bit of formatting. “Whatever, It’s friday and I have a paper airplane folding competition to attend! I’ll do it next week.”</p>
+<p>You might think you or a colleague of yours will probably see this and fix it monday morning. But let’s be real here. That part of code will not only not get fixed, it will probably get worst.</p>
+<h2 id="how-can-we-prevent-this-happening">How can we prevent this happening?</h2>
+<p>The best way to keep these issues from appearing, is to never let them in the codebase in the first place. It is mostly a mentality thing.</p>
+<p>Here are a few tips that might help.</p>
+<h3 id="the-boy-scout-rule">The Boy scout rule</h3>
+<p>For the people who’ve never been in the “Boy Scouts of America”. Statistically, quite a lot of people. They supposedly have a rule (I didn’t actually found the rule, but that might be because I only know about boy scouts from Wes Anderson movies):</p>
+<blockquote>
+<p>Always leave the campground cleaner than you found it. If you find a mess on the ground, clean it up regardless of who might have made the mess.</p>
+</blockquote>
+<p><a href="https://twitter.com/unclebobmartin">Robert C. Martin</a>, whom you might know better as Uncle Bob, argues in his book <a href="https://www.barnesandnoble.com/w/clean-code-robert-c-martin/1101628669?ean=9780132350884">Clean Code</a> that we could perfectly apply this mentality to programming. So every file you open, try and leave it a bit better then you’ve found it.</p>
+<p>I would however suggest you do this in a separate branch/PR. What can get a bit tedious.</p>
+<h3 id="just-automate-it">Just automate it</h3>
+<p>Of course you write tests (not writing tests in 2017 is like using bronzer for contouring in your make-up). So you probably already have a build server in your stack. Now luckily for us, we can automate the code style, and run “tests” against it in much the same way. With the added bonus of not having to write any kind of “style tests”.</p>
+<h3 id="so-whats-out-there">So what’s out there?</h3>
+<p><a href="https://scrutinizer-ci.com/">Scrutinizer</a> is a popular one. It gives the option to assign a score to both the individual files and the entire project. The score is calculated on the rules you assign for your project (it ships with a standard rule set). If your commit sinks the score, it’s time to refactor.</p>
+<p>Some alternatives like <a href="https://www.codacy.com/">Codacy</a> and <a href="https://sideci.com/">Sideci</a> even allow for the option to automatically add comments to a pull request. So it feels like a human is giving actual code reviews. This can be very handy for one person teams. (Note however that this is nowhere as good a real review from an actual colleague, at least not for now).</p>
+<p>Now if you want to go 1 step further, there is this cool tool called <a href="https://github.com/phpro/grumphp">Grumphp</a>. Grumphp hooks into you Git commit hook and runs its test before commit. If the tests fail, you can’t commit. As a picture says more than a thousand words; check out this cool GIF I stole from their Github page:</p>
+<p><img src="https://github.com/phpro/grumphp/wiki/images/demo.gif" alt="Grump example"></p>
+<h3 id="6-weeks-work-2-weeks-cleanup">6 weeks work 2 weeks cleanup</h3>
+<p>As you know, you can’t have an insightful blog post without at least one mention of <a href="https://twitter.com/jasonfried">Jason Fried</a>. In one of his <a href="https://m.signalvnoise.com/how-we-set-up-our-work-cbce3d3d9cae">posts</a>, Jason talks about how they work at <a href="https://basecamp.com">Basecamp</a>. Most of the article goes beyond the scope of this post (still a great read), but what really struck out for me was this part:</p>
+<blockquote>
+<p>Once a six week cycle is over, we take one or two weeks off of scheduled projects so everyone can roam independently, fix stuff up, pick up some pet projects we’ve wanted to do, and generally wind down prior to starting the next six week cycle. Ample time for context switching. We also use this time to firm up ideas that we’ll be tackling next cycle. More on this in a bit.</p>
+</blockquote>
+<p>This is probably a hard sell to make to clients or your boss. But even if you could get to a “work 6 weeks on features do 2 weeks cleanup”, you could end up with a much cleaner and more workable project. Those practices allow for faster implementation of new features and most important of all: Happy developers.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I truly believe that the broken window theory can be applied to software projects. In my personal experiences I’ve rarely seen a project start out as a total mess. If it ended up as a mess, it was gradually. I also believe that this is not necessary the fault of developers working on the project, think of it more as frogs in a pot with gradually increased temperature of water. One morning you just wake up and take a look at the project and realise that it has gotten really messy.</p>
+<p>I think that the best way to counter these small neglects sneaking up in your code base is by really analyzing every pull request. Be it by manual code reviews from peers or by dedicated automated tools. In the best case both.</p>
+<p>Another important thing to note is that senior developers are in no way immune to these mishaps. Skill level has in my opinion less to do with this kind of stuff. Everyone can have an off day, it just important that these off days don&rsquo;t stick around in the project.</p>
+
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div><div class="container">
+        <div class="row justify-content-center">
+            <div class="col-9">
+                <div class="bio-card">
+                    <div class="row bio-card-body">
+                        <div class="col-xs-12 col-md-5 bio-card-image">
+                            <a href="https://twitter.com/maybeFrederick">
+                                <img src="/assets/images/my-face.jpg" alt="my face" class="img-responsive" />
+                            </a>
+                        </div>
+                        <div class="col-xs-12 col-md-7 bio-card-txt">
+                            <h2>Hey thanks for reading!</h2>
+                            <p>Hope you enjoyed this post. There is no comments section here, if you've ever seen the YouTube comments
+                                section you'll probably understand why. If you have any remarks or comments on this topic, please
+                                dont hesitate to reach out on
+                                <a href="https://twitter.com/maybeFrederick">Twitter</a> or send me a
+                                <a href="mailto:frederick@brodyandhooper.com" target="_top">mail.</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="footer">
+        <div class="container">
+            <div class="padder">
+                <div class="row">
+                    <div class='col-sm-8 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Latest posts</h2>
+                            </header>
+                            <ul>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/">Posts</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-05-09-binary-tree/">What is a binary tree and why would I ever want to reverse it</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/">The simple class</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-12-13-a-love-letter-to-legacy/">A love letter to legacy projects</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-10-08-integration-operation-segregation-principle/">The Integration Operation Segregation Principle</a></h3>
+                                </li>
+                                
+                            </ul>
+                        </section>
+                    </div>
+                    <div class='col-sm-4 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Who now?</h2>
+                            </header>
+                            <p>Frederick is a Webdeveloper from Antwerp Belgium with a love for legacy code and APIs. He is the founder of
+                                Brody & Hooper</p>
+    
+                            If you want to stay up to date on my ramblings you can subscribe to this 90's thing called
+                            <a href="https://frederickvanbrabant.comindex.xml">Rss</a>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+     crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+     crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    
+        ga('create', 'UA-98268819-1', 'auto');
+        ga('send', 'pageview');
+    
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Person",
+      "name": "Frederick Vanbrabant",
+      "url": "http://www.frederickvanbrabant.com",
+      "sameAs": [
+        "https://twitter.com/maybeFrederick",
+        "https://www.linkedin.com/in/frederickvanbrabant/",
+        "https://github.com/vanbrabantf",
+        "https://symposiumapp.com/u/frederick",
+        "http://www.speakersbase.com/frederick-vanbrabant"
+      ]
+    }
+    </script>
+    
+    </html>

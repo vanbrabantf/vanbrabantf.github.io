@@ -1,0 +1,637 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<html>
+	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="description" content="Webdeveloper from Antwerp Belgium with a love for legacy code and APIs">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Frederick Vanbrabant" />
+    	<title>Frederick Vanbrabant delirious rantings</title>
+
+		
+		<meta name="twitter:site" content="@maybefrederick" />
+        <meta name="twitter:description" content="" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:creator" content="@maybefrederick" />
+		<meta name="twitter:title" content="A bird&#39;s eye view on API development" />
+
+		
+			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2015-11-16-birdseye-view-on-api/tump.png" />
+			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2015-11-16-birdseye-view-on-api/tump.png" />
+		
+
+
+    	
+    	<meta name="msapplication-tap-highlight" content="no">
+
+    	
+    	<link rel="manifest" href="/assets/manifest.json">
+
+    	 
+	    <meta name="mobile-web-app-capable" content="yes">
+	    <meta name="application-name" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="icon" sizes="192x192" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta name="apple-mobile-web-app-title" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="apple-touch-icon" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="msapplication-TileImage" content="/assets/images/touch/chrome-touch-icon-144x144.png">
+	    <meta name="msapplication-TileColor" content="#d52349">
+
+	    
+    	<meta name="theme-color" content="#d52349">
+
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('/assets/js/serviceworker.js').then(function(registration) {
+						
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}).catch(function(err) {
+						
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+		</script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/style.css" />
+	</head>
+
+
+<div class="container">
+        <div class="row header">
+            <div class="col padding-0">
+                <h1><a href="/index.html">Frederick Vanbrabant's</a></h1>
+                <h2>delirious rantings</h2>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron cover-image" style="background-image: url('/assets/posts/2015-11-16-birdseye-view-on-api/header.png');" >
+    </div>
+        
+    <div id="main-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			
+				<section>
+					<header class="blog-title">
+						<h1>A bird&#39;s eye view on API development</h1>
+						<p>Posted 16 November, 2015- About 15 mins to read</p>
+					</header>
+					<div class="row blog-body">
+						<div class="col">
+							<section>
+								<p><strong>This post wast orignially posted on the <a href="https://blog.madewithlove.be/">madewithlove</a> site</strong></p>
+<blockquote>
+<p>So an API, that&rsquo;s just output of some JSON code right? No problem, my framework does that automatically.</p>
+</blockquote>
+<p>Or if you just want an overview on some best practices, conventions and nifty ways people have done stuff before, this post has you covered.</p>
+<p>We won&rsquo;t go in much detail about source code here. This article is language agnostic, whether you use PHP, Ruby, Velato or some obscure Javascript framework you can happily follow along. Please note that not everything here is law, some parts (maybe everything) are open for discussion. Lastly: some of this may be pretty obvious, you are probably right. But I rather cover all the bases.</p>
+<h2 id="so-what-are-web-apis-all-about">So what are web APIs all about</h2>
+<p>Application Programming Interface, or as the cool kids call it: API, is a collection of endpoints to interact with an application. You have internal and external APIs. This post is all about external APIs (more specific, external web APIs). Some people like to think about APIs as a wrapper around a database, this is however mostly not the case. But they tend to serve (mostly) the same purpose: interacting with data.</p>
+<p>APIs can be widely different in architecture (XML-RPC, REST, SOAP, &hellip;) and data structure (XML, JSON), but it&rsquo;s very important that they stay as consistent as possible. Today we&rsquo;re gonna focus on REST.</p>
+<h2 id="rest">REST</h2>
+<p>Stands for  Representational State Transfer (don&rsquo;t worry, there won&rsquo;t be a quiz) and is the most commonly used (and modern) architecture for handling APIs. REST doesn&rsquo;t rely on coupling to the rest of the application like protocols as SOAP tend to do (do note that REST is not a protocol) making it fast and easy to implement.</p>
+<p>The basics of REST aren&rsquo;t that hard to grasp, although there is a lot of misunderstanding on the internet about it.
+Rest is a resource based architecture that is stateless. This means that a REST resource (the data) can&rsquo;t have sessions nor cookies. The data itself is represented in media types like XML and JSON. It&rsquo;s a common pitfall to think that RESTful APIs are <a href="https://twitter.com/PHP_CEO/status/435105782829305857">JSON</a> only.</p>
+<p>REST commits to a uniform interface. In most cases this is HTTP as they fit nicely together. However be careful, another common pitfall is to think that HTTP and REST are interwoven. REST isn&rsquo;t necessarily connected to HTTP even though in practise it usually is.</p>
+<p>So what does that exactly mean, committing to a uniform interface? This is easily explained with the HTTP protocol:</p>
+<h2 id="http-and-rest">HTTP and REST</h2>
+<p>Hypertext Transfer Protocol (another acronym, this post would be a great drinking game) is something you probably already know. You are using it right now, as you are using it in your browser to surf the Internet (a relative new hype).</p>
+<p>HTTP is request/response driven, this means that a response only is given as a request is made. There is no constant stream of data (sockets).</p>
+<p>In the case of REST we are mainly interested in its interface. In HTTP the client sends verbs in the header of request, the server responses with HTTP codes in its response header. Now this is one of the hard parts about building an API, what verb fits with what action and/or what response code should be send. As far as the verbs go, only the edge cases are difficult, the response codes on the other hand are often open for discussion. So let&rsquo;s have a quick look at some commonly used ones shall we (please note that these are the most used ones, there are more):</p>
+<table>
+<thead>
+<tr>
+<th>Verb</th>
+<th align="center">Return HTTP Code</th>
+<th align="right">Example of url</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td align="center">200</td>
+<td align="right">/wombats</td>
+</tr>
+<tr>
+<td>GET</td>
+<td align="center">200</td>
+<td align="right">/wombats/1</td>
+</tr>
+<tr>
+<td>POST</td>
+<td align="center">201</td>
+<td align="right">/wombats</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td align="center">200</td>
+<td align="right">/wombats/1</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td align="center">200</td>
+<td align="right">/wombats/1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-get-verb">The GET verb</h3>
+<p>It kinda does what it says on the tin. It GETs a resource. It can fetch individual resources or a collection (We&rsquo;ll take a closer look on how this is displayed later in the post). On success this endpoint returns a 200 (see http codes) with the resource (or collection of resources) in its body.</p>
+<h3 id="the-post-verb">The POST verb</h3>
+<p>This verb asks the server to accept the resource included in the post. You mainly know this outside of APIs as forms. It&rsquo;s commonly used to add new resources to a collection. For example If you were to post to <code>animals/wombats</code> you would create a new wombat not a new animal. If the endpoint creates a resource that isn&rsquo;t covered in the API (not everything needs an endpoint) it should return a 204 No ContentHTTP status code (success, empty response), or a 201 Createdresponse which should contain the created resource and optionally a location header where the new resource can be found.</p>
+<p>Now what do I mean with a &ldquo;creating a resource on an  endpoint that isn&rsquo;t covered in the API&rdquo; ?
+This would be an endpoint that has no reference GET endpoint. Simply put, something you only want to send to the server but never return to the client.</p>
+<h3 id="the-put-verb">The PUT verb</h3>
+<p>The PUT verb is like the POST verb used to send data. The main difference here is that POST creation is done on the collection, PUT creation is done on a resource URI (POST: <code>animals/dogs</code> PUT <code>animal/dogs/1</code>). PUT can also be used to alter a resource. Executing the same PUT request multiple times should only create or alter the resource once: its action should be <a href="https://www.youtube.com/watch?v=6dVNdFwqeKs">idempotent</a>. If you do this than please be sure to inform the client of what happened, nothing is worse then getting non-sensical HTTP codes (except the new Star-Trek movies). So if you just update the resource, you should return a 200 or 204 HTTP code and an empty body. If you end up creating a new resource, you just follow the POST flow.</p>
+<h4 id="the-patch-verb">The PATCH verb</h4>
+<p>This one is a bit special, It&rsquo;s often confused with the PUT verb as it (mostly) performs the same function: updating resources. So why have two verbs that do the same thing? The answer is, they don&rsquo;t and you shouldn&rsquo;t probabily use this verb (unless you really know what you&rsquo;re doing). According to the <a href="https://tools.ietf.org/html/rfc5789">RFC</a> a PATCH request should contain instructions on how to partially update a resource.</p>
+<p>You can find more info (and examples on how a PATCH request looks) here: <a href="http://stackoverflow.com/questions/28459418/rest-api-put-vs-patch-with-real-life-examples">REST API - PUT vs PATCH with real life examples</a></p>
+<p>Update: <a href="https://twitter.com/couac">William Durand</a> <a href="https://twitter.com/couac/status/667409903884046336">informed me</a> that you should always add the header <code>Content-Type: application/partial-update-json</code> when you do a partial update through PATCH.
+More info can be found here: <a href="http://www.ietf.org/mail-archive/web/apps-discuss/current/msg03991.html">media type for partial JSON updates?</a></p>
+<h3 id="the-delete-verb">The DELETE verb</h3>
+<p>Another simple one, it deletes stuff. This needs to point at a specific endpoint (like a PUT) and returns a 200 HTTP code.</p>
+<h3 id="how-to-build-your-urls">How to build your urls</h3>
+<p>It&rsquo;s very important to have a consistent API, a huge part of this is the consistency of your urls. Don&rsquo;t worry, if you just follow a few simple guidelines you&rsquo;ll be allright.</p>
+<p>First of all, it&rsquo;s best to use <a href="http://apigee.com/about/blog/technology/restful-api-design-nouns-are-good-verbs-are-bad">nouns instead of verbs</a>. This is a simple way to enforce consistancy in your naming scheme.
+Secondly you should always use the plural form. so use <code>animals/dogs</code> instead of <code>animal/dog</code>.
+Thirdly you should think in terms of your API, not in terms of your database. Your client doens&rsquo;t need to know about the structure of your data model.</p>
+<h3 id="http-codes">HTTP CODES</h3>
+<p>A very important part of an API is informing clients about what just happened. In HTTP this is solved with HTTP codes returned in the header of the response. We have seen a couple of them appear above, so what are they? Well they are indexes to a list of commonly used responses a server (or <a href="https://sitesdoneright.com/blog/2013/03/what-is-418-im-a-teapot-status-code-error">teapot</a>) could give.</p>
+<p>They can be found here: <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">List of HTTP status codes</a> or <a href="https://http.cat/">here in a more academic way</a>.
+As stated before, sometimes it&rsquo;s hard to see what code fits what use case. These are often fun points of discussion while stargazing on a first date.</p>
+<h3 id="hateoas">HATEOAS</h3>
+<p>Hypertext As The Engine Of Application State (acronym, drink) is a big part of REST. Its purpose is to add discoverability to your API. You can compare this to hyperlinks on regular websites. For example: imagine a Twitter feed, it consist of a long list of tweets sent by users. if you click on a tweet you get a detailed view of the tweet with all its responses. This is comparable with the HATEOAS structure. You attach a link to each entity in a collection, this link points to the endpoint of the specific resource.</p>
+<p>Why is this handy? In theory this allows dropping separate documentation. You don&rsquo;t have to document all your endpoints, the endpoints provide them themselves. In practice I would advise to always provide separate documentation. A great workflow here is <a href="https://apiblueprint.org/">Api Blueprint</a> documentation with automated <a href="https://dredd.readthedocs.org/en/latest/">Dredd</a> testing on top of it to make sure your documentation is never out of date.</p>
+<h2 id="data-structure">Data structure</h2>
+<p>This is the part things get a little fuzzier. Not only are there different content types out there (XML, JSON), even those tend to have different structure standards. This part of the article is more about what&rsquo;s out there, instead of what you should use. The most important thing you should remember is the scope of your application. Even though it&rsquo;s good practice to return both in XML and JSON (through the Accept header), it can prove to be beyond the scope of your API to do so.</p>
+<p>As most people prefer the JSON format (as do I), we shall take a look at the different structure standards (loose term). People tend to get pretty defensive on what standard they pick, this happens because when you pick one, you&rsquo;re stuck with it. You can&rsquo;t just decide to adopt a new structure, even in a new API version, I would not advise it.</p>
+<h3 id="json-api">JSON API</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;links&#34;</span>: {
+    <span style="color:#f92672">&#34;self&#34;</span>: <span style="color:#e6db74">&#34;http://example.com/articles&#34;</span>,
+    <span style="color:#f92672">&#34;next&#34;</span>: <span style="color:#e6db74">&#34;http://example.com/articles?page[offset]=2&#34;</span>,
+    <span style="color:#f92672">&#34;last&#34;</span>: <span style="color:#e6db74">&#34;http://example.com/articles?page[offset]=10&#34;</span>
+  },
+  <span style="color:#f92672">&#34;data&#34;</span>: [{
+    <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;articles&#34;</span>,
+    <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;1&#34;</span>,
+    <span style="color:#f92672">&#34;attributes&#34;</span>: {
+      <span style="color:#f92672">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;JSON API paints my bikeshed!&#34;</span>
+    },
+    <span style="color:#f92672">&#34;relationships&#34;</span>: {
+      <span style="color:#f92672">&#34;author&#34;</span>: {
+        <span style="color:#f92672">&#34;links&#34;</span>: {
+          <span style="color:#f92672">&#34;self&#34;</span>: <span style="color:#e6db74">&#34;http://example.com/articles/1/relationships/author&#34;</span>,
+          <span style="color:#f92672">&#34;related&#34;</span>: <span style="color:#e6db74">&#34;http://example.com/articles/1/author&#34;</span>
+        },
+        <span style="color:#f92672">&#34;data&#34;</span>: { <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;people&#34;</span>, <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;9&#34;</span> }
+      },
+      <span style="color:#f92672">&#34;comments&#34;</span>: {
+        <span style="color:#f92672">&#34;links&#34;</span>: {
+          <span style="color:#f92672">&#34;self&#34;</span>: <span style="color:#e6db74">&#34;http://example.com/articles/1/relationships/comments&#34;</span>,
+          <span style="color:#f92672">&#34;related&#34;</span>: <span style="color:#e6db74">&#34;http://example.com/articles/1/comments&#34;</span>
+        },
+        <span style="color:#f92672">&#34;data&#34;</span>: [
+          { <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;comments&#34;</span>, <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;5&#34;</span> },
+          { <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;comments&#34;</span>, <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;12&#34;</span> }
+        ]
+      }
+    },
+    <span style="color:#f92672">&#34;links&#34;</span>: {
+      <span style="color:#f92672">&#34;self&#34;</span>: <span style="color:#e6db74">&#34;http://example.com/articles/1&#34;</span>
+    }
+  }]
+}</code></pre></td></tr></table>
+</div>
+</div>
+<p>This is my favourite, so it&rsquo;s first. I&rsquo;ve taken the liberty of trimming the example found on the site (<a href="http://jsonapi.org/">http://jsonapi.org/</a>). As you can plainly see, this includes lots of data. On closer inspection you might notice that the &ldquo;real&rdquo; data is kind of small compared to the entire response (this is a very verbose example). This is due to a very heavy usage of HATEOAS.</p>
+<p>The response starts with a <code>links</code> object, this is a nice way to implement pagination. It&rsquo;s pretty easy to write a recursive function to consume this endpoint (and you can reuse it for all endpoints).</p>
+<p>Then follows the data object, which contains an array (if this were an endpoint to a specific entity, it would not use an array) to display the different articles (in this case only one).</p>
+<p>The relationships are pretty self explanatory. these are HATEOAS links to related endpoints.</p>
+<h3 id="jsend">JSend</h3>
+<p><div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
+  <span style="color:#f92672">&#34;data&#34;</span>: {
+    <span style="color:#f92672">&#34;post&#34;</span>: {
+      <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#ae81ff">1</span>,
+      <span style="color:#f92672">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;A blog post&#34;</span>,
+      <span style="color:#f92672">&#34;body&#34;</span>: <span style="color:#e6db74">&#34;Some useful content&#34;</span>
+    }
+  }
+}</code></pre></td></tr></table>
+</div>
+</div>
+Simple and to the point, what&rsquo;s not to like? Well there is no HATEOAS, that&rsquo;s kind of a bummer. Still, if you are making a small application (or maybe some AJAX calls), that would not be the disastrous. As stated before, it all depends on the scope of your application.</p>
+<h3 id="odata-json-protocol">OData JSON Protocol</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+    <span style="color:#f92672">&#34;@odata.context&#34;</span>: <span style="color:#e6db74">&#34;serviceRoot/$metadata#People&#34;</span>,
+    <span style="color:#f92672">&#34;@odata.nextLink&#34;</span>: <span style="color:#e6db74">&#34;serviceRoot/People?%24skiptoken=8&#34;</span>,
+    <span style="color:#f92672">&#34;value&#34;</span>: [
+        {
+            <span style="color:#f92672">&#34;@odata.id&#34;</span>: <span style="color:#e6db74">&#34;serviceRoot/People(&#39;russellwhyte&#39;)&#34;</span>,
+            <span style="color:#f92672">&#34;@odata.etag&#34;</span>: <span style="color:#e6db74">&#34;W08D1694BD49A0F11&#34;</span>,
+            <span style="color:#f92672">&#34;@odata.editLink&#34;</span>: <span style="color:#e6db74">&#34;serviceRoot/People(&#39;russellwhyte&#39;)&#34;</span>,
+            <span style="color:#f92672">&#34;UserName&#34;</span>: <span style="color:#e6db74">&#34;russellwhyte&#34;</span>,
+            <span style="color:#f92672">&#34;FirstName&#34;</span>: <span style="color:#e6db74">&#34;Russell&#34;</span>,
+            <span style="color:#f92672">&#34;LastName&#34;</span>: <span style="color:#e6db74">&#34;Whyte&#34;</span>,
+            <span style="color:#f92672">&#34;Emails&#34;</span>: [
+                <span style="color:#e6db74">&#34;Russell@example.com&#34;</span>,
+                <span style="color:#e6db74">&#34;Russell@contoso.com&#34;</span>
+            ],
+            <span style="color:#f92672">&#34;AddressInfo&#34;</span>: [
+                {
+                    <span style="color:#f92672">&#34;Address&#34;</span>: <span style="color:#e6db74">&#34;187 Suffolk Ln.&#34;</span>,
+                    <span style="color:#f92672">&#34;City&#34;</span>: {
+                        <span style="color:#f92672">&#34;CountryRegion&#34;</span>: <span style="color:#e6db74">&#34;United States&#34;</span>,
+                        <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;Boise&#34;</span>,
+                        <span style="color:#f92672">&#34;Region&#34;</span>: <span style="color:#e6db74">&#34;ID&#34;</span>
+                    }
+                }
+            ],
+            <span style="color:#f92672">&#34;Gender&#34;</span>: <span style="color:#e6db74">&#34;Male&#34;</span>,
+            <span style="color:#f92672">&#34;Concurrency&#34;</span>: <span style="color:#ae81ff">635404796846280400</span>
+        },
+        {
+            <span style="color:#f92672">&#34;@odata.id&#34;</span>: <span style="color:#e6db74">&#34;serviceRoot/People(&#39;keithpinckney&#39;)&#34;</span>,
+            <span style="color:#f92672">&#34;@odata.etag&#34;</span>: <span style="color:#e6db74">&#34;W08D1694BD49A0F11&#34;</span>,
+            <span style="color:#f92672">&#34;@odata.editLink&#34;</span>: <span style="color:#e6db74">&#34;serviceRoot/People(&#39;keithpinckney&#39;)&#34;</span>,
+            <span style="color:#f92672">&#34;UserName&#34;</span>: <span style="color:#e6db74">&#34;keithpinckney&#34;</span>,
+            <span style="color:#f92672">&#34;FirstName&#34;</span>: <span style="color:#e6db74">&#34;Keith&#34;</span>,
+            <span style="color:#f92672">&#34;LastName&#34;</span>: <span style="color:#e6db74">&#34;Pinckney&#34;</span>,
+            <span style="color:#f92672">&#34;Emails&#34;</span>: [
+                <span style="color:#e6db74">&#34;Keith@example.com&#34;</span>,
+                <span style="color:#e6db74">&#34;Keith@contoso.com&#34;</span>
+            ],
+            <span style="color:#f92672">&#34;AddressInfo&#34;</span>: [],
+            <span style="color:#f92672">&#34;Gender&#34;</span>: <span style="color:#e6db74">&#34;Male&#34;</span>,
+            <span style="color:#f92672">&#34;Concurrency&#34;</span>: <span style="color:#ae81ff">635404796846280400</span>
+        }
+    ]
+}</code></pre></td></tr></table>
+</div>
+</div>
+<p>Now you might look at this and think: Wtf&hellip;
+And you would be right. This is a difficult to understand standard and is probably not something you wanna use as it&rsquo;s not really compatible with REST. OData requires endpoints that get created dynamically (called out-of-band information). it also demands that you create an endpoint named <code> /$metadata</code> to decipher the metadata in the response.</p>
+<p>This Structure seems a bit out there and requires not only some extra work to implement, it also requires some really great documentation.</p>
+<p>I would only recommend it if you really need it, and know what you are doing. (Even then HAL would still be a better option)</p>
+<h3 id="hal">HAL</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+    <span style="color:#f92672">&#34;_links&#34;</span>: {
+        <span style="color:#f92672">&#34;self&#34;</span>: { <span style="color:#f92672">&#34;href&#34;</span>: <span style="color:#e6db74">&#34;/orders&#34;</span> },
+        <span style="color:#f92672">&#34;curies&#34;</span>: [{ <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;ea&#34;</span>, <span style="color:#f92672">&#34;href&#34;</span>: <span style="color:#e6db74">&#34;http://example.com/docs/rels/{rel}&#34;</span>, <span style="color:#f92672">&#34;templated&#34;</span>: <span style="color:#66d9ef">true</span> }],
+        <span style="color:#f92672">&#34;next&#34;</span>: { <span style="color:#f92672">&#34;href&#34;</span>: <span style="color:#e6db74">&#34;/orders?page=2&#34;</span> },
+        <span style="color:#f92672">&#34;ea:find&#34;</span>: {
+            <span style="color:#f92672">&#34;href&#34;</span>: <span style="color:#e6db74">&#34;/orders{?id}&#34;</span>,
+            <span style="color:#f92672">&#34;templated&#34;</span>: <span style="color:#66d9ef">true</span>
+        },
+        <span style="color:#f92672">&#34;ea:admin&#34;</span>: [{
+            <span style="color:#f92672">&#34;href&#34;</span>: <span style="color:#e6db74">&#34;/admins/2&#34;</span>,
+            <span style="color:#f92672">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;Fred&#34;</span>
+        }, {
+            <span style="color:#f92672">&#34;href&#34;</span>: <span style="color:#e6db74">&#34;/admins/5&#34;</span>,
+            <span style="color:#f92672">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;Kate&#34;</span>
+        }]
+    },
+    <span style="color:#f92672">&#34;currentlyProcessing&#34;</span>: <span style="color:#ae81ff">14</span>,
+    <span style="color:#f92672">&#34;shippedToday&#34;</span>: <span style="color:#ae81ff">20</span>,
+    <span style="color:#f92672">&#34;_embedded&#34;</span>: {
+        <span style="color:#f92672">&#34;ea:order&#34;</span>: [{
+            <span style="color:#f92672">&#34;_links&#34;</span>: {
+                <span style="color:#f92672">&#34;self&#34;</span>: { <span style="color:#f92672">&#34;href&#34;</span>: <span style="color:#e6db74">&#34;/orders/123&#34;</span> },
+                <span style="color:#f92672">&#34;ea:basket&#34;</span>: { <span style="color:#f92672">&#34;href&#34;</span>: <span style="color:#e6db74">&#34;/baskets/98712&#34;</span> },
+                <span style="color:#f92672">&#34;ea:customer&#34;</span>: { <span style="color:#f92672">&#34;href&#34;</span>: <span style="color:#e6db74">&#34;/customers/7809&#34;</span> }
+            },
+            <span style="color:#f92672">&#34;total&#34;</span>: <span style="color:#ae81ff">30.00</span>,
+            <span style="color:#f92672">&#34;currency&#34;</span>: <span style="color:#e6db74">&#34;USD&#34;</span>,
+            <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;shipped&#34;</span>
+        }, {
+            <span style="color:#f92672">&#34;_links&#34;</span>: {
+                <span style="color:#f92672">&#34;self&#34;</span>: { <span style="color:#f92672">&#34;href&#34;</span>: <span style="color:#e6db74">&#34;/orders/124&#34;</span> },
+                <span style="color:#f92672">&#34;ea:basket&#34;</span>: { <span style="color:#f92672">&#34;href&#34;</span>: <span style="color:#e6db74">&#34;/baskets/97213&#34;</span> },
+                <span style="color:#f92672">&#34;ea:customer&#34;</span>: { <span style="color:#f92672">&#34;href&#34;</span>: <span style="color:#e6db74">&#34;/customers/12369&#34;</span> }
+            },
+            <span style="color:#f92672">&#34;total&#34;</span>: <span style="color:#ae81ff">20.00</span>,
+            <span style="color:#f92672">&#34;currency&#34;</span>: <span style="color:#e6db74">&#34;USD&#34;</span>,
+            <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;processing&#34;</span>
+        }]
+    }
+}</code></pre></td></tr></table>
+</div>
+</div>
+<p>Looks familiar? It&rsquo;s basically OData with HATEOAS support. I would choose this over OData (and not only because <a href="http://www.imdb.com/title/tt0062622/">2001: A Space Odyssey</a> is one of my favourite movies).</p>
+<h3 id="other-options">Other options</h3>
+<p>As stated before, These are just a few options. It&rsquo;s not a crime to adapt these to your business cases or create a <a href="http://xkcd.com/927/">brand new standard</a>. Maybe combine JSend with HATEOAS ?</p>
+<h2 id="authentication">Authentication</h2>
+<p>As you guys know REST is stateless (no sessions or cookies for you). So how can we limit users so they only can access the content they are allowed to access? No worries, smart people have already found some smart solutions to this problem. Again which one to choose is up to you and your application (even though OAuth2.0 is currently preferred)</p>
+<h3 id="http-basic">HTTP Basic</h3>
+<p>This one is the easiest one to implement. It&rsquo;s the standard HTTP way of authentication. That said, it&rsquo;s also the least secure option out there (never use this over non SSL/HTTPS connections!).</p>
+<p>To log a user in, the client just needs to send a Basic header with a base64 encoding of username:password.</p>
+<p>That&rsquo;s it. Now every sequential call you do, you just have to send that data with it.</p>
+<h3 id="json-web-tokens">JSON Web Tokens</h3>
+<p>A JWT looks like this: aaa.bbb.ccc. It&rsquo;s just a long string divided in 3 sections, separated with a dot (.). The first section is a header, second one is the payload and the last one is the signature. For more information about how to build token I recommend reading <a href="https://scotch.io/tutorials/the-anatomy-of-a-json-web-token#what-does-a-jwt-look-like?">this guide</a>.</p>
+<p>The basic JWT flow goes like this: You send your credentials to a login endpoint. The endpoint returns a JWT token with your data in it. Now you just have to send that token with every request like this:</p>
+<pre><code class="language-linenos=table" data-lang="linenos=table">Authorization: Bearer PlaceTokenHere</code></pre>
+<p>Most JWT&rsquo;s have expiry dates, This kind of authentication method has no refresh system. When it expires you just have to request a new one.</p>
+<h3 id="oauth2">OAuth2</h3>
+<p>This is the most popular Authentication method. This is mainly due to it&rsquo;s security and flexibility. That said, it can be a little bit of PITA  to set it up.
+Covering the entire OAuth spectrum would take us too far I&rsquo;m afraid. I&rsquo;ll just cover a very simplistic practical flow.</p>
+<p>In it&rsquo;s most simplistic form there are some similarities between JWT and OAuth. They both request a token in the same way and they both get a token returned (In this case obviously an OAuth token and not a JWT).</p>
+<p>OAuth requires that you send the token with it on each request as well:</p>
+<pre><code class="language-linenos=table" data-lang="linenos=table">Authorization: Bearer PlaceTokenHere</code></pre>
+<p>OAuth tokens always have an expiry date, when this happens you have to use the refresh token (it&rsquo;s part of the response you get when receiving your OAuth token) on the refresh endpoint to get a new OAuth token.</p>
+<p>This is a very simplistic representation of retrieving an OAuth token, I&rsquo;m affraid the differences between OAuth and JWT would take us too far. I encourage you to read more about it here: <a href="http://oauthbible.com/">http://oauthbible.com/</a>.</p>
+<h2 id="versioning">Versioning</h2>
+<p>The older your API gets, the more prone your API is to change. How we deal with this change can be tricky for end users. You can&rsquo;t just remove or change endpoints, there are probably some people that rely on the old structure of your API. You don&rsquo;t need to support older versions of your API indefinitely, but it would be common decency to give people time to migrate to the new structure.</p>
+<p>As you can imagine, everyone has an opinion on how versioning should be done. Let&rsquo;s look at a few common ones.</p>
+<h3 id="url-based-versioning">Url based versioning</h3>
+<p>This looks like the most obvious solution, but it&rsquo;s not necessarily the best one. This way of versioning requires some foreknowledge and planning. You have to design your first version of the API with the possibility in mind that future versions of the API are coming. This sounds obvious, but API versioning is commonly an afterthought.</p>
+<p>A url based versioning url might look like this:</p>
+<pre><code class="language-linenos=table" data-lang="linenos=table">/api/v3/headis/players</code></pre>
+<h3 id="header-based-versioning">Header based versioning</h3>
+<p>This way is commonly described as the &ldquo;best&rdquo; way. Of course the reality is that there is no best way. And it all depends on your use case (can&rsquo;t stress that enough).</p>
+<p>Header based versioning is done trough, well you guessed it, a header. More specifically, the Accept header.
+Looks like this:</p>
+<pre><code class="language-linenos=table" data-lang="linenos=table">Accept: application/vnd.github.v3+json</code></pre>
+<p>If no version header is given, you simply return your latest version.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This is of course the tip of the iceberg. We just had a bird&rsquo;s eye view over API development. The key thing to remember here is that almost every problem with APIs has occurred to someone before and it&rsquo;s important to be aware of what the possible directions are with every crossroad you encounter. Just don&rsquo;t forget that there is no such thing as &ldquo;the one true way&rdquo;.</p>
+<h3 id="further-reading">Further reading</h3>
+<ul>
+<li><a href="https://apisyouwonthate.com/">Phil Sturgeon&rsquo;s great Build APIs you won&rsquo;t hate</a></li>
+<li><a href="http://apigee.com/about/resources/ebooks/web-api-design">Apigee&rsquo;s Crafting Interfaces that Developers Love (Free)</a></li>
+<li><a href="http://shop.oreilly.com/product/0636920028468.do">The O&rsquo;reilly book (By Leonard Richardson, Mike Amundsen, Sam Ruby)</a></li>
+</ul>
+<p><img src="http://imgs.xkcd.com/comics/api.png" alt=""></p>
+<p>Image by Randall Munroe from his <a href="http://xkcd.com/">great web comic site</a></p>
+
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div><div class="container">
+        <div class="row justify-content-center">
+            <div class="col-9">
+                <div class="bio-card">
+                    <div class="row bio-card-body">
+                        <div class="col-xs-12 col-md-5 bio-card-image">
+                            <a href="https://twitter.com/maybeFrederick">
+                                <img src="/assets/images/my-face.jpg" alt="my face" class="img-responsive" />
+                            </a>
+                        </div>
+                        <div class="col-xs-12 col-md-7 bio-card-txt">
+                            <h2>Hey thanks for reading!</h2>
+                            <p>Hope you enjoyed this post. There is no comments section here, if you've ever seen the YouTube comments
+                                section you'll probably understand why. If you have any remarks or comments on this topic, please
+                                dont hesitate to reach out on
+                                <a href="https://twitter.com/maybeFrederick">Twitter</a> or send me a
+                                <a href="mailto:frederick@brodyandhooper.com" target="_top">mail.</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="footer">
+        <div class="container">
+            <div class="padder">
+                <div class="row">
+                    <div class='col-sm-8 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Latest posts</h2>
+                            </header>
+                            <ul>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/">Posts</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-05-09-binary-tree/">What is a binary tree and why would I ever want to reverse it</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/">The simple class</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-12-13-a-love-letter-to-legacy/">A love letter to legacy projects</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-10-08-integration-operation-segregation-principle/">The Integration Operation Segregation Principle</a></h3>
+                                </li>
+                                
+                            </ul>
+                        </section>
+                    </div>
+                    <div class='col-sm-4 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Who now?</h2>
+                            </header>
+                            <p>Frederick is a Webdeveloper from Antwerp Belgium with a love for legacy code and APIs. He is the founder of
+                                Brody & Hooper</p>
+    
+                            If you want to stay up to date on my ramblings you can subscribe to this 90's thing called
+                            <a href="https://frederickvanbrabant.comindex.xml">Rss</a>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+     crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+     crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    
+        ga('create', 'UA-98268819-1', 'auto');
+        ga('send', 'pageview');
+    
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Person",
+      "name": "Frederick Vanbrabant",
+      "url": "http://www.frederickvanbrabant.com",
+      "sameAs": [
+        "https://twitter.com/maybeFrederick",
+        "https://www.linkedin.com/in/frederickvanbrabant/",
+        "https://github.com/vanbrabantf",
+        "https://symposiumapp.com/u/frederick",
+        "http://www.speakersbase.com/frederick-vanbrabant"
+      ]
+    }
+    </script>
+    
+    </html>

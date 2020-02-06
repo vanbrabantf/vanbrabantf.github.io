@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/</loc>
+    <lastmod>2019-05-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/</loc>
+    <lastmod>2019-05-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2019-05-09-binary-tree/</loc>
+    <lastmod>2019-05-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/</loc>
+    <lastmod>2019-04-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2018-12-13-a-love-letter-to-legacy/</loc>
+    <lastmod>2018-12-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2018-10-08-integration-operation-segregation-principle/</loc>
+    <lastmod>2018-10-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2018-07-24-php-performance/</loc>
+    <lastmod>2018-07-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2017-12-7-atomic-commits/</loc>
+    <lastmod>2017-12-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2017-07-24-connecting-microservices/</loc>
+    <lastmod>2017-07-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2017-07-02-yk38-bug/</loc>
+    <lastmod>2017-07-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2017-06-18-broken-windows-theory/</loc>
+    <lastmod>2017-06-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2017-05-31-generics-in-php/</loc>
+    <lastmod>2017-05-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2017-03-13-improved_pwa_score/</loc>
+    <lastmod>2017-03-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2016-01-29-on-how-to-implement-a-code-of-conduct/</loc>
+    <lastmod>2016-01-29T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/post/2015-11-16-birdseye-view-on-api/</loc>
+    <lastmod>2015-11-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/categories/</loc>
+  </url>
+  
+  <url>
+    <loc>https://frederickvanbrabant.com/tags/</loc>
+  </url>
+  
+</urlset>

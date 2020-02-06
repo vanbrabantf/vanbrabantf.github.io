@@ -1,0 +1,233 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<html>
+	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="description" content="Webdeveloper from Antwerp Belgium with a love for legacy code and APIs">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Frederick Vanbrabant" />
+    	<title>Frederick Vanbrabant delirious rantings</title>
+
+		
+		<meta name="twitter:site" content="@maybefrederick" />
+        <meta name="twitter:description" content="" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:creator" content="@maybefrederick" />
+		<meta name="twitter:title" content="The Y2k38 Bug: The biggest news craze of the year 2038" />
+
+		
+			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2017-07-02-yk38-bug/tump.png" />
+			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2017-07-02-yk38-bug/tump.png" />
+		
+
+
+    	
+    	<meta name="msapplication-tap-highlight" content="no">
+
+    	
+    	<link rel="manifest" href="/assets/manifest.json">
+
+    	 
+	    <meta name="mobile-web-app-capable" content="yes">
+	    <meta name="application-name" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="icon" sizes="192x192" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta name="apple-mobile-web-app-title" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="apple-touch-icon" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="msapplication-TileImage" content="/assets/images/touch/chrome-touch-icon-144x144.png">
+	    <meta name="msapplication-TileColor" content="#d52349">
+
+	    
+    	<meta name="theme-color" content="#d52349">
+
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('/assets/js/serviceworker.js').then(function(registration) {
+						
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}).catch(function(err) {
+						
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+		</script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/style.css" />
+	</head>
+
+
+<div class="container">
+        <div class="row header">
+            <div class="col padding-0">
+                <h1><a href="/index.html">Frederick Vanbrabant's</a></h1>
+                <h2>delirious rantings</h2>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron cover-image" style="background-image: url('/assets/posts/2017-07-02-yk38-bug/header.png');" >
+    </div>
+        
+    <div id="main-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			
+				<section>
+					<header class="blog-title">
+						<h1>The Y2k38 Bug: The biggest news craze of the year 2038</h1>
+						<p>Posted 2 July, 2017- About 5 mins to read</p>
+					</header>
+					<div class="row blog-body">
+						<div class="col">
+							<section>
+								<p>As you might know, I co-organise a PHP meetup called: <a href="phpantwerp.be">PHP Antwerp</a>. Some time ago we had one of our talented speakers: <a href="https://twitter.com/joeri_s">Joeri Sebrechts</a> talk about “What every developer should know about time, no excuses“ (If you ever have the chance to see it, I wholly recommend it). In this talk, he mentions briefly the Y2k38 problem. A bug that will wreck havoc on systems that store time in Unix epoch timestamps.</p>
+<h2 id="wait-this-sounds-familiar">Wait, this sounds familiar.</h2>
+<p>That’s because it is …</p>
+<p>For those of you who weren&rsquo;t fully sentient around the time everyone partied like it was 1999 (for the second time). The big problem around that period was the Y2K bug. Quickly summed up, the Y2K bug was due to people storing years in a 2 digit form like 88 or 67. Now when the year ticks over to 2000 (or every 100 years) they would reset to 00 or 01.</p>
+<p>At the time there was a lot of media buzz around the topic. Planes would fall out of the sky, hospitals would shut down, society would collapse. When the clock eventually ticked over to the new millennium, everything seemed to be still fully functional (including the bleached spiked hair styles). The media quickly resumed to the new hot topic and it all quickly died down. The entire event would be remembered as a hoax.</p>
+<p>But it absolutely wasn’t. In <a href="https://twitter.com/GeeH">Gary Hockin’s</a> talk <a href="https://www.youtube.com/watch?v=RH74_sFjqzs">“Using Open Source for Fun and Profit”</a> (One of the best talks I’ve ever seen) he briefly talks about working together with other engineers to check applications for the bug and mitigating the issue (yes he is <strong>that</strong> old). The truth is that it costed a lot of hands and a lot of capital to sort out.</p>
+<p>And even then we didn’t made it out without a scrap. <a href="http://news.bbc.co.uk/2/hi/business/582007.stm">Credit card machines stoped working</a>, <a href="https://www.theguardian.com/uk/2001/sep/14/martinwainwright">2 unplanned abortions ensued</a>, <a href="http://news.bbc.co.uk/2/hi/science/nature/585013.stm">An alarm sounded in a nuclear powerplant in Japan</a> and even the <a href="https://web.archive.org/web/20081104223443/http://archives.cnn.com/2000/TECH/computing/01/01/y2k.weekend.wrap/index.html">US Naval Observatory</a> was touched.</p>
+<h2 id="what-makes-2038-so-special">What makes 2038 so special?</h2>
+<p>So yeah, Y2K happened because of a logical problem, but 2038 sounds a bit random… That’s because we are looking at the date in a “human readable” form. If we store the date as a Unix epoch timestamp, a form of timekeeping that counts seconds forth from 00:00:00 1 January 1970, we would get  2147483648.</p>
+<p>Again, for some people this might still look like a very random number, but that is more than half of the maximum range an integer can take on a 32-bit system. An integer has a positive range and a negative range. This allowed us to go to dates before the year 1970. Half of its range is negative and half of its range is positive. If you count these two halves up, you might see that we are dealing here with an integer overflow. More precisely after 03:14:07 UTC on 19 January 2038.</p>
+<p>It is possible to change the positive and negative range of the data. However you can not extend it, but you can shift it forward or backward. For example, a company that deals a lot in old data might have shifted the timestamp further back. Giving it less reach in times after 1970.</p>
+<p>This means that the Y2k38 might not appear for everyone at the same time. Or even in the year 2038.</p>
+<h2 id="what-happens-then">What happens then?</h2>
+<p>Mostly the same situation as Y2K, but in this case we don’t go back to 1900 but we go back to 13 December 1901. The good news here is that we jump from a Tuesday to a Friday. The bad news is that banks might calculate negative interests, airports might send wrong routes to planes, basically everything that has a critical function related to timekeeping might be in trouble.</p>
+<h2 id="why-do-these-things-happen">Why do these things happen?</h2>
+<p>When we look back at the Y2K bug, it all seems kinda silly. Why would you store a year in a 2 digit form … why couldn’t you anticipate this issue … The same question arises for Y2k38, you know the integer will someday run out in you 32 bit system. So why use it?</p>
+<p>There is a bit of <a href="https://www.wikiwand.com/en/Survivorship_bias">survivorship bias</a> going on here. Take for example the project you are currently working on. It can be a long term legacy project, a cool new startup idea or a small advertising project. Will that be around for 5 years? 10 years? 30 years? It’s very hard to tell right now, technologies change, the product changes. Preparing your code for an issue that might show up in 30 years sounds irrational. Yet somehow some systems keep running without that refactor for years.</p>
+<blockquote>
+<p>premature optimization is the root of all evil (or at least most of it) in programming. - Donald Knuth</p>
+</blockquote>
+<h2 id="what-software-is-at-risk-at-the-moment">What software is at risk at the moment?</h2>
+<p>It is very fussy to give a full list of all systems at risk. But it is safe to assume that almost all systems that count on Unix timestamps in a 32-bit environment will be at risk.</p>
+<p>This includes operating systems, databases, embedded systems …</p>
+<h2 id="should-i-start-digging-a-fallout-shelter">Should I start digging a fallout shelter?</h2>
+<p>Yes, yes you should. Would be a kickass ice breaker. “Did you know I have a fallout shelter” ? Actually scrap that, sounds kinda creepy.
+You would a least not need one for this bug. Just as with the Y2K bug, this one will pass. There will be a lot of money spend. A lot of people will earn a lot of money. But in the end, it will mostly be resolved.</p>
+<p>In the meantime, it seems best to not store your dates in Unix timestamps if you&rsquo;re on a 32-bit system. For all you know your software might still run on some old machine in 20 years.</p>
+
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div><div class="container">
+        <div class="row justify-content-center">
+            <div class="col-9">
+                <div class="bio-card">
+                    <div class="row bio-card-body">
+                        <div class="col-xs-12 col-md-5 bio-card-image">
+                            <a href="https://twitter.com/maybeFrederick">
+                                <img src="/assets/images/my-face.jpg" alt="my face" class="img-responsive" />
+                            </a>
+                        </div>
+                        <div class="col-xs-12 col-md-7 bio-card-txt">
+                            <h2>Hey thanks for reading!</h2>
+                            <p>Hope you enjoyed this post. There is no comments section here, if you've ever seen the YouTube comments
+                                section you'll probably understand why. If you have any remarks or comments on this topic, please
+                                dont hesitate to reach out on
+                                <a href="https://twitter.com/maybeFrederick">Twitter</a> or send me a
+                                <a href="mailto:frederick@brodyandhooper.com" target="_top">mail.</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="footer">
+        <div class="container">
+            <div class="padder">
+                <div class="row">
+                    <div class='col-sm-8 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Latest posts</h2>
+                            </header>
+                            <ul>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/">Posts</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-05-09-binary-tree/">What is a binary tree and why would I ever want to reverse it</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/">The simple class</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-12-13-a-love-letter-to-legacy/">A love letter to legacy projects</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-10-08-integration-operation-segregation-principle/">The Integration Operation Segregation Principle</a></h3>
+                                </li>
+                                
+                            </ul>
+                        </section>
+                    </div>
+                    <div class='col-sm-4 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Who now?</h2>
+                            </header>
+                            <p>Frederick is a Webdeveloper from Antwerp Belgium with a love for legacy code and APIs. He is the founder of
+                                Brody & Hooper</p>
+    
+                            If you want to stay up to date on my ramblings you can subscribe to this 90's thing called
+                            <a href="https://frederickvanbrabant.comindex.xml">Rss</a>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+     crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+     crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    
+        ga('create', 'UA-98268819-1', 'auto');
+        ga('send', 'pageview');
+    
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Person",
+      "name": "Frederick Vanbrabant",
+      "url": "http://www.frederickvanbrabant.com",
+      "sameAs": [
+        "https://twitter.com/maybeFrederick",
+        "https://www.linkedin.com/in/frederickvanbrabant/",
+        "https://github.com/vanbrabantf",
+        "https://symposiumapp.com/u/frederick",
+        "http://www.speakersbase.com/frederick-vanbrabant"
+      ]
+    }
+    </script>
+    
+    </html>

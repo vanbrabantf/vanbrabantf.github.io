@@ -1,0 +1,327 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<html>
+	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="description" content="Webdeveloper from Antwerp Belgium with a love for legacy code and APIs">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Frederick Vanbrabant" />
+    	<title>Frederick Vanbrabant delirious rantings</title>
+
+		
+		<meta name="twitter:site" content="@maybefrederick" />
+        <meta name="twitter:description" content="" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:creator" content="@maybefrederick" />
+		<meta name="twitter:title" content="Connect microservices with the help of GRPC" />
+
+		
+			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2017-07-24-grpc/tump.jpg" />
+			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2017-07-24-grpc/tump.jpg" />
+		
+
+
+    	
+    	<meta name="msapplication-tap-highlight" content="no">
+
+    	
+    	<link rel="manifest" href="/assets/manifest.json">
+
+    	 
+	    <meta name="mobile-web-app-capable" content="yes">
+	    <meta name="application-name" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="icon" sizes="192x192" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta name="apple-mobile-web-app-title" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="apple-touch-icon" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="msapplication-TileImage" content="/assets/images/touch/chrome-touch-icon-144x144.png">
+	    <meta name="msapplication-TileColor" content="#d52349">
+
+	    
+    	<meta name="theme-color" content="#d52349">
+
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('/assets/js/serviceworker.js').then(function(registration) {
+						
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}).catch(function(err) {
+						
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+		</script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/style.css" />
+	</head>
+
+
+<div class="container">
+        <div class="row header">
+            <div class="col padding-0">
+                <h1><a href="/index.html">Frederick Vanbrabant's</a></h1>
+                <h2>delirious rantings</h2>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron cover-image" style="background-image: url('/assets/posts/2017-07-24-grpc/header.jpg');" >
+    </div>
+        
+    <div id="main-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			
+				<section>
+					<header class="blog-title">
+						<h1>Connect microservices with the help of GRPC</h1>
+						<p>Posted 24 July, 2017- About 7 mins to read</p>
+					</header>
+					<div class="row blog-body">
+						<div class="col">
+							<section>
+								<p>Microservices are all the rage these days. Luckily underneath the hype there are some great use cases for them. If you’re splitting up a monolith codebase into smaller specialised chunks, extracting a long running queue to its own system, or even using particular pieces of code in a different programming language. You always have to solve one architectural problem. How do I make these things talk to each other.</p>
+<p>Your first reflex might be a collection of REST api’s. Put them in a network with filtered ip’s, or any other way to secure it, and call it a day. But if we take a step back and look at this setup, is REST really the best way to go about it?</p>
+<p>Don’t get me wrong, I love REST. But in this case should we be thinking in terms of resources? If we take a system that crops avatars for example. You would get something like this</p>
+<pre><code class="language-linenos=table" data-lang="linenos=table">PATCH images/4
+{
+    "width": 400,
+    "height": 200
+}</code></pre>
+<p>This doesn&rsquo;t really feel right. We aren&rsquo;t dealing with resources here but more with actions on data.</p>
+<p>Fortunately we aren’t the first ones to ponder on this.</p>
+<h2 id="enter-rpc">Enter RPC</h2>
+<p>Some of you might have had a shiver run down your back when reading that title. RPC is commonly linked to older systems and even worst: linked to SOAP (shiver nr.2).</p>
+<p>The reason you might not have great experiences with these setups is, ironically, for the same reason we described above. They have been misused to fit architecture they aren’t designed for. RPC is actually perfect for the use case above.</p>
+<p>For the people not familiar with RPC, let me give a quick overview: It stands for Remote procedure call. And is, as the name suggests, a way to call procedures on a remote system. The REST call we made earlier would look like this:</p>
+<pre><code class="language-linenos=table" data-lang="linenos=table">POST images.crop-image
+{
+    "id": 4,
+    "width": 400,
+    "height": 200
+}</code></pre>
+<p>Or</p>
+<pre><code class="language-linenos=table" data-lang="linenos=table">POST cropImage
+{
+    "id": 4,
+    "width": 400,
+    "height": 200
+}</code></pre>
+<p>You treat your external API as an internal API. Parameters for the endpoint are attached in the body of the call. And that gives some weird results sometimes. In the case of RPC, Verbs don&rsquo;t really matter. If you want to fetch a user for example, it could look like this:</p>
+<pre><code class="language-linenos=table" data-lang="linenos=table">POST displayUser
+{
+  “Id”: 4
+}</code></pre>
+<p>Or</p>
+<pre><code class="language-linenos=table" data-lang="linenos=table">GET displayUser?id=4</code></pre>
+<p>If you’re an avid REST supporter and never worked with RPC before, this all looks very strange. Maybe even dirty. I personally don’t like public RPC API’s, but in very specific cases they might be useful. If your API is more like an application that does actions on data, instead of managing data, it can make sense. (Just remember that this is not an excuse for letting your internal architecture bleed into your API).</p>
+<p>Knowing this, we can look at our microservices in the same light. Here we have small applications that might benefit more from the RPC style of calling methods than the REST style of altering resources.</p>
+<p>A nice end goal for our microservices might be to use them in our code, without knowing that they are remote. Let me better explain this with an example.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">mailUsers</span>(<span style="color:#a6e22e">Message</span> $message)
+{
+    $users <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">userRespository</span><span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getUsers</span>();
+    <span style="color:#a6e22e">MailService</span><span style="color:#f92672">::</span><span style="color:#a6e22e">SendToUsers</span>($users, $message);
+}
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>It would be great if we could use code like this to communicate to a remote service. The <code>Mailservice</code> would be an abstraction that takes the method <code>SendToUsers</code> dynamically from the microservice.</p>
+<p>In that way, when you update the API of the microservice, you would not need to update the <code>Mailservice</code> code. The client would automaticlly have access to the new methods.</p>
+<p>Of course that would take a lot of work to create. You would have to write some sort of transformer, create something that can login to the service, and eventually POST the data…</p>
+<h2 id="grpc">GRPC</h2>
+<p>There is another company with the same issues as us. Ok maybe not exactly the same issues as us, cause they are maybe a bit bigger. Google created a system called Stubby that connects most of their services together. When Stubby got a rewrite, Google decided to create a new system. Not closely matching their infrastructure and even made it open-source. This new system is called <a href="https://grpc.io/">GRPC</a>.</p>
+<p>GRPC is a RPC framework that does a lot of heavy lifting for you. First of all, it handles all the load balancing, tracing, health checking and authentication functions you would otherwise have to write yourself. It can even go full async. But that is not even the coolest part. It also writes all the code for the connection.</p>
+<h3 id="lets-take-a-look-at-how-it-works">Let’s take a look at how it works</h3>
+<p>If you want to execute methods on a remote system as if they were present in your current system, you will have to transform the data. You have no idea what the server is expecting. The server on the other side would want to have that data serialized as well. This is also a great place to add some validation on that data.</p>
+<p>To tackle serialization and validation Google created something called protocol buffers. These protocol buffers rely on proto files that tell them what data is coming in and out. This system is somewhat comparable to systems like <a href="https://swagger.io">Swagger</a> and <a href="https://apiblueprint.org/">Blueprint</a>. Unlike these, proto files are less human readable and look at bit more like code. And pack a lot more functionallity than just documentation.</p>
+<p>Here is an example of one of those proto files:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-proto" data-lang="proto">syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#f92672">package</span> tutorial;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Person</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>	<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">required</span> <span style="color:#66d9ef">string</span> name <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">required</span> <span style="color:#66d9ef">int32</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">string</span> email <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>	<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">enum</span> PhoneType {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>        MOBILE <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>        HOME <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>        WORK <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    }<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}</code></pre></td></tr></table>
+</div>
+</div>
+<p>As you can see they have a C/Java style and more importantly, are strictly typed. The numbers that are assigned to these variables are id’s for the system itself. Please note that these files are allowed to have a bit of logic in them making them very flexible. You can look at them as value objects.</p>
+<p>Once you have created the Proto file, the real magic happens. Now you are able to generate the connection between the systems. I say generate, because it is exactly like that. GRPC can now automatically generate an SDK that you can import in your client and server. This SDK uses the mapping to act as regular methods calls in your current code base.</p>
+<p>You can find some examples of generated code on the <a href="https://github.com/grpc/grpc/tree/master/examples/php">GRPC github</a></p>
+<h3 id="why-would-i-want-protobuffers-over-something-like-json">Why would I want protobuffers over something like JSON?</h3>
+<p>We now know on a high level how GRPC works, but we still haven’t talked about how the data is actually transmitted. The downside here is that unless you dive really deep, this will all be a bit blackbox-ish.</p>
+<p>Protobuffers aren’t really designed to be human readable, they are compressed binaries. I know this might be a huge turn off, but it does has its advantages. These come mainly in the form of its small footprint and speed.</p>
+<p>Yogesh Shinde posted an article on <a href="https://dzone.com/articles/protobuf-performance-comparison-and-points-to-make">Dzone</a> on the comparison between JSON and protobuffers that suggested that the later are almost double as fast.</p>
+<p><a href="https://twitter.com/brunoskrebs">Bruno Krebs</a>’s article <a href="https://auth0.com/blog/beating-json-performance-with-protobuf/">Beating JSON performance with Protobuf</a> even sported cases that were up to 6 times the speed.</p>
+<h3 id="and-what-are-the-big-downsides">And what are the big downsides?</h3>
+<p>Everything comes at a price, and GRPC is no exception. The biggest downside is obviously the black box connections. They are hard to debug and you’re not ever really sure about what’s transmitted.</p>
+<p>The generated code is also a bit of a double edged sword. Lots of people have had some bad experiences with generated code (for good reasons). But to be honest, I  feel that in this case it’s not that bad. The generated code are mostly value like objects that sometimes are little more than getters and setters and it does allow you to generate SDK’s in loads of different languages with a single click, so that is a decision you have to make for yourself.</p>
+<p>I also found the set up a bit hard. In the case of PHP they suggest you install using PECL what is not really ideal (There is a composer option as wel). You also need to run a Node server so that might not jive all that well with your current setup.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This might all seem a bit daunting to set up if you only have 1 or 2 microservices in your domain. But if your product is a collection of different microservices, you might save some time and performance with this technology. Especially if there are a few different programming languages mixed in.</p>
+<p>But be sure to create a pilot project before you take the plunge.</p>
+
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div><div class="container">
+        <div class="row justify-content-center">
+            <div class="col-9">
+                <div class="bio-card">
+                    <div class="row bio-card-body">
+                        <div class="col-xs-12 col-md-5 bio-card-image">
+                            <a href="https://twitter.com/maybeFrederick">
+                                <img src="/assets/images/my-face.jpg" alt="my face" class="img-responsive" />
+                            </a>
+                        </div>
+                        <div class="col-xs-12 col-md-7 bio-card-txt">
+                            <h2>Hey thanks for reading!</h2>
+                            <p>Hope you enjoyed this post. There is no comments section here, if you've ever seen the YouTube comments
+                                section you'll probably understand why. If you have any remarks or comments on this topic, please
+                                dont hesitate to reach out on
+                                <a href="https://twitter.com/maybeFrederick">Twitter</a> or send me a
+                                <a href="mailto:frederick@brodyandhooper.com" target="_top">mail.</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="footer">
+        <div class="container">
+            <div class="padder">
+                <div class="row">
+                    <div class='col-sm-8 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Latest posts</h2>
+                            </header>
+                            <ul>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/">Posts</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-05-09-binary-tree/">What is a binary tree and why would I ever want to reverse it</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/">The simple class</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-12-13-a-love-letter-to-legacy/">A love letter to legacy projects</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-10-08-integration-operation-segregation-principle/">The Integration Operation Segregation Principle</a></h3>
+                                </li>
+                                
+                            </ul>
+                        </section>
+                    </div>
+                    <div class='col-sm-4 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Who now?</h2>
+                            </header>
+                            <p>Frederick is a Webdeveloper from Antwerp Belgium with a love for legacy code and APIs. He is the founder of
+                                Brody & Hooper</p>
+    
+                            If you want to stay up to date on my ramblings you can subscribe to this 90's thing called
+                            <a href="https://frederickvanbrabant.comindex.xml">Rss</a>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+     crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+     crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    
+        ga('create', 'UA-98268819-1', 'auto');
+        ga('send', 'pageview');
+    
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Person",
+      "name": "Frederick Vanbrabant",
+      "url": "http://www.frederickvanbrabant.com",
+      "sameAs": [
+        "https://twitter.com/maybeFrederick",
+        "https://www.linkedin.com/in/frederickvanbrabant/",
+        "https://github.com/vanbrabantf",
+        "https://symposiumapp.com/u/frederick",
+        "http://www.speakersbase.com/frederick-vanbrabant"
+      ]
+    }
+    </script>
+    
+    </html>

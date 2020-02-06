@@ -1,0 +1,273 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<html>
+	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="description" content="Webdeveloper from Antwerp Belgium with a love for legacy code and APIs">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Frederick Vanbrabant" />
+    	<title>Frederick Vanbrabant delirious rantings</title>
+
+		
+		<meta name="twitter:site" content="@maybefrederick" />
+        <meta name="twitter:description" content="" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:creator" content="@maybefrederick" />
+		<meta name="twitter:title" content="How we improved our PWA score by 53 points in 4 hours" />
+
+		
+			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2017-03-03-improved_pwa_score/tump.png" />
+			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2017-03-03-improved_pwa_score/tump.png" />
+		
+
+
+    	
+    	<meta name="msapplication-tap-highlight" content="no">
+
+    	
+    	<link rel="manifest" href="/assets/manifest.json">
+
+    	 
+	    <meta name="mobile-web-app-capable" content="yes">
+	    <meta name="application-name" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="icon" sizes="192x192" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta name="apple-mobile-web-app-title" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="apple-touch-icon" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="msapplication-TileImage" content="/assets/images/touch/chrome-touch-icon-144x144.png">
+	    <meta name="msapplication-TileColor" content="#d52349">
+
+	    
+    	<meta name="theme-color" content="#d52349">
+
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('/assets/js/serviceworker.js').then(function(registration) {
+						
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}).catch(function(err) {
+						
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+		</script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/style.css" />
+	</head>
+
+
+<div class="container">
+        <div class="row header">
+            <div class="col padding-0">
+                <h1><a href="/index.html">Frederick Vanbrabant's</a></h1>
+                <h2>delirious rantings</h2>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron cover-image" style="background-image: url('/assets/posts/2017-03-03-improved_pwa_score/header.png');" >
+    </div>
+        
+    <div id="main-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			
+				<section>
+					<header class="blog-title">
+						<h1>How we improved our PWA score by 53 points in 4 hours</h1>
+						<p>Posted 13 March, 2017- About 6 mins to read</p>
+					</header>
+					<div class="row blog-body">
+						<div class="col">
+							<section>
+								<p><strong>This post wast orignially posted on the <a href="https://blog.madewithlove.be/">madewithlove</a> site</strong></p>
+<p>A week ago <a href="https://twitter.com/hannesvdvreken">Hannes</a> and I attended <a href="http://phpconference.co.uk/">PHPUK</a> in London (<a href="https://blog.madewithlove.be/post/php-uk-conference/">You can read all about it here</a>). We saw a lot of great talks and met numerous very smart people. Among these was <a href="https://twitter.com/rowan_m">Rowan Merewood</a>, who gave a talk called &ldquo;Progressive Web Apps in the wild&rdquo;. He convinced me to try and add some PWA&rsquo;ness to one of our applications, just to try it out.</p>
+<h3 id="hold-up-what-is-pwa">Hold up, what is PWA?</h3>
+<p>So the first thing you should know about PWA (or progressive web apps) is that it&rsquo;s an adaptation of your current site or web app. This means that if you want to have all the features of a progressive web app, you are going to need to change your current site/application. The good news here is that they are all changes you would want to have anyway.</p>
+<p>PWA turns your site/application into something that feels like a native application on supported mobile browsers (this is mostly Chrome on Android at the time of writing). Making your application feel more native includes offline access, an app icon on the homescreen, an app like interface (you can choose to hide the navigation bar) and a lot more.</p>
+<h3 id="what-is-needed-to-make-this-happen">What is needed to make this happen?</h3>
+<p>For this I&rsquo;m going to steal some information from the <a href="https://developers.google.com/web/fundamentals/getting-started/codelabs/your-first-pwapp/">developers.google</a> pages:</p>
+<ul>
+<li>Progressive - Works for every user, regardless of browser choice because it&rsquo;s built with progressive enhancement as a core tenet.</li>
+<li>Responsive - Fits any form factor: desktop, mobile, tablet, or whatever is next.</li>
+<li>Connectivity independent - Enhanced with service workers to work offline or on low-quality networks.</li>
+<li>App-like - Feels like an app to the user with app-style interactions and navigation because it&rsquo;s built on the app shell model.</li>
+<li>Fresh - Always up-to-date thanks to the service worker update process.</li>
+<li>Safe - Served via HTTPS to prevent snooping and to ensure content hasn&rsquo;t been tampered with.</li>
+<li>Discoverable - Is identifiable as an &ldquo;application&rdquo; thanks to W3C manifest and service worker registration scope, allowing search engines to find it.</li>
+<li>Re-engageable - Makes re-engagement easy through features like push notifications.</li>
+<li>Installable - Allows users to &ldquo;keep&rdquo; apps they find most useful on their home screen without the hassle of an app store.</li>
+<li>Linkable - Easily share via URL, does not require complex installation.</li>
+</ul>
+<p>That looks like a lot of work right?</p>
+<p>In reality most of this is not really new. Your site should already be responsive, be served over https, linkable etc.
+The others things are easily added.</p>
+<h3 id="ok-lets-do-this-how-do-we-start">Ok, let&rsquo;s do this. How do we start?</h3>
+<p>Well I had the same question&hellip; Most of those things above are front-end things, and front-end was a name I haven&rsquo;t heard in a long long time. So I called in our resident front-end guru <a href="https://twitter.com/sambego">Sam</a> who helped me through it.</p>
+<p>So first up is installing <a href="https://chrome.google.com/webstore/detail/lighthouse/blipmdconlkpinefehnmjammfjpmpbjk?hl=en">Lighthouse</a>, this is a chrome plugin, created by the friendly people at Google that checks the site you are currently visiting for compliance with the list above and returns not only a score but also some pointers on what to improve.</p>
+<p>We&rsquo;ve decided to run it against <a href="https://madewithlove.be/">our own site </a> (note: you&rsquo;re currently reading our blog which is decoupled from our company site) and <a href="/assets/posts/2017-03-03-improved_pwa_score/pwa1.pdf">this is what we got</a>.</p>
+<p>So if you don&rsquo;t want to check out the entire report, let&rsquo;s go over some highlights first. First of all is the score.</p>
+<p><img src="/assets/posts/2017-03-03-improved_pwa_score/1.png" alt="First score"></p>
+<p>46/100 is not really great, but at least we already covered some stuff.</p>
+<p>Ok, so what are the major areas for improvement here?</p>
+<p>We seem to miss these things related to a manifest, a &ldquo;Service Worker&rdquo; and some misc server/css stuff.</p>
+<h3 id="what-is-a-manifest">What is a manifest?</h3>
+<p>A manifest is some meta data about your website. One of the cool things this allows you to do is make it possible for Android phones (and maybe in the future other OS&rsquo;s) to add a shortcut to the home screen that makes the app feel like a native app.</p>
+<p>Time to make a manifest! <a href="https://gist.github.com/vanbrabantf/b9df089f5aeeaae944752d2b12079e81">This is what we ended up with</a>. (don&rsquo;t forget to link it in your HTML)</p>
+<p>As you can see, this is not really complicated. Let&rsquo;s take a quick look at the fields:</p>
+<ul>
+<li><code>short_name</code> is the name that will appear under the icon on the homescreen.</li>
+<li><code>name</code> is the longer name that will be used in communication screens.</li>
+<li><code>icons</code> is a collection of homescreen icons in different sizes.</li>
+<li><code>start_url</code> is the relative url the app should open on launch.</li>
+<li><code>display</code> is the feeling the app should have, we set it to <code>standalone</code> so the app has a native feeling.</li>
+<li><code>background_color</code> this is the background colour of the splash screen.</li>
+<li><code>theme_color</code> is the colour of the application and top bar of the browser.</li>
+</ul>
+<p>So that&rsquo;s all there is to it, let&rsquo;s run Lighthouse again and see how we did: <a href="/assets/posts/2017-03-03-improved_pwa_score/pwa3.pdf">report</a></p>
+<p><img src="/assets/posts/2017-03-03-improved_pwa_score/2.png" alt="Second score"></p>
+<p>That was a huge bump for such a small job! We could stop here, but in for a penny in for a pound. What else can we tackle?</p>
+<h3 id="service-workers-how-hard-can-it-be">Service Workers, how hard can it be?</h3>
+<blockquote>
+<p>Service workers essentially act as proxy servers that sit between web applications, and the browser and network (when available). They are intended to (amongst other things) enable the creation of effective offline experiences, intercepting network requests and taking appropriate action based on whether the network is available and updated assets reside on the server. They will also allow access to push notifications and background sync APIs. - <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API">MDN</a></p>
+</blockquote>
+<p>This is probably a bit more complicated than a json file &hellip; Sam (mainly) and I tinkered some time with this but in the end we decided on using a premade Service Worker from <a href="https://twitter.com/chriscoyier?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor">Chris Coyier</a>.Our version can be found <a href="https://gist.github.com/vanbrabantf/76586a7d069d0e42922123c4046c1286">here</a>.</p>
+<p>This Service worker has a nifty caching implementation(for mobile and desktop) that supports offline browsing on you mobile device.</p>
+<p>Report time! <a href="/assets/posts/2017-03-03-improved_pwa_score/pwa4.pdf">report</a></p>
+<p><img src="/assets/posts/2017-03-03-improved_pwa_score/3.png" alt="Final score"></p>
+<h3 id="can-we-push-it-to-100">Can we push it to 100?</h3>
+<p>In our case &hellip; sadly no.</p>
+<p>Our biggest problem here is that big map at the top of our site. It&rsquo;s not really open to modifications. We could rewrite it ourselves, but that would bring us too far into this 4 hour experiment.</p>
+<p>We have also decided to rework our homepage, when we do this we&rsquo;ll probably keep a keen eye on our PWA score so we can finally grab that 100%!</p>
+<h3 id="what-else-did-we-get-out-of-this">What else did we get out of this?</h3>
+<p>Something we didn&rsquo;t really anticipate was the nice speed increase we got. This is of course due to the Service worker and its caching methods.</p>
+<p>Checkout these before and after images:</p>
+<p><img src="/assets/posts/2017-03-03-improved_pwa_score/before.png" alt="Before timeline"></p>
+<p><img src="/assets/posts/2017-03-03-improved_pwa_score/after.png" alt="After timeline"></p>
+<h3 id="conclusion">Conclusion</h3>
+<p>I was actually really surprised how easy this was. We got an <strong>almost</strong> perfect score in a short time experimenting with that spec. The results are also pretty amazing, we now have something that feels like a native app, a nice bump in page speed and some extra SEO points, just by adding 2 files.</p>
+<p>I totally advise you give this a shot, maybe you can even push it to 100%!</p>
+
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div><div class="container">
+        <div class="row justify-content-center">
+            <div class="col-9">
+                <div class="bio-card">
+                    <div class="row bio-card-body">
+                        <div class="col-xs-12 col-md-5 bio-card-image">
+                            <a href="https://twitter.com/maybeFrederick">
+                                <img src="/assets/images/my-face.jpg" alt="my face" class="img-responsive" />
+                            </a>
+                        </div>
+                        <div class="col-xs-12 col-md-7 bio-card-txt">
+                            <h2>Hey thanks for reading!</h2>
+                            <p>Hope you enjoyed this post. There is no comments section here, if you've ever seen the YouTube comments
+                                section you'll probably understand why. If you have any remarks or comments on this topic, please
+                                dont hesitate to reach out on
+                                <a href="https://twitter.com/maybeFrederick">Twitter</a> or send me a
+                                <a href="mailto:frederick@brodyandhooper.com" target="_top">mail.</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="footer">
+        <div class="container">
+            <div class="padder">
+                <div class="row">
+                    <div class='col-sm-8 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Latest posts</h2>
+                            </header>
+                            <ul>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/">Posts</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-05-09-binary-tree/">What is a binary tree and why would I ever want to reverse it</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/">The simple class</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-12-13-a-love-letter-to-legacy/">A love letter to legacy projects</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-10-08-integration-operation-segregation-principle/">The Integration Operation Segregation Principle</a></h3>
+                                </li>
+                                
+                            </ul>
+                        </section>
+                    </div>
+                    <div class='col-sm-4 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Who now?</h2>
+                            </header>
+                            <p>Frederick is a Webdeveloper from Antwerp Belgium with a love for legacy code and APIs. He is the founder of
+                                Brody & Hooper</p>
+    
+                            If you want to stay up to date on my ramblings you can subscribe to this 90's thing called
+                            <a href="https://frederickvanbrabant.comindex.xml">Rss</a>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+     crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+     crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    
+        ga('create', 'UA-98268819-1', 'auto');
+        ga('send', 'pageview');
+    
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Person",
+      "name": "Frederick Vanbrabant",
+      "url": "http://www.frederickvanbrabant.com",
+      "sameAs": [
+        "https://twitter.com/maybeFrederick",
+        "https://www.linkedin.com/in/frederickvanbrabant/",
+        "https://github.com/vanbrabantf",
+        "https://symposiumapp.com/u/frederick",
+        "http://www.speakersbase.com/frederick-vanbrabant"
+      ]
+    }
+    </script>
+    
+    </html>

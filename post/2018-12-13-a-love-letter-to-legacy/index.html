@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<html>
+	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="description" content="Webdeveloper from Antwerp Belgium with a love for legacy code and APIs">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Frederick Vanbrabant" />
+    	<title>Frederick Vanbrabant delirious rantings</title>
+
+		
+		<meta name="twitter:site" content="@maybefrederick" />
+        <meta name="twitter:description" content="" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:creator" content="@maybefrederick" />
+		<meta name="twitter:title" content="A love letter to legacy projects" />
+
+		
+			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2018-12-12-a-love-letter-to-legacy/tump.jpg" />
+			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2018-12-12-a-love-letter-to-legacy/tump.jpg" />
+		
+
+
+    	
+    	<meta name="msapplication-tap-highlight" content="no">
+
+    	
+    	<link rel="manifest" href="/assets/manifest.json">
+
+    	 
+	    <meta name="mobile-web-app-capable" content="yes">
+	    <meta name="application-name" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="icon" sizes="192x192" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta name="apple-mobile-web-app-title" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="apple-touch-icon" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="msapplication-TileImage" content="/assets/images/touch/chrome-touch-icon-144x144.png">
+	    <meta name="msapplication-TileColor" content="#d52349">
+
+	    
+    	<meta name="theme-color" content="#d52349">
+
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('/assets/js/serviceworker.js').then(function(registration) {
+						
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}).catch(function(err) {
+						
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+		</script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/style.css" />
+	</head>
+
+
+<div class="container">
+        <div class="row header">
+            <div class="col padding-0">
+                <h1><a href="/index.html">Frederick Vanbrabant's</a></h1>
+                <h2>delirious rantings</h2>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron cover-image" style="background-image: url('/assets/posts/2018-12-12-a-love-letter-to-legacy/header.jpg');" >
+    </div>
+        
+    <div id="main-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			
+				<section>
+					<header class="blog-title">
+						<h1>A love letter to legacy projects</h1>
+						<p>Posted 12 December, 2018- About 6 mins to read</p>
+					</header>
+					<div class="row blog-body">
+						<div class="col">
+							<section>
+								<p>Monday morning. Your previous project just wrapped up, and they are going to assign you a brand new one. They even promised you the lead on this project. Who said Mondays couldn’t be great?</p>
+<p>A few hours later and you are staring at the most dreadful code you have ever seen — controllers of more than a thousand lines, PHP that injects jQuery in the views, raw SQL statements that could challenge a Dostoyevsky novel in size. The list goes on and on. This Monday is going to need a ton of coffee.</p>
+<p>The previous few lines might sound very familiar to you. You might even be working on a project like this at this very moment. If that is the case, … lucky you.</p>
+<h1 id="why-do-these-horrible-applications-exist">Why do these horrible applications exist?</h1>
+<p>Most applications don’t start like this. As you know, green field applications start full of hopes, dreams and rainbows. A new business idea gets launched. It does something small, pretty good. People like the application. They like it a lot. More and more customers flock to the application. You excitingly add more functionality to your small idea. Soon, one of your more prominent clients, asks for a very valid use case.</p>
+<p>Hmm, you haven’t thought about this particular flow in the application. To be honest; the application doesn’t support it. However… it’s a big client, and it’s a great idea. You know what, this small little hack won’t make the difference. We’ll document it, so everyone knows about it.</p>
+<p>Fast forward a few months. You have a dozen developers working for you, and your Kanban feature board is filled to the brim. The strange thing about the board, however, is that most of the features on that board don’t come from your hand, they come from customers. Moreover, they all want concrete things very tailored to their workflows. That little hack that’s been made a few months ago is now not even considered a hack anymore; it’s just how the application works. Moreover, if you take a step back, most of the application is now a collection of these small little hacks.</p>
+<p>You might think that this is a horrible product, and from a code perspective you might be right. However, from a business perspective, this is a vital process. The product has a ton of customers, and they are invested enough to want to tailor it to their workflows and they even reach out to you with suggestions. Granted, not all of these suggestions are great, but they wouldn’t come forward if there weren’t a need for them.</p>
+<h1 id="is-this-the-low-point">Is this the low point?</h1>
+<p>However, now where does that leave you, It’s entertaining to have a company with many customers, but at the end of the day, you’re still the one that is in the trenches of despair.</p>
+<p>Not necessarily; Having a product like this tend to generate income. The most significant part of that income is invested back into the project. Once the legacy code hampers the production of new features or generates too many bugs, the discussion surrounding refactoring parts of the code tend to start getting more and more speed.</p>
+<p>Once you start refactoring, you suddenly notice that you have so much value in front of you — a ton of use cases already implemented, a wealth of user behaviour and data, metrics and most important of all: the budget and infrastructure to match.</p>
+<h1 id="working-with-legacy-day-to-day">Working with legacy day to day</h1>
+<p>Most refactorings tend to start with the question from management that is frequently a variation of: “what are the worst parts of the application, and how can we make them better”. This sentence is poetry to a developer’s ear. A great chance to go over the entire application note down the pain points, look at technologies that might ease trouble, have lengthy discussions with colleagues about the architecture of the pesky service classes. Not only are you going to learn a ton on the technical side of things, socially you’re going to improve in ways of persuasion and proposing ideas.</p>
+<p>After a while, the most significant part of the spec will be done. Moreover, I can guarantee you that you’ve never been so excited to work on the project before. You can now look at the project and see a road to be walked, where before it was just an end to a means.</p>
+<p>Now comes the tricky part, refactoring one of those huge files. The first time you read over the class, you might get some doubts about this whole refactoring stuff. Luckily you stick to your means of attack and write your first end to end tests. Once you’ve established a safety net, you regain a big part of your courage.</p>
+<p>Ok you think, this piece of code I might be able to extract to a separate class. You write the unit test. You extract the code, and everything is green. Ok, great start! Let’s do it again.</p>
+<p>A few hours later you stare at the construction you’ve made. It’s a vast improvement of what it was before (every single indentation you fix is an improvement), but looking at the loose classes, you can see some definite improvements still. You could leave it as it is, and that would be great, or go further. Either path you chose, at one point you’re going to create a PR, and sit back and stare at the diff screen of your favourite git hosting service … what a beauty.</p>
+<h1 id="growing-with-the-application">Growing with the application</h1>
+<p>Working on applications like this is all about responsibility. Every decision you make as a team will impact you in the future, in a good way and sometimes in a not so good way.</p>
+<p>This kind of pressure might sound like a burden, but in reality, it is indeed a blessing. It forces you to slow down and think about your actions as a team. Should I write a test for this? The answer is going to be yes, cause once it has a test, it’s going to part of the test coverage for maybe years to come.</p>
+<p>So that’s the beauty of legacy code: You get a rough stone that you can shape into a gem. The pressure of delivering new features won’t be lower on a legacy application over Greenfield, but management often understands the need for refactoring and architectural meetings better.</p>
+<p>Moreover, all the technologies and paradigms learned in the refactoring of legacy code are invaluable when you move on to Greenfield projects as you now have the context for the need for value objects, testing and decoupling.</p>
+<p>So yes, if you’re about to start on a legacy code base. Lucky you. You’re about to have one hell of a ride.</p>
+<p>Ps: Happy birthday Taylor Swift</p>
+
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div><div class="container">
+        <div class="row justify-content-center">
+            <div class="col-9">
+                <div class="bio-card">
+                    <div class="row bio-card-body">
+                        <div class="col-xs-12 col-md-5 bio-card-image">
+                            <a href="https://twitter.com/maybeFrederick">
+                                <img src="/assets/images/my-face.jpg" alt="my face" class="img-responsive" />
+                            </a>
+                        </div>
+                        <div class="col-xs-12 col-md-7 bio-card-txt">
+                            <h2>Hey thanks for reading!</h2>
+                            <p>Hope you enjoyed this post. There is no comments section here, if you've ever seen the YouTube comments
+                                section you'll probably understand why. If you have any remarks or comments on this topic, please
+                                dont hesitate to reach out on
+                                <a href="https://twitter.com/maybeFrederick">Twitter</a> or send me a
+                                <a href="mailto:frederick@brodyandhooper.com" target="_top">mail.</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="footer">
+        <div class="container">
+            <div class="padder">
+                <div class="row">
+                    <div class='col-sm-8 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Latest posts</h2>
+                            </header>
+                            <ul>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/">Posts</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-05-09-binary-tree/">What is a binary tree and why would I ever want to reverse it</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/">The simple class</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-12-13-a-love-letter-to-legacy/">A love letter to legacy projects</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-10-08-integration-operation-segregation-principle/">The Integration Operation Segregation Principle</a></h3>
+                                </li>
+                                
+                            </ul>
+                        </section>
+                    </div>
+                    <div class='col-sm-4 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Who now?</h2>
+                            </header>
+                            <p>Frederick is a Webdeveloper from Antwerp Belgium with a love for legacy code and APIs. He is the founder of
+                                Brody & Hooper</p>
+    
+                            If you want to stay up to date on my ramblings you can subscribe to this 90's thing called
+                            <a href="https://frederickvanbrabant.comindex.xml">Rss</a>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+     crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+     crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    
+        ga('create', 'UA-98268819-1', 'auto');
+        ga('send', 'pageview');
+    
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Person",
+      "name": "Frederick Vanbrabant",
+      "url": "http://www.frederickvanbrabant.com",
+      "sameAs": [
+        "https://twitter.com/maybeFrederick",
+        "https://www.linkedin.com/in/frederickvanbrabant/",
+        "https://github.com/vanbrabantf",
+        "https://symposiumapp.com/u/frederick",
+        "http://www.speakersbase.com/frederick-vanbrabant"
+      ]
+    }
+    </script>
+    
+    </html>

@@ -1,0 +1,677 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<html>
+	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="description" content="Webdeveloper from Antwerp Belgium with a love for legacy code and APIs">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Frederick Vanbrabant" />
+    	<title>Frederick Vanbrabant delirious rantings</title>
+
+		
+		<meta name="twitter:site" content="@maybefrederick" />
+        <meta name="twitter:description" content="" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:creator" content="@maybefrederick" />
+		<meta name="twitter:title" content="The Integration Operation Segregation Principle" />
+
+		
+			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2018-10-09-princ/tump.jpg" />
+			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2018-10-09-princ/tump.jpg" />
+		
+
+
+    	
+    	<meta name="msapplication-tap-highlight" content="no">
+
+    	
+    	<link rel="manifest" href="/assets/manifest.json">
+
+    	 
+	    <meta name="mobile-web-app-capable" content="yes">
+	    <meta name="application-name" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="icon" sizes="192x192" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta name="apple-mobile-web-app-title" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="apple-touch-icon" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="msapplication-TileImage" content="/assets/images/touch/chrome-touch-icon-144x144.png">
+	    <meta name="msapplication-TileColor" content="#d52349">
+
+	    
+    	<meta name="theme-color" content="#d52349">
+
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('/assets/js/serviceworker.js').then(function(registration) {
+						
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}).catch(function(err) {
+						
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+		</script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/style.css" />
+	</head>
+
+
+<div class="container">
+        <div class="row header">
+            <div class="col padding-0">
+                <h1><a href="/index.html">Frederick Vanbrabant's</a></h1>
+                <h2>delirious rantings</h2>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron cover-image" style="background-image: url('/assets/posts/2018-10-09-princ/header.jpg');" >
+    </div>
+        
+    <div id="main-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			
+				<section>
+					<header class="blog-title">
+						<h1>The Integration Operation Segregation Principle</h1>
+						<p>Posted 8 October, 2018- About 6 mins to read</p>
+					</header>
+					<div class="row blog-body">
+						<div class="col">
+							<section>
+								<p>A few weeks ago I attended a <a href="https://www.meetup.com/dddbelgium/events/252030211">DDDBelgium meetup</a> where I was lucky to participate in a refactor workshop lead by <a href="https://twitter.com/Pelshoff">Pim</a> and <a href="https://twitter.com/jlammerts">Joop</a>. After the incredible workshop Pim, <a href="https://twitter.com/driesvints">Dries</a> and me were discussing some code that we refactored earlier . Not so long in the conversation the words &ldquo;Integration Operation Segregation Principle&rdquo; casually got dropped by Pim.</p>
+<p>Now I&rsquo;m going, to be honest with you (as I was with them), I had no idea what the hell he was talking about. And maybe neither do you.</p>
+<h2 id="a-simple-pricecalculator">A simple PriceCalculator</h2>
+<p>Let&rsquo;s take a look at some code:
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+    <span style="color:#66d9ef">declare</span>(<span style="color:#a6e22e">strict_types</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>);
+    
+    <span style="color:#66d9ef">namespace</span> <span style="color:#a6e22e">Car\Rent</span>;
+    
+    <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PriceCalculator</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">calculate</span>(<span style="color:#a6e22e">CarRental</span> $carRental)<span style="color:#f92672">:</span> <span style="color:#a6e22e">int</span>
+        {
+            $startDate <span style="color:#f92672">=</span> $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getStartDate</span>();
+            $endDate <span style="color:#f92672">=</span> $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getEndDate</span>();
+            $days <span style="color:#f92672">=</span> $startDate<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">diff</span>($endDate);
+            $dayPrice <span style="color:#f92672">=</span> $days <span style="color:#f92672">*</span> $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getPricePerDay</span>();
+    
+            <span style="color:#66d9ef">return</span> $dayPrice <span style="color:#f92672">+</span> ($carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getDistance</span>() <span style="color:#f92672">*</span> $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getPricePerKm</span>());
+        }
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+As you can see, we have a small piece of code that calculates the price for a few days of rental.</p>
+<p>The code itself is pretty straightforward. We gather the start date, the end date. We calculate the number of days and later on multiply those days by the price + the km&rsquo;s driven. A small piece of code, that does a lot.</p>
+<p>No code is complete without a test:
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+    <span style="color:#66d9ef">declare</span>(<span style="color:#a6e22e">strict_types</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>);
+    
+    <span style="color:#66d9ef">namespace</span> <span style="color:#a6e22e">Tests\Car\Rent</span>;
+    
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PriceCalculatorTest</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">TestCase</span>
+    {
+        <span style="color:#e6db74">/**
+</span><span style="color:#e6db74">         * @test
+</span><span style="color:#e6db74">         */</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">it_calculates_a_price</span>()
+        {
+            $carRental <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getMockBuilder</span>(<span style="color:#a6e22e">CarRental</span><span style="color:#f92672">::</span><span style="color:#a6e22e">class</span>)
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">disableOriginalConstructor</span>()
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getMock</span>();
+    
+            $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">expects</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">once</span>())
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">method</span>(<span style="color:#e6db74">&#39;getStartDate&#39;</span>)
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">willReturn</span>(<span style="color:#a6e22e">time</span>());
+    
+            $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">expects</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">once</span>())
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">method</span>(<span style="color:#e6db74">&#39;getEndDate&#39;</span>)
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">willReturn</span>(<span style="color:#a6e22e">time</span>());
+    
+            $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">expects</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">once</span>())
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">method</span>(<span style="color:#e6db74">&#39;getEndDate&#39;</span>)
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">willReturn</span>(<span style="color:#a6e22e">time</span>());
+    
+            $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">expects</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">once</span>())
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">method</span>(<span style="color:#e6db74">&#39;getPricePerDay&#39;</span>)
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">willReturn</span>(<span style="color:#ae81ff">10</span>);
+    
+            $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">expects</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">once</span>())
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">method</span>(<span style="color:#e6db74">&#39;getDistance&#39;</span>)
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">willReturn</span>(<span style="color:#ae81ff">10</span>);
+    
+            $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">expects</span>($this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">once</span>())
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">method</span>(<span style="color:#e6db74">&#39;getPricePerKm&#39;</span>)
+                <span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">willReturn</span>(<span style="color:#ae81ff">1</span>);
+    
+            $calculator <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">PriceCalculator</span>();
+            $price <span style="color:#f92672">=</span> $calculator<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">calculate</span>($carRental);
+    
+            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">assertSame</span>(<span style="color:#ae81ff">110</span>, $price);
+        }
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+That&rsquo;s a big test.</p>
+<p>It mocks a few things, then calls the calculator and asserts the results. All in all a very simple unit test, but not a fun one to write.</p>
+<h2 id="turning-code-into-a-lot-more-code">Turning code into a lot more code</h2>
+<p>If we take a look at that <code>PriceCalculator</code> class you can see it structurally does 2 things: it <strong>fetches data</strong> and <strong>performs actions</strong> on that data. Or in other words: it <strong>integrates</strong> and <strong>operates.</strong></p>
+<p>At this point, you probably already figured out when the Integration Operation Segregation Principle is all about: splitting these up. Let me show what the previous class looks like with this principle applied:
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+    <span style="color:#66d9ef">declare</span>(<span style="color:#a6e22e">strict_types</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>);
+    
+    <span style="color:#66d9ef">namespace</span> <span style="color:#a6e22e">Car\Rent</span>;
+    
+    <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PriceCalculator</span>
+    {
+        <span style="color:#66d9ef">private</span> $dateRangePriceCalculator;
+        <span style="color:#66d9ef">private</span> $distancePriceCalculator;
+        <span style="color:#66d9ef">private</span> $dayDistanceCalculator;
+    
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> __construct(
+            <span style="color:#a6e22e">DateRangePriceCalculator</span> $dateRangePriceCalculator,
+            <span style="color:#a6e22e">DistancePriceCalculator</span> $distancePriceCalculator,
+            <span style="color:#a6e22e">DayDistanceCalculator</span> $dayDistanceCalculator
+        )
+        {
+            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">dateRangePriceCalculator</span> <span style="color:#f92672">=</span> $dateRangePriceCalculator;
+            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">distancePriceCalculator</span> <span style="color:#f92672">=</span> $distancePriceCalculator;
+            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">dayDistanceCalculator</span> <span style="color:#f92672">=</span> $dayDistanceCalculator;
+        }
+    
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">calculate</span>(<span style="color:#a6e22e">CarRental</span> $carRental)<span style="color:#f92672">:</span> <span style="color:#a6e22e">int</span>
+        {
+            $startDate <span style="color:#f92672">=</span> $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getStartDate</span>();
+            $endDate <span style="color:#f92672">=</span> $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getEndDate</span>();
+            $days <span style="color:#f92672">=</span> $startDate<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">diff</span>($endDate);
+    
+            $dayPrice <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">dateRangePriceCalculator</span><span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">calculate</span>(
+                $days,
+                $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getPricePerDay</span>()
+            );
+            $distancePrice <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">distancePriceCalculator</span><span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">calculate</span>(
+                $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getDistance</span>(), 
+    						$carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getPricePerKm</span>()
+            );
+    
+            <span style="color:#66d9ef">return</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">dayDistanceCalculator</span><span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">calculate</span>(
+    						$dayPrice, 
+    						$distancePrice
+    				);
+        }
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+    <span style="color:#66d9ef">declare</span>(<span style="color:#a6e22e">strict_types</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>);
+    
+    <span style="color:#66d9ef">namespace</span> <span style="color:#a6e22e">Car\Rent</span>;
+    
+    <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DateRangePriceCalculator</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">calculate</span>(<span style="color:#a6e22e">int</span> $days, <span style="color:#a6e22e">int</span> $pricePerDay) <span style="color:#f92672">:</span><span style="color:#a6e22e">int</span>
+        {
+            <span style="color:#66d9ef">return</span> $days <span style="color:#f92672">*</span> $pricePerDay;
+        }
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+    <span style="color:#66d9ef">declare</span>(<span style="color:#a6e22e">strict_types</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>);
+    
+    <span style="color:#66d9ef">namespace</span> <span style="color:#a6e22e">Car\Rent</span>;
+    
+    <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DistancePriceCalculator</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">calculate</span>(<span style="color:#a6e22e">int</span> $distance, <span style="color:#a6e22e">int</span> $pricePerKm)<span style="color:#f92672">:</span> <span style="color:#a6e22e">int</span>
+        {
+            <span style="color:#66d9ef">return</span> $distance <span style="color:#f92672">*</span> $pricePerKm;
+        }
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+    <span style="color:#66d9ef">declare</span>(<span style="color:#a6e22e">strict_types</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>);
+    
+    <span style="color:#66d9ef">namespace</span> <span style="color:#a6e22e">Car\Rent</span>;
+    
+    <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DayDistanceCalculator</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">calculate</span>(<span style="color:#a6e22e">int</span> $dayPrice, <span style="color:#a6e22e">int</span> $distancePrice)<span style="color:#f92672">:</span> <span style="color:#a6e22e">int</span>
+        {
+            <span style="color:#66d9ef">return</span> $dayPrice <span style="color:#f92672">+</span> $distancePrice;
+        }
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+&ldquo;Frederick you devious hack!&rdquo; you might shout, You&rsquo;ve turned a small method into a 4 class method that more than doubles the lines of code.</p>
+<p>Well, you&rsquo;re not wrong. It&rsquo;s way more code. And on first glance, it looks way more complex. But let&rsquo;s take a step back and go over it.</p>
+<h2 id="extracting-complexity">Extracting complexity</h2>
+<p>if you strip away the dependency injection etc, you&rsquo;re left with
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">calculate</span>(<span style="color:#a6e22e">CarRental</span> $carRental)<span style="color:#f92672">:</span> <span style="color:#a6e22e">int</span>
+    {
+        $startDate <span style="color:#f92672">=</span> $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getStartDate</span>();
+        $endDate <span style="color:#f92672">=</span> $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getEndDate</span>();
+        $days <span style="color:#f92672">=</span> $startDate<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">diff</span>($endDate);
+
+        $dayPrice <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">dateRangePriceCalculator</span><span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">calculate</span>(
+            $days,
+            $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getPricePerDay</span>()
+        );
+        $distancePrice <span style="color:#f92672">=</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">distancePriceCalculator</span><span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">calculate</span>(
+            $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getDistance</span>(), 
+                        $carRental<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">getPricePerKm</span>()
+        );
+
+        <span style="color:#66d9ef">return</span> $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">dayDistanceCalculator</span><span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">calculate</span>(
+                        $dayPrice, 
+                        $distancePrice
+                );
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+There is nothing complex going on here. Everything perfectly describes what is happening. That <code>$dayPrice</code> ? Oh, it&rsquo;s been calculated, how is it being calculated? Who cares. No need to worry about it. Someone with almost no programming knowledge can read this method and fully understand what&rsquo;s happening here.</p>
+<p>But what about the logic.
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+    <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DateRangePriceCalculator</span>
+    {
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">calculate</span>(<span style="color:#a6e22e">int</span> $days, <span style="color:#a6e22e">int</span> $pricePerDay)<span style="color:#f92672">:</span> <span style="color:#a6e22e">int</span>
+        {
+            <span style="color:#66d9ef">return</span> $days <span style="color:#f92672">*</span> $pricePerDay;
+        }
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+I would argue that the logic in there is even more simple.</p>
+<p>In the future, there might be some business logic changes (we might need to do something with tax?). We now know where we can do that, everything is contained in this little class.</p>
+<p>This is also a nice illustration of the <a href="https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle">Open–closed principle</a>.</p>
+<p>So yes, we do have a lot more code. But it&rsquo;s all very simple code, easy to read, easy to debug and the coolest of all: Easy to test.
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    <span style="color:#75715e">&lt;?php</span>
+    <span style="color:#66d9ef">declare</span>(<span style="color:#a6e22e">strict_types</span><span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>);
+    
+    <span style="color:#66d9ef">namespace</span> <span style="color:#a6e22e">Tests\Car\Rent</span>;
+    
+    <span style="color:#66d9ef">use</span> <span style="color:#a6e22e">Car\Rent\DateRangePriceCalculator</span>;
+    
+    <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DateRangePriceCalculatorTest</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">TestCase</span>
+    {
+        <span style="color:#e6db74">/**
+</span><span style="color:#e6db74">         * @test
+</span><span style="color:#e6db74">         */</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">it_calculates_a_price_for_a_date_range</span>()
+        {
+            $dateRangeCaluclator <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">DateRangePriceCalculator</span>();
+            $price <span style="color:#f92672">=</span> $dateRangeCaluclator<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">calculate</span>(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">50</span>);
+    
+            $this<span style="color:#f92672">-&gt;</span><span style="color:#a6e22e">assertSame</span>(<span style="color:#ae81ff">100</span>, $price);
+        }
+    }
+</code></pre></td></tr></table>
+</div>
+</div>
+Now that is a nice unit test. No mocks, easy to write, easy to read. (compare this to the unit test at the top of this article).</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>As you can see the Integration Operation Segregation Principle is just a long and complicated term to describe something very simple. This all might seem like a lot of work, but it&rsquo;s worth it. Your code and especially your tests will thank you later</p>
+<p>If you want to read more about this, do check out this incredible blogpost: <a href="http://geekswithblogs.net/theArchitectsNapkin/archive/2014/09/13/the-incremental-architectacutes-napkin---7---nest-flows-to.aspx">The Incremental Architect´s Napkin - #7 - Nest flows to scale functional design</a></p>
+
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div><div class="container">
+        <div class="row justify-content-center">
+            <div class="col-9">
+                <div class="bio-card">
+                    <div class="row bio-card-body">
+                        <div class="col-xs-12 col-md-5 bio-card-image">
+                            <a href="https://twitter.com/maybeFrederick">
+                                <img src="/assets/images/my-face.jpg" alt="my face" class="img-responsive" />
+                            </a>
+                        </div>
+                        <div class="col-xs-12 col-md-7 bio-card-txt">
+                            <h2>Hey thanks for reading!</h2>
+                            <p>Hope you enjoyed this post. There is no comments section here, if you've ever seen the YouTube comments
+                                section you'll probably understand why. If you have any remarks or comments on this topic, please
+                                dont hesitate to reach out on
+                                <a href="https://twitter.com/maybeFrederick">Twitter</a> or send me a
+                                <a href="mailto:frederick@brodyandhooper.com" target="_top">mail.</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="footer">
+        <div class="container">
+            <div class="padder">
+                <div class="row">
+                    <div class='col-sm-8 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Latest posts</h2>
+                            </header>
+                            <ul>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/">Posts</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-05-09-binary-tree/">What is a binary tree and why would I ever want to reverse it</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/">The simple class</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-12-13-a-love-letter-to-legacy/">A love letter to legacy projects</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-10-08-integration-operation-segregation-principle/">The Integration Operation Segregation Principle</a></h3>
+                                </li>
+                                
+                            </ul>
+                        </section>
+                    </div>
+                    <div class='col-sm-4 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Who now?</h2>
+                            </header>
+                            <p>Frederick is a Webdeveloper from Antwerp Belgium with a love for legacy code and APIs. He is the founder of
+                                Brody & Hooper</p>
+    
+                            If you want to stay up to date on my ramblings you can subscribe to this 90's thing called
+                            <a href="https://frederickvanbrabant.comindex.xml">Rss</a>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+     crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+     crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    
+        ga('create', 'UA-98268819-1', 'auto');
+        ga('send', 'pageview');
+    
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Person",
+      "name": "Frederick Vanbrabant",
+      "url": "http://www.frederickvanbrabant.com",
+      "sameAs": [
+        "https://twitter.com/maybeFrederick",
+        "https://www.linkedin.com/in/frederickvanbrabant/",
+        "https://github.com/vanbrabantf",
+        "https://symposiumapp.com/u/frederick",
+        "http://www.speakersbase.com/frederick-vanbrabant"
+      ]
+    }
+    </script>
+    
+    </html>

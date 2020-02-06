@@ -1,0 +1,255 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<html>
+	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="description" content="Webdeveloper from Antwerp Belgium with a love for legacy code and APIs">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="author" content="Frederick Vanbrabant" />
+    	<title>Frederick Vanbrabant delirious rantings</title>
+
+		
+		<meta name="twitter:site" content="@maybefrederick" />
+        <meta name="twitter:description" content="" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:creator" content="@maybefrederick" />
+		<meta name="twitter:title" content="On how to implement a code of conduct" />
+
+		
+			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2016-01-29-on-how-to-implement-a-code-of-conduct/tump.png" />
+			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2016-01-29-on-how-to-implement-a-code-of-conduct/tump.png" />
+		
+
+
+    	
+    	<meta name="msapplication-tap-highlight" content="no">
+
+    	
+    	<link rel="manifest" href="/assets/manifest.json">
+
+    	 
+	    <meta name="mobile-web-app-capable" content="yes">
+	    <meta name="application-name" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="icon" sizes="192x192" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="apple-mobile-web-app-capable" content="yes">
+	    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+	    <meta name="apple-mobile-web-app-title" content="Frederick Vanbrabant delirious rantings">
+	    <link rel="apple-touch-icon" href="/assets/images/touch/chrome-touch-icon-192x192.png">
+
+	    
+	    <meta name="msapplication-TileImage" content="/assets/images/touch/chrome-touch-icon-144x144.png">
+	    <meta name="msapplication-TileColor" content="#d52349">
+
+	    
+    	<meta name="theme-color" content="#d52349">
+
+		<script>
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', function() {
+					navigator.serviceWorker.register('/assets/js/serviceworker.js').then(function(registration) {
+						
+						console.log('ServiceWorker registration successful with scope: ', registration.scope);
+					}).catch(function(err) {
+						
+						console.log('ServiceWorker registration failed: ', err);
+					});
+				});
+			}
+		</script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/style.css" />
+	</head>
+
+
+<div class="container">
+        <div class="row header">
+            <div class="col padding-0">
+                <h1><a href="/index.html">Frederick Vanbrabant's</a></h1>
+                <h2>delirious rantings</h2>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron cover-image" style="background-image: url('/assets/posts/2016-01-29-on-how-to-implement-a-code-of-conduct/header.png');" >
+    </div>
+        
+    <div id="main-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col">
+			
+				<section>
+					<header class="blog-title">
+						<h1>On how to implement a code of conduct</h1>
+						<p>Posted 29 January, 2016- About 4 mins to read</p>
+					</header>
+					<div class="row blog-body">
+						<div class="col">
+							<section>
+								<p><strong>This post wast orignially posted on the <a href="https://blog.madewithlove.be/">madewithlove</a> site</strong></p>
+<h2 id="preface">Preface</h2>
+<p>Recently there has been a lot of commotion around code of conducts and if a user group/open-source project should implement them or not. This is not a post about that, we shall not be discussing the ethics or possible political impact this brings with it. We will however propose a starting point on <strong>how</strong> to implement them.</p>
+<p>Please note that I am in no way an expert in this field, this blogpost is the result of endless talks with colleagues / friends and people I bugged on Slack (extra thanks to <a href="https://twitter.com/phalt_">Paul Hallett</a> and <a href="https://twitter.com/developerjack">Jack Skinner</a>).</p>
+<p>So without further ado, I&rsquo;ve made an easy 7 step program to follow along (this is the perfect time to fetch coffee or tea):</p>
+<h2 id="steps">Steps</h2>
+<h3 id="1-what-is-a-coc">1. What is a CoC?</h3>
+<p>This is where the bulk of the drama comes from; most people are not really informed about what a Code of Conduct really is or start to overthink the concept. In essence it&rsquo;s actually really simple:</p>
+<p>A CoC or a code of conduct boils down to a list of rules. These rules can be as verbose or short as you like, as strict or as loose as you like. It&rsquo;s just an outline of how people should behave when they attend your conference or contribute to your open-source project.</p>
+<p>Lots of places have a code of conduct, like for example a bar, think &ldquo;we don&rsquo;t serve people without shoes&rdquo;.</p>
+<h3 id="2-do-i-need-a-coc">2. Do I need a CoC?</h3>
+<p>You might react with: &ldquo;Well we&rsquo;ve never had any problems before and I don&rsquo;t see the point in having one&rdquo;. Sure, don&rsquo;t adopt one. The world isn&rsquo;t going to end if you don&rsquo;t adopt one.</p>
+<p>On the other hand a CoC can have the advantage that everyone clearly knows what&rsquo;s up. So if you turn into problems later down the line, you can easily refer to the rules.</p>
+<p>Just make up your mind. As stated before, this post is not about whether or not you should implement one.</p>
+<p>If you don&rsquo;t want to implement one, you can skip to step 7.</p>
+<h3 id="3-should-i-write-one-myself">3. Should I write one myself?</h3>
+<p>As always there is a lot of debate around this. You could if you want, but the general opinion is the same as on encryption, &ldquo;Don&rsquo;t invent your own&rdquo;. Writing your own is pretty catchy (believe me, I&rsquo;ve tried). There are lots of things to think about and frankly you probably want a CoC that&rsquo;s clear about its contents.</p>
+<p>If you want to write a CoC that states:</p>
+<ul>
+<li>Be: awesome.</li>
+<li>Don&rsquo;t be: not awesome.</li>
+</ul>
+<p>That&rsquo;s all good, but know that you&rsquo;ll be spending more of your time arguing about what passes as &ldquo;Being awesome&rdquo; then doing the thing you want to do. Holding conferences or writing code.</p>
+<p>So if you want to save yourself some trouble and or time down the line, a good idea is to implement something that&rsquo;s already thought out and proven to work.</p>
+<h3 id="4-whats-out-there">4. What&rsquo;s out there?</h3>
+<p>Luckily there are some easy ways to adopt CoCs out there, for example <a href="http://geekfeminism.wikia.com/">geekfeminism</a> has a conference blueprint that can be used to roll your own: <a href="http://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy">conferences CoC</a>, if that one doesn&rsquo;t fit your bill there are others out there, for example: <a href="http://confcodeofconduct.com/">Conference Code of Conduct</a>.</p>
+<p>If you rather check out the codes of conduct of famous open-source projects/conferences and fit them to your needs, here are a few:</p>
+<ul>
+<li><a href="https://www.djangoproject.com/conduct/">Django Code of Conduct</a></li>
+<li><a href="https://wiki.python.org/moin/DiversityInPython">Diversity In Python</a></li>
+<li><a href="http://events.linuxfoundation.org/code-of-conduct">Linux Code of Conduct</a></li>
+<li><a href="https://www.drupal.org/dcoc">Drupal Code of Conduct</a></li>
+<li><a href="https://support.google.com/developergroups/answer/3340512?hl=en">Google&rsquo;s Anti-Harassment Policy (template)</a></li>
+</ul>
+<p>And there are a lot more out there. (If I forgot a major one, please contact me, or leave a comment).</p>
+<h3 id="5-pick-one">5. Pick one</h3>
+<p>So now comes the difficult part, choose one. This means:</p>
+<ul>
+<li>Read them.</li>
+<li>Take one that you think fits your project/conference best.</li>
+<li>Possibly adapt it to your needs. (if you adapt it, make it clear you&rsquo;ve done so)</li>
+</ul>
+<p>Please note that I don&rsquo;t want to favor one over the other, this is your choice here.</p>
+<h3 id="6-implement-it">6. Implement it</h3>
+<p>Ok, you&rsquo;ve chosen your CoC. Now is the moment you want to share it with the world. Make sure you clearly show that you have a CoC and that you expect people to follow it. People can&rsquo;t follow a CoC if they don&rsquo;t know it exists.</p>
+<h3 id="7-communicate">7. Communicate</h3>
+<p>You&rsquo;ve chosen a CoC, or not, you&rsquo;ve put it out there, we are done right?</p>
+<p>Well no. Open-source is all about community. A project is never an island. There will be reactions on your decisions (if there aren&rsquo;t you should ask for them), now it&rsquo;s the time to discuss it with the community. Again, how you handle them is up to you, but it could be wise to be open to them (if you think they&rsquo;re good) and be willing to adjust some parts.</p>
+<p>These things are like code, they can always be improved upon.</p>
+
+							</section>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+</div><div class="container">
+        <div class="row justify-content-center">
+            <div class="col-9">
+                <div class="bio-card">
+                    <div class="row bio-card-body">
+                        <div class="col-xs-12 col-md-5 bio-card-image">
+                            <a href="https://twitter.com/maybeFrederick">
+                                <img src="/assets/images/my-face.jpg" alt="my face" class="img-responsive" />
+                            </a>
+                        </div>
+                        <div class="col-xs-12 col-md-7 bio-card-txt">
+                            <h2>Hey thanks for reading!</h2>
+                            <p>Hope you enjoyed this post. There is no comments section here, if you've ever seen the YouTube comments
+                                section you'll probably understand why. If you have any remarks or comments on this topic, please
+                                dont hesitate to reach out on
+                                <a href="https://twitter.com/maybeFrederick">Twitter</a> or send me a
+                                <a href="mailto:frederick@brodyandhooper.com" target="_top">mail.</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="footer">
+        <div class="container">
+            <div class="padder">
+                <div class="row">
+                    <div class='col-sm-8 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Latest posts</h2>
+                            </header>
+                            <ul>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/">Posts</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-05-09-binary-tree/">What is a binary tree and why would I ever want to reverse it</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2019-04-03-the-simple-class/">The simple class</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-12-13-a-love-letter-to-legacy/">A love letter to legacy projects</a></h3>
+                                </li>
+                                
+                                <li>
+                                    <h3><a href="https://frederickvanbrabant.com/post/2018-10-08-integration-operation-segregation-principle/">The Integration Operation Segregation Principle</a></h3>
+                                </li>
+                                
+                            </ul>
+                        </section>
+                    </div>
+                    <div class='col-sm-4 col-12'>
+                        <section class='footer-items'>
+                            <header>
+                                <h2>Who now?</h2>
+                            </header>
+                            <p>Frederick is a Webdeveloper from Antwerp Belgium with a love for legacy code and APIs. He is the founder of
+                                Brody & Hooper</p>
+    
+                            If you want to stay up to date on my ramblings you can subscribe to this 90's thing called
+                            <a href="https://frederickvanbrabant.comindex.xml">Rss</a>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+     crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+     crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    
+        ga('create', 'UA-98268819-1', 'auto');
+        ga('send', 'pageview');
+    
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Person",
+      "name": "Frederick Vanbrabant",
+      "url": "http://www.frederickvanbrabant.com",
+      "sameAs": [
+        "https://twitter.com/maybeFrederick",
+        "https://www.linkedin.com/in/frederickvanbrabant/",
+        "https://github.com/vanbrabantf",
+        "https://symposiumapp.com/u/frederick",
+        "http://www.speakersbase.com/frederick-vanbrabant"
+      ]
+    }
+    </script>
+    
+    </html>
