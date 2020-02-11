@@ -5,10 +5,49 @@
         <description>Recent content in Posts on Frederick Vanbrabant delirious rantings</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-US</language>
-        <lastBuildDate>Thu, 09 May 2019 00:00:00 +0000</lastBuildDate>
+        <lastBuildDate>Fri, 07 Feb 2020 00:00:00 +0000</lastBuildDate>
         
         <atom:link href="https://frederickvanbrabant.com/post/index.xml" rel="self" type="application/rss+xml" />
         
+        
+        <item>
+            <title>The economics of clean code</title>
+            <link>https://frederickvanbrabant.com/post/2020-02-07-the-economics-of-clean-code/</link>
+            <pubDate>Fri, 07 Feb 2020 00:00:00 +0000</pubDate>
+            
+            <guid>https://frederickvanbrabant.com/post/2020-02-07-the-economics-of-clean-code/</guid>
+            <description>&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;The only way to make the deadline — the only way to go fast — is to keep the code as clean as possible at all times.&amp;rdquo; — Robert C. Martin&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I&amp;rsquo;m afraid I have to disagree with this statement. Let me tell you why.&lt;/p&gt;
+&lt;h1 id=&#34;what-is-clean-code&#34;&gt;What is clean code&lt;/h1&gt;
+&lt;p&gt;There seem to be many opinions surrounding clean code. Some people have an entire architecture of how code should look. Others stick to the actual layout of the code, or length of a class while even others vaguely point towards &lt;em&gt;Robert C. Martin&amp;rsquo;s&lt;/em&gt; books.&lt;/p&gt;
+&lt;p&gt;One thing is clear; it&amp;rsquo;s something that&amp;rsquo;s really on a lot of developers mind. Clean code makes projects more comfortable to work with and improves shelf life. It&amp;rsquo;s the antagonist of vile legacy codebases that are unmaintainable.&lt;/p&gt;
+&lt;p&gt;Then why does business always treat it as a secondary objective? Do they just don&amp;rsquo;t get it?&lt;/p&gt;
+&lt;h1 id=&#34;business-needs-vs-developers-struggles&#34;&gt;Business needs vs developers struggles&lt;/h1&gt;
+&lt;p&gt;Clean code and architecture indeed allow businesses to have a more maintainable product. But I&amp;rsquo;m sure you would agree that before you can have a maintainable product, you should first strive to have an actual product.&lt;/p&gt;
+&lt;p&gt;The foundations of a product are undoubtedly essential; they dictate the mindset of the months/years to come, but they also take a tremendous amount of time. Time in which the project isn&amp;rsquo;t moving. If the project isn&amp;rsquo;t moving, we are not generating revenue. Every start indeed requires a startup cost, but we also need the lights burning and the espresso flowing.&lt;/p&gt;
+&lt;p&gt;This entire mindset was partly the start of the agile movement. Build a minimal viable product, get it to the market fast; see if there is a demand, iterate.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s where that horrible motto from Facebook comes from: &amp;ldquo;move fast and break things&amp;rdquo;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It seems we&amp;rsquo;ve come to an impasse: the tech side wants a well balanced and nutritional dinner, while the business side wants fast food&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;technical-debt&#34;&gt;Technical debt&lt;/h1&gt;
+&lt;p&gt;So yes, that mindset results in those &lt;code&gt;paymentsService&lt;/code&gt; god classes that are 5000 lines long and nobody dares to touch. Controllers that speak directly to databases; in short, technical debt.&lt;/p&gt;
+&lt;p&gt;It seems we&amp;rsquo;ve come to an impasse: the tech side wants a well balanced and nutritional dinner, while the business side wants fast food. But it&amp;rsquo;s essential to realise that it&amp;rsquo;s not a tug of war. It&amp;rsquo;s better to look at it as a process that needs some leniency from both sides.&lt;/p&gt;
+&lt;p&gt;As said in the previous chapter, you can&amp;rsquo;t build a product in a vacuum. You need to stave it against the market. Otherwise, you risk much capital against untested ideas. Investing a third of your budget before you even can think of a front-end might be a bit risky from a business standpoint.&lt;/p&gt;
+&lt;p&gt;On the other side, keeping acquiring technical debt is also not a way forward. You will, indeed have a quick start. Implement features in days instead of weeks. &amp;hellip; till you can&amp;rsquo;t anymore. Just like financial debt, technical debt will eventually catch up with you. And it can end your business just as quickly. It&amp;rsquo;s great to have a product that&amp;rsquo;s a perfect market fit, but if you can&amp;rsquo;t keep up with your competitors cause your application is too slow, or features can&amp;rsquo;t be implemented quickly enough due to the technical mess, you will lose out.&lt;/p&gt;
+&lt;p&gt;So treat that technical debt as your would financial debt. Use it to invest it into your project. But keep track of it and pay it off. I would recommend &lt;a href=&#34;http://verraes.net/2020/01/wall-of-technical-debt/&#34;&gt;this post&lt;/a&gt; from &lt;a href=&#34;https://twitter.com/mathiasverraes&#34;&gt;Mathias Verraes&lt;/a&gt; on how you can do this.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://imgs.xkcd.com/comics/good_code.png&#34; alt=&#34;XKCD comic about good code&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Image courtesy of XKCD (&lt;a href=&#34;https://xkcd.com/844/&#34;&gt;https://xkcd.com/844/&lt;/a&gt;)&lt;/p&gt;
+&lt;h1 id=&#34;long-term-thinking-vs-quick-wins&#34;&gt;Long term thinking vs quick wins&lt;/h1&gt;
+&lt;p&gt;You also have to keep the scope of the project in mind. Some people build systems with the mindset that it might blow up anytime and we&amp;rsquo;re going to need to support this for years to come. Other people start big projects without tests and pretend that they&amp;rsquo;re going to write them in the future, &amp;ldquo;when there is time&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s critical to strike a decent balance here and reevaluate the scope and market position of the product at regular intervals. This evaluation should not be only on the business or technical side; this is a team effort and should also be communicated that way.&lt;/p&gt;
+&lt;h1 id=&#34;my-takeaways-tldr&#34;&gt;My takeaways (TL;DR)&lt;/h1&gt;
+&lt;p&gt;It&amp;rsquo;s essential to realise what you are building and the impact it will have in the near and far future. Keep the short time roadmap concise and don&amp;rsquo;t over-invest (financially and technically) but also don&amp;rsquo;t try and outrun the liabilities you are taking on along the way.&lt;/p&gt;
+&lt;p&gt;Keep communication of the status and impact of the project open towards the entire team, and reevaluate these values on a regular timeframe. Adapt your level of technical investment according to these projections.&lt;/p&gt;
+</description>
+        </item>
         
         <item>
             <title>What is a binary tree and why would I ever want to reverse it</title>

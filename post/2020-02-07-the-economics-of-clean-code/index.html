@@ -14,11 +14,11 @@
         <meta name="twitter:description" content="" />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:creator" content="@maybefrederick" />
-		<meta name="twitter:title" content="On how to implement a code of conduct" />
+		<meta name="twitter:title" content="The economics of clean code" />
 
 		
-			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2016-01-29-on-how-to-implement-a-code-of-conduct/tump.png" />
-			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2016-01-29-on-how-to-implement-a-code-of-conduct/tump.png" />
+			<meta property="og:image" content="https://frederickvanbrabant.com/assets/posts/2020-02-07-economics/tump.jpg" />
+			<meta name="twitter:image" content="https://frederickvanbrabant.com/assets/posts/2020-02-07-economics/tump.jpg" />
 		
 
 
@@ -72,7 +72,7 @@
             </div>
         </div>
     </div>
-    <div class="jumbotron cover-image" style="background-image: url('/assets/posts/2016-01-29-on-how-to-implement-a-code-of-conduct/header.png');" >
+    <div class="jumbotron cover-image" style="background-image: url('/assets/posts/2020-02-07-economics/header.jpg');" >
     </div>
         
     <div id="main-wrapper">
@@ -82,61 +82,42 @@
 			
 				<section>
 					<header class="blog-title">
-						<h1>On how to implement a code of conduct</h1>
-						<p>Posted 29 January, 2016- About 4 mins to read</p>
+						<h1>The economics of clean code</h1>
+						<p>Posted 7 February, 2020- About 4 mins to read</p>
 					</header>
 					<div class="row blog-body">
 						<div class="col">
 							<section>
-								<p><strong>This post wast orignially posted on the <a href="https://blog.madewithlove.be/">madewithlove</a> site</strong></p>
-<h2 id="preface">Preface</h2>
-<p>Recently there has been a lot of commotion around code of conducts and if a user group/open-source project should implement them or not. This is not a post about that, we shall not be discussing the ethics or possible political impact this brings with it. We will however propose a starting point on <strong>how</strong> to implement them.</p>
-<p>Please note that I am in no way an expert in this field, this blogpost is the result of endless talks with colleagues / friends and people I bugged on Slack (extra thanks to <a href="https://twitter.com/phalt_">Paul Hallett</a> and <a href="https://twitter.com/developerjack">Jack Skinner</a>).</p>
-<p>So without further ado, I&rsquo;ve made an easy 7 step program to follow along (this is the perfect time to fetch coffee or tea):</p>
-<h2 id="steps">Steps</h2>
-<h3 id="1-what-is-a-coc">1. What is a CoC?</h3>
-<p>This is where the bulk of the drama comes from; most people are not really informed about what a Code of Conduct really is or start to overthink the concept. In essence it&rsquo;s actually really simple:</p>
-<p>A CoC or a code of conduct boils down to a list of rules. These rules can be as verbose or short as you like, as strict or as loose as you like. It&rsquo;s just an outline of how people should behave when they attend your conference or contribute to your open-source project.</p>
-<p>Lots of places have a code of conduct, like for example a bar, think &ldquo;we don&rsquo;t serve people without shoes&rdquo;.</p>
-<h3 id="2-do-i-need-a-coc">2. Do I need a CoC?</h3>
-<p>You might react with: &ldquo;Well we&rsquo;ve never had any problems before and I don&rsquo;t see the point in having one&rdquo;. Sure, don&rsquo;t adopt one. The world isn&rsquo;t going to end if you don&rsquo;t adopt one.</p>
-<p>On the other hand a CoC can have the advantage that everyone clearly knows what&rsquo;s up. So if you turn into problems later down the line, you can easily refer to the rules.</p>
-<p>Just make up your mind. As stated before, this post is not about whether or not you should implement one.</p>
-<p>If you don&rsquo;t want to implement one, you can skip to step 7.</p>
-<h3 id="3-should-i-write-one-myself">3. Should I write one myself?</h3>
-<p>As always there is a lot of debate around this. You could if you want, but the general opinion is the same as on encryption, &ldquo;Don&rsquo;t invent your own&rdquo;. Writing your own is pretty catchy (believe me, I&rsquo;ve tried). There are lots of things to think about and frankly you probably want a CoC that&rsquo;s clear about its contents.</p>
-<p>If you want to write a CoC that states:</p>
-<ul>
-<li>Be: awesome.</li>
-<li>Don&rsquo;t be: not awesome.</li>
-</ul>
-<p>That&rsquo;s all good, but know that you&rsquo;ll be spending more of your time arguing about what passes as &ldquo;Being awesome&rdquo; then doing the thing you want to do. Holding conferences or writing code.</p>
-<p>So if you want to save yourself some trouble and or time down the line, a good idea is to implement something that&rsquo;s already thought out and proven to work.</p>
-<h3 id="4-whats-out-there">4. What&rsquo;s out there?</h3>
-<p>Luckily there are some easy ways to adopt CoCs out there, for example <a href="http://geekfeminism.wikia.com/">geekfeminism</a> has a conference blueprint that can be used to roll your own: <a href="http://geekfeminism.wikia.com/wiki/Conference_anti-harassment/Policy">conferences CoC</a>, if that one doesn&rsquo;t fit your bill there are others out there, for example: <a href="http://confcodeofconduct.com/">Conference Code of Conduct</a>.</p>
-<p>If you rather check out the codes of conduct of famous open-source projects/conferences and fit them to your needs, here are a few:</p>
-<ul>
-<li><a href="https://www.djangoproject.com/conduct/">Django Code of Conduct</a></li>
-<li><a href="https://wiki.python.org/moin/DiversityInPython">Diversity In Python</a></li>
-<li><a href="http://events.linuxfoundation.org/code-of-conduct">Linux Code of Conduct</a></li>
-<li><a href="https://www.drupal.org/dcoc">Drupal Code of Conduct</a></li>
-<li><a href="https://support.google.com/developergroups/answer/3340512?hl=en">Google&rsquo;s Anti-Harassment Policy (template)</a></li>
-</ul>
-<p>And there are a lot more out there. (If I forgot a major one, please contact me, or leave a comment).</p>
-<h3 id="5-pick-one">5. Pick one</h3>
-<p>So now comes the difficult part, choose one. This means:</p>
-<ul>
-<li>Read them.</li>
-<li>Take one that you think fits your project/conference best.</li>
-<li>Possibly adapt it to your needs. (if you adapt it, make it clear you&rsquo;ve done so)</li>
-</ul>
-<p>Please note that I don&rsquo;t want to favor one over the other, this is your choice here.</p>
-<h3 id="6-implement-it">6. Implement it</h3>
-<p>Ok, you&rsquo;ve chosen your CoC. Now is the moment you want to share it with the world. Make sure you clearly show that you have a CoC and that you expect people to follow it. People can&rsquo;t follow a CoC if they don&rsquo;t know it exists.</p>
-<h3 id="7-communicate">7. Communicate</h3>
-<p>You&rsquo;ve chosen a CoC, or not, you&rsquo;ve put it out there, we are done right?</p>
-<p>Well no. Open-source is all about community. A project is never an island. There will be reactions on your decisions (if there aren&rsquo;t you should ask for them), now it&rsquo;s the time to discuss it with the community. Again, how you handle them is up to you, but it could be wise to be open to them (if you think they&rsquo;re good) and be willing to adjust some parts.</p>
-<p>These things are like code, they can always be improved upon.</p>
+								<blockquote>
+<p>&ldquo;The only way to make the deadline — the only way to go fast — is to keep the code as clean as possible at all times.&rdquo; — Robert C. Martin</p>
+</blockquote>
+<p>I&rsquo;m afraid I have to disagree with this statement. Let me tell you why.</p>
+<h1 id="what-is-clean-code">What is clean code</h1>
+<p>There seem to be many opinions surrounding clean code. Some people have an entire architecture of how code should look. Others stick to the actual layout of the code, or length of a class while even others vaguely point towards <em>Robert C. Martin&rsquo;s</em> books.</p>
+<p>One thing is clear; it&rsquo;s something that&rsquo;s really on a lot of developers mind. Clean code makes projects more comfortable to work with and improves shelf life. It&rsquo;s the antagonist of vile legacy codebases that are unmaintainable.</p>
+<p>Then why does business always treat it as a secondary objective? Do they just don&rsquo;t get it?</p>
+<h1 id="business-needs-vs-developers-struggles">Business needs vs developers struggles</h1>
+<p>Clean code and architecture indeed allow businesses to have a more maintainable product. But I&rsquo;m sure you would agree that before you can have a maintainable product, you should first strive to have an actual product.</p>
+<p>The foundations of a product are undoubtedly essential; they dictate the mindset of the months/years to come, but they also take a tremendous amount of time. Time in which the project isn&rsquo;t moving. If the project isn&rsquo;t moving, we are not generating revenue. Every start indeed requires a startup cost, but we also need the lights burning and the espresso flowing.</p>
+<p>This entire mindset was partly the start of the agile movement. Build a minimal viable product, get it to the market fast; see if there is a demand, iterate.</p>
+<p>It&rsquo;s where that horrible motto from Facebook comes from: &ldquo;move fast and break things&rdquo;.</p>
+<blockquote>
+<p>It seems we&rsquo;ve come to an impasse: the tech side wants a well balanced and nutritional dinner, while the business side wants fast food</p>
+</blockquote>
+<h1 id="technical-debt">Technical debt</h1>
+<p>So yes, that mindset results in those <code>paymentsService</code> god classes that are 5000 lines long and nobody dares to touch. Controllers that speak directly to databases; in short, technical debt.</p>
+<p>It seems we&rsquo;ve come to an impasse: the tech side wants a well balanced and nutritional dinner, while the business side wants fast food. But it&rsquo;s essential to realise that it&rsquo;s not a tug of war. It&rsquo;s better to look at it as a process that needs some leniency from both sides.</p>
+<p>As said in the previous chapter, you can&rsquo;t build a product in a vacuum. You need to stave it against the market. Otherwise, you risk much capital against untested ideas. Investing a third of your budget before you even can think of a front-end might be a bit risky from a business standpoint.</p>
+<p>On the other side, keeping acquiring technical debt is also not a way forward. You will, indeed have a quick start. Implement features in days instead of weeks. &hellip; till you can&rsquo;t anymore. Just like financial debt, technical debt will eventually catch up with you. And it can end your business just as quickly. It&rsquo;s great to have a product that&rsquo;s a perfect market fit, but if you can&rsquo;t keep up with your competitors cause your application is too slow, or features can&rsquo;t be implemented quickly enough due to the technical mess, you will lose out.</p>
+<p>So treat that technical debt as your would financial debt. Use it to invest it into your project. But keep track of it and pay it off. I would recommend <a href="http://verraes.net/2020/01/wall-of-technical-debt/">this post</a> from <a href="https://twitter.com/mathiasverraes">Mathias Verraes</a> on how you can do this.</p>
+<p><img src="https://imgs.xkcd.com/comics/good_code.png" alt="XKCD comic about good code"></p>
+<p>Image courtesy of XKCD (<a href="https://xkcd.com/844/">https://xkcd.com/844/</a>)</p>
+<h1 id="long-term-thinking-vs-quick-wins">Long term thinking vs quick wins</h1>
+<p>You also have to keep the scope of the project in mind. Some people build systems with the mindset that it might blow up anytime and we&rsquo;re going to need to support this for years to come. Other people start big projects without tests and pretend that they&rsquo;re going to write them in the future, &ldquo;when there is time&rdquo;.</p>
+<p>It&rsquo;s critical to strike a decent balance here and reevaluate the scope and market position of the product at regular intervals. This evaluation should not be only on the business or technical side; this is a team effort and should also be communicated that way.</p>
+<h1 id="my-takeaways-tldr">My takeaways (TL;DR)</h1>
+<p>It&rsquo;s essential to realise what you are building and the impact it will have in the near and far future. Keep the short time roadmap concise and don&rsquo;t over-invest (financially and technically) but also don&rsquo;t try and outrun the liabilities you are taking on along the way.</p>
+<p>Keep communication of the status and impact of the project open towards the entire team, and reevaluate these values on a regular timeframe. Adapt your level of technical investment according to these projections.</p>
 
 							</section>
 						</div>
@@ -245,20 +226,20 @@
              "@id": "https:\/\/frederickvanbrabant.com"
         },
         "articleSection" : "post",
-        "name" : "On how to implement a code of conduct",
-        "headline" : "On how to implement a code of conduct",
-        "description" : "This post wast orignially posted on the madewithlove site\nPreface Recently there has been a lot of commotion around code of conducts and if a user group\/open-source project should implement them or not. This is not a post about that, we shall not be discussing the ethics or possible political impact this brings with it. We will however propose a starting point on how to implement them.\nPlease note that I am in no way an expert in this field, this blogpost is the result of endless talks with colleagues \/ friends and people I bugged on Slack (extra thanks to Paul Hallett and Jack Skinner).",
+        "name" : "The economics of clean code",
+        "headline" : "The economics of clean code",
+        "description" : "\x26ldquo;The only way to make the deadline — the only way to go fast — is to keep the code as clean as possible at all times.\x26rdquo; — Robert C. Martin\n I\x26rsquo;m afraid I have to disagree with this statement. Let me tell you why.\nWhat is clean code There seem to be many opinions surrounding clean code. Some people have an entire architecture of how code should look.",
         "inLanguage" : "en-US",
         "author" : "Frederick Vanbrabnt",
         "creator" : "Frederick Vanbrabnt",
         "publisher": "Frederick Vanbrabnt",
         "accountablePerson" : "Frederick Vanbrabnt",
         "copyrightHolder" : "Frederick Vanbrabnt",
-        "copyrightYear" : "2016",
-        "datePublished": "2016-01-29 00:00:00 \x2b0000 UTC",
-        "dateModified" : "2016-01-29 00:00:00 \x2b0000 UTC",
-        "url" : "https:\/\/frederickvanbrabant.com\/post\/2016-01-29-on-how-to-implement-a-code-of-conduct\/",
-        "wordCount" : "811",
+        "copyrightYear" : "2020",
+        "datePublished": "2020-02-07 00:00:00 \x2b0000 UTC",
+        "dateModified" : "2020-02-07 00:00:00 \x2b0000 UTC",
+        "url" : "https:\/\/frederickvanbrabant.com\/post\/2020-02-07-the-economics-of-clean-code\/",
+        "wordCount" : "788",
         "keywords" : [ "Blog" ]
     }
     </script>
