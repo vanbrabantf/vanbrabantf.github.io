@@ -7,7 +7,6 @@ description:
 date: 2017-12-07T00:00:00Z
 image: "/images/posts/2017-12-7-atomic-commits/header.jpg"
 categories: ["Software", "Managing technology"]
-author: "John Doe"
 tags: ["Clean code", "GIT"]
 draft: false
 ---

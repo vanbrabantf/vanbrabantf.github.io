@@ -5,7 +5,6 @@ description: "Monday morning. Your previous project just wrapped up, and they ar
 date: 2018-12-12T00:00:00Z
 image: "/images/posts/2018-12-12-a-love-letter-to-legacy/header.jpg"
 categories: ["Software", "Managing technology"]
-author: "John Doe"
 tags: ["Clean code", "legacy"]
 draft: false
 ---

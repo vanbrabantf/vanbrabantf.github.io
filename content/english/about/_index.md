@@ -1,9 +1,13 @@
 ---
-title: "Hey, I am John Doe!"
+title: "Hey, I'm Frederick!"
 meta_title: "About"
-description: "this is meta description"
+description: "this is Frederick's about page"
 image: "/images/avatar.png"
 draft: false
 ---
 
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis illum nesciunt commodi vel nisi ut alias excepturi ipsum, totam, labore tempora, odit ex iste tempore sed. Fugit voluptatibus perspiciatis assumenda nulla ad nihil, omnis vel, doloremque sit quam autem optio maiores, illum eius facilis et quo consectetur provident dolor similique! Enim voluptatem dicta expedita veritatis repellat dolorum impedit, provident quasi at.
+I firmly believe that the key to building great software is to look further than technology or processes; it's the communication with and alignment between all stakeholders that makes the difference.
+
+As an architect, I want to work towards a best-fit and sustainable solution that balances people, processes and technology.
+
+I love public speaking as well. My keynote talks and lectures focus on technical architecture and managing software teams.

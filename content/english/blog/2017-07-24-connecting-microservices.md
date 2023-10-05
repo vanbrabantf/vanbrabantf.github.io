@@ -8,7 +8,6 @@ description:
 date: 2017-07-24T00:00:00Z
 image: "/images/posts/2017-07-24-grpc/header.jpg"
 categories: ["Software", "Managing technology", "Infrastructure"]
-author: "John Doe"
 tags: ["Clean code", "API"]
 draft: false
 ---

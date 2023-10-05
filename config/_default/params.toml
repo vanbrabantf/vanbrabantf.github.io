@@ -20,14 +20,14 @@ theme_default = "system" # available options [light/dark/system]
 # Main Sections
 mainSections = ["blog"]
 # contact form action
-contact_form_action = "#" # contact form works with [https://airform.io/] or [https://formspree.io]
+contact_form_action = "https://airform.io/frederick@brodyandhooper.com" # contact form works with [https://airform.io/] or [https://formspree.io]
 # google tag manager, see https://developers.google.com/tag-manager/
-google_tag_manager = "" # example: G-XXXXXXXXXX
+google_tag_manager = "GTM-WGGLZD6D" # example: GTM-WGGLZD6D
 google_adsense = ""     # example: ca-pub-xxxxxxxxxxxxxxxx
 # custom script on header, example: custom_script= "<script>console.log(\"Hello World\")</script>"
 custom_script = ""
 # copyright
-copyright = "Designed & Developed by [Zeon Studio](https://zeon.studio)"
+copyright = "© Frederick Vanbrabant"
 
 # Preloader
 # preloader module: https://github.com/gethugothemes/hugo-modules/tree/master/components/preloader
@@ -53,7 +53,7 @@ show_categories = true
 keywords = ["business architecture", "software", "business"]
 description = "Frederick's delirious rants"
 author = "Frederick Vanbrabant"
-image = "images/og-image.png"
+image = "images/banner.png"
 
 
 # site verifications

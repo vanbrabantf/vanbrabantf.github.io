@@ -5,7 +5,6 @@ description: "Clean code makes projects more comfortable to work with and improv
 date: 2020-02-07T00:00:00Z
 image: "/images/posts/2020-02-07-economics/header.jpg"
 categories: ["Software", "Managing technology"]
-author: "John Doe"
 tags: ["Clean code", "legacy"]
 draft: false
 ---

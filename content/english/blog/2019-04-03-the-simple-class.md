@@ -5,7 +5,6 @@ description: "One of my favourite types of classes is a value object. For those 
 date: 2019-04-03T00:00:00Z
 image: "/images/posts/2019-04-03-the-simple-class/header.jpg"
 categories: ["Software", "Managing technology"]
-author: "John Doe"
 tags: ["Clean code", "software patterns"]
 draft: false
 ---

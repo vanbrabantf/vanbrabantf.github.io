@@ -5,7 +5,6 @@ description: "A few weeks ago I attended a DDDBelgium meetup where I was lucky t
 date: 2018-10-08T00:00:00Z
 image: "/images/posts/2018-10-09-princ/header.jpg"
 categories: ["Software", "Managing technology"]
-author: "John Doe"
 tags: ["Clean code", "legacy"]
 draft: false
 ---
@@ -18,6 +17,7 @@ Now I'm going, to be honest with you (as I was with them), I had no idea what th
 
 Let's take a look at some code:
 {{< highlight php "linenos=table" >}}
+
 <?php
 declare(strict_types=1);
 
